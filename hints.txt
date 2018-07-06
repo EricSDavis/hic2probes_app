@@ -3,3 +3,5 @@ Helpful commands when refreshing submodules:
 git submodule update --recursive --remote
 
 git pull --recurse-submodules
+
+system("./hic2probes/shell/hicsq.sh -e 133100000 -n 10", input = "yes")
