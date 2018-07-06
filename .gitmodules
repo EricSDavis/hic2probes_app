@@ -1,0 +1,3 @@
+[submodule "hic2probes"]
+	path = hic2probes
+	url = https://EricSDavis@github.com/dphansti/hic2probes
