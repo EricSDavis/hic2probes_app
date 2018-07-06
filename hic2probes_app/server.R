@@ -2,16 +2,17 @@ library(shiny)
 
 # Define server logic
 shinyServer(function(input, output) {
-   
-  output$distPlot <- renderPlot({
-    
-    # generate bins based on input$bins from ui.R
-    x    <- faithful[, 2] 
-    bins <- seq(min(x), max(x), length.out = input$bins + 1)
-    
-    # draw the histogram with the specified number of bins
-    hist(x, breaks = bins, col = 'darkgray', border = 'white')
-    
+  
+  eventReactive(input$test, {
+    system("./hic2probes/shell/hicsq.sh -e 133100000 -n 10", input = "yes")
+    data <- as.data.frame(read.delim("../hic2probes/output/probes.bed"))
+    data
   })
+  
+  output$Probes <- renderDataTable({
+    stuff()
+  })
+  
+  
   
 })
