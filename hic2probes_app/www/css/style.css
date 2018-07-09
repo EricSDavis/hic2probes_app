@@ -1,0 +1,242 @@
+@import url('https://fonts.googleapis.com/css?family=Heebo:300,400,500,700');
+:root {
+  --font-family-sans-serif: 'Heebo', Calibri, Candara, Arial, sans-serif;
+  --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+html {
+  font-family: 'Heebo', sans-serif;
+  font-weight: 400 !important;
+}
+
+body {
+  font-family: 'Heebo', Calibri, Candara, Arial, sans-serif;
+  font-size: 130%;
+  font-weight: 400 !important;
+  letter-spacing: .25;
+}
+
+textarea {
+  font-family: inherit;
+}
+
+a {
+ color: #43bbef;
+}
+   
+h1,.h1{
+  font-family: inherit;
+  font-weight: ;
+  font-size: 185%;
+  margin-top: 20px;
+  margin-bottom: 8px;
+}
+
+h2,.h2{
+  font-family: inherit;
+  font-weight: 700;
+  font-size: 140%;
+  letter-spacing: .25px;
+  margin-top: 20px;
+  margin-bottom: 4px;
+}
+
+h3,.h3{
+  font-family: inherit;
+  font-weight: 700;
+  font-size: 120%;
+  letter-spacing: .25px;
+  margin-top: 20px;
+  margin-bottom: 4px;
+} 
+
+h4,.h4{
+  font-family: inherit;
+  font-weight: 500;
+  font-size: 120%;
+  letter-spacing: .25px;
+  margin-top: 20px;
+  margin-bottom: 4px;
+}
+
+h5,.h5{
+  font-family: inherit;
+  font-weight: 400;
+  font-size: 120%;
+  letter-spacing: .25px;
+  margin-top: 20px;
+  margin-bottom: 4px;
+} 
+
+h6,.h6{
+  font-family: inherit;
+  font-weight: 700;
+  font-size: 100%;
+  letter-spacing: .25px;
+  margin-top: 2px;
+}
+
+/* original font sizes:
+   h1 - 280%, h2 - 230%, h3 - 185%, h4 - 140%, h5 - 110%, h6 - 90% 
+   font weight: 500 */
+
+.box.box-solid.box-primary>.box-header,
+.box.box-solid.box-success>.box-header,
+.box.box-solid.box-info>.box-header,
+.box.box-solid.box-warning>.box-header,
+.box.box-solid.box-danger>.box-header{
+ padding-top: 11px;
+ padding-bottom: 9px;
+}
+
+/* header logo text */
+.main-header .logo {
+  font-family: "Heebo", sans-serif;
+  font-weight: 400;
+  letter-spacing: 5px;
+}
+
+/*  header */
+.skin-blue .main-header .navbar,
+.skin-blue .main-header .logo,
+.skin-blue .main-header .logo:hover{
+  background-color: #0b3469;
+}        
+
+.btn.radiobtn.btn-primary:hover{
+  background: #99b1c7;
+}
+
+.btn.radiobtn.btn-primary.active{
+  color: #fff;
+  background:#333;
+  border-bottom-color:#eceff3;
+  border-left-color:#eceff3;
+  border-right-color:#eceff3;
+  border-top-color:#eceff3;
+}
+
+.btn.radiobtn.btn-primary.active{
+  -webkit-box-shadow: none; 
+  -moz-box-shadow: none;
+  box-shadow: none;
+}
+
+.btn-group{
+   padding: 0px 0px 2px 0px;
+}
+
+.box.box-solid.box-primary>.box-header{
+  color:#fff;
+  background:#0b3469;
+}
+
+.box.box-solid.box-primary{
+  border-bottom-color:#eceff3;
+  border-left-color:#eceff3;
+  border-right-color:#eceff3;
+  border-top-color:#eceff3;
+}
+
+.box.box-primary{
+ border-top-color:#;
+}
+
+.box.box-solid.box-success{
+  border-bottom-color:#eceff3;
+  border-left-color:#eceff3;
+  border-right-color:#eceff3;
+  border-top-color:#eceff3;
+}
+
+.box.box-solid.box-info{
+  border-bottom-color:#eceff3;
+  border-left-color:#eceff3;
+  border-right-color:#eceff3;
+  border-top-color:#eceff3;
+}
+
+.box.box-solid.box-warning{
+  border-bottom-color:#eceff3;
+  border-left-color:#eceff3;
+  border-right-color:#eceff3;
+  border-top-color:#eceff3;
+}
+
+.box.box-warning{
+ border-top-color:#;
+}
+
+.box.box-solid.box-danger{
+  border-bottom-color:#eceff3;
+  border-left-color:#eceff3;
+  border-right-color:#eceff3;
+  border-top-color:#eceff3;
+}
+
+.btn.action-button.btn-primary.btn-xs.shiny-bound-input>.fa.fa-question{
+ color: #fff;
+}
+
+.btn.action-button.btn-primary.btn-xs.shiny-bound-input{
+  width: 14px;
+  height: 17px;
+  line-height: 16px;
+  min-height: 16px;
+  vertical-align: center;
+  font-size: 11px;
+  padding: 1.5px 1.25px 0px 1px;
+  margin: 0;
+}
+
+.nav-tabs-custom{
+  -webkit-box-shadow: none; 
+  -moz-box-shadow: none;
+  box-shadow: none;
+}
+
+.tab-pane.active {
+ overflow: hidden;
+}
+
+/* right align action button */
+.rightAlign{
+  float: right;
+}
+
+.sidebar{
+  background-color: #0b3469;
+}
+
+.box-header{
+  background-color: #0b3469;
+}
+
+
+/* Spinner  ( https://projects.lukehaas.me/css-loaders/) */
+.loader {
+    position: absolute;
+  left: 65%;
+  top: 50%;
+  z-index: 1;
+  width: 150px;
+  height: 150px;
+  margin: -75px 0 0 -75px;
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid #173565;
+  width: 120px;
+  height: 120px;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+}
+
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
