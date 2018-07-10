@@ -1,5 +1,7 @@
 library(shiny)
 library(shinydashboard)
+library(shinyalert)
+library(DT)
 
 ## Dashboard Header ####
 header <- dashboardHeader(
@@ -19,6 +21,7 @@ sidebar <- dashboardSidebar(
 
 ## Dashboard Body ####
 body <- dashboardBody(
+  useShinyalert(),
   
   ## Link in stylesheets ####
   tags$link(rel = "stylesheet", type = "text/css", href = "css/style.css"),
@@ -106,45 +109,125 @@ body <- dashboardBody(
               icon = icon("wrench", lib = "font-awesome")
             )
           ) # end of div
-          
         ), # end of box
-        div(id="spinner"),
+        
+        ## Page-load Spinner ####
         conditionalPanel(
-          condition = "input.run_script",
+          condition = "input.run_script > 0 && $('html').hasClass('shiny-busy')",
           HTML('
              <div class="loader"></div>
+             <p id="loading-message1" class="loading-message"> Constructing Probes... </p>
+             <p id="loading-message2" class="loading-message"> They are going to be great... </p>
                ')
-        )
-        
+        ) # end of conditional panel
       ) # end of fluidRow
-      
     ), # end of tabItem
     
     
     ## "Evaluate" Page ####
     tabItem(
       tabName = "Evaluate",
-      h2("This is the Evaluate Page"),
       
-      ## Return to Start Page ####
-      actionButton(
-        inputId = "return",
-        label = "Start-Over",
-        icon = icon("arrow-left", lib = "font-awesome")
-      ),
+      fluidRow(
+        column(
+          width = 12,
+        
+          ## Return to Start Page ####
+          actionButton(
+            inputId = "return",
+            label = "Start-Over",
+            icon = icon("arrow-left", lib = "font-awesome")
+          ) # end of actionButton
+        ) # end of column
+      ), # end of fluidRow
       
       tags$br(),
-      tags$br(),
       
-      ## Probe Data Table ####
-      dataTableOutput("Probes"),
       
-      textOutput("test")
-      
+      tabBox(
+        title = uiOutput("title"),
+        side = "right",
+        width = 12,
+        
+        tabPanel(
+          title="Region View",
+          fluidRow(
+            column(
+              width = 12,
+              
+              ## Region view slider ####
+              box(
+                width = 12,
+                uiOutput("region_slider")
+              ),
+             
+              ## Histogram of Probe Coverage ####
+              box(
+                title = "Histogram of Probe Coverage",
+                width = 12,
+                collapsible = T,
+                plotOutput("coverageHistogram")
+              )
+            ), # end of column
+            
+            column(
+              width = 12,
+              ## Plot of GC Content ####
+              box(
+                title = "GC Content and Probe Quality",
+                width = 12,
+                collapsible = T,
+                plotOutput("gc_plot")
+              )
+            ), # end of column
+            
+            column(
+              width = 12,
+              ## Plot of Shift ####
+              box(
+                title = "Distance from Restriction Site",
+                width = 12,
+                collapsible = T,
+                plotOutput("shift_plot")
+              )
+            ), # end of column
+            
+            column(
+              width = 12,
+              ## Probe Data Table ####
+              box(
+                title = "Probe Data Table",
+                width = 12,
+                div(style = 'overflow-x: scroll', DT::dataTableOutput('Probes')),
+                collapsible = T
+              )
+              
+            ) # end of column
+          ) # end of fluidRow
+
+        ), # end of Region View tabPanel
+        
+        ## Summary View Plots ####
+        tabPanel(
+          title="Summary View",
+          fluidRow(
+            column(
+              width = 4,
+              plotOutput("summary_gc")
+            ), #end of column
+            column(
+              width = 4,
+              plotOutput("summary_pass")
+            ), #end of column
+            column(
+              width = 4,
+              plotOutput("summary_shift")
+            ) #end of column
+          ) # end of fluidRow
+        ) # end of Summary View tabPanel
+      ) # end of tabBox
     ) # end of tabItem
-    
   ) # end of tabItems
-  
 ) # end of body
 
 ## Dashboard Page ####
