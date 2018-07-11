@@ -70,42 +70,53 @@ shinyServer(function(input, output, session) {
     DT::datatable(data)
   })
   
-  
   ##--------------Coverage Histogram----------------####
   output$coverageHistogram <- renderPlot({
     data <- script_results()
     values <- sort(unlist(lapply(seq(1:nrow(data)), function(x) data$start[x]:data$stop[x])))
     req(input$region_slider)
+    req(input$region_slider[2] != input$region_slider[1])
     
-    begin <- input$start
-    end <- input$stop
-    if(end - begin <= 1000){
-      breaks <- 100000
-    } else if(end - begin <= 10000) {
-      breaks <- 10000
-    } else if(end - begin <= 100000){
-      breaks <- 1000
-    } else if (end - begin <= 1000000){
-      breaks <- 100
-    } else if (end - begin <= 10000000){
-      breaks <- 100
-    } else if (end - begin <= 100000000){
-      breaks <- 10
-    } else if (end - begin <= 1000000000){
-      breaks <- 1
-    } else {
-      breaks <- 1
+    ## Dynamically resizing breakpoints
+    gdist <- input$stop - input$start
+    sdist <- input$region_slider[2] - input$region_slider[1]
+    breaks <- gdist/(gdist*(0.01*(sdist/gdist)))
+    
+    ## Custom histogram barplot
+    custom_histogram <- function(data=data, breaks = breaks, xlim){
+      ## Cut table into bins along with pass numbers
+      bins <- table(cut(data$start, breaks = breaks, include.lowest = T), factor(data$pass, levels = 0:3))
+      bin_start <- as.numeric(gsub("^[:(:]|\\[|,.*", "", rownames(bins)))
+      bin_stop <- as.numeric(gsub(".*,|\\]","", rownames(bins)))
+      bdata <- as.data.frame(cbind(bin_start, bin_stop, bins))
+      bdata$bins <- rowSums(bdata[,3:ncol(bdata)])
+      bin_size <- bdata$bin_stop[1] - bdata$bin_start[1]
+      
+      ## Define color palette
+      cols <- c("green", "blue", "purple", "red")
+      cols <- adjustcolor(cols, alpha.f = 0.6)
+      
+      ## Plot stacked histogram barplot
+      plot(c(0,1), c(0,1), "n",
+           xlim = xlim, #c(min(bdata$bin_start), max(bdata$bin_stop)),
+           ylim = c(0, max(bdata$bins)),
+           xlab = "genomic coordinates",
+           ylab = "Number of Probes",
+           main = "Histogram of Probe Coverage",
+           sub = paste0("N= ", sum(bdata$bins), ", ",
+                        "bin size= ", bin_size, "bp"),
+           frame.plot = F)
+      rect(bdata$bin_start, 0, bdata$bin_stop, bdata$bins)
+      rect(bdata$bin_start, 0, bdata$bin_stop, bdata$`0`, col = cols[1])
+      rect(bdata$bin_start, bdata$`0`, bdata$bin_stop, bdata$`0`+bdata$`1`, col = cols[2])
+      rect(bdata$bin_start, bdata$`0`+bdata$`1`, bdata$bin_stop, bdata$`0`+bdata$`1`+bdata$`2`, col = cols[3])
+      rect(bdata$bin_start, bdata$`0`+bdata$`1`+bdata$`2`, bdata$bin_stop, bdata$`0`+bdata$`1`+bdata$`2`+bdata$`3`, col = cols[4])
+      legend('topleft', title = "Pass Number", legend = c(0:3), fill = cols, bty = 'n', cex = 0.55)
+      
     }
     
-    hist(
-      values,
-      breaks = breaks,
-      xlim = c(input$region_slider[1], input$region_slider[2]),
-      main = "",
-      xlab = paste0(input$chr, " region"),
-      col = "grey"
-    )
-    legend('topright', legend = paste0("bin size= ", breaks))
+    ## Implement function
+    custom_histogram(data, breaks = breaks, xlim = c(input$region_slider[1], input$region_slider[2]))
     
   })
   
@@ -144,6 +155,13 @@ shinyServer(function(input, output, session) {
       value = c(input$start, input$stop),
       step = 10
     )
+  })
+  
+  observeEvent(input$region_slider, {
+    if(input$region_slider[2] == input$region_slider[1]){
+      updateSliderInput(session, "region_slider", value = c(input$start, input$stop))
+      shinyalert("You Cant Do That...", "Stop it!", type = "error")
+    }
   })
   
   
