@@ -39,7 +39,7 @@ body <- dashboardBody(
           class = "sidebar",
           solidHeader = T,
           title = "DEFINE REGION",
-          width = 3,
+          width = 4,
           
           ## Genome Input ####
           selectInput(
@@ -110,6 +110,11 @@ body <- dashboardBody(
                         }
                         });
                         '),
+            # actionButton(
+            #   inputId = "cancel_script",
+            #   label = "Cancel",
+            #   icon = icon("times", lib = "font-awesome")
+            # ),
             actionButton(
               inputId = "run_script",
               label = "Design Probes",
@@ -122,7 +127,7 @@ body <- dashboardBody(
           class = "main-panel",
           solidHeader = T,
           #title = "LURE: A Probe Design Tool for Fishing Hi-C Data",
-          width = 9,
+          width = 8,
           height = 527,
           
           h1("LURE"),
@@ -139,6 +144,7 @@ body <- dashboardBody(
                  <p id="loading-message1" class="loading-message"> Constructing Probes... </p>
                  <p id="loading-message2" class="loading-message"> They are going to be great... </p>
                  ')
+
         ) # end of conditional panel
       ) # end of fluidRow
     ), # end of tabItem
@@ -157,7 +163,13 @@ body <- dashboardBody(
             inputId = "return",
             label = "Start-Over",
             icon = icon("arrow-left", lib = "font-awesome")
-          ) # end of actionButton
+          ), # end of actionButton
+          numericInput(
+            inputId = "max_probes2",
+            label = "Adjust Probe Number:",
+            value = NA,
+            min = 0
+          )
         ) # end of column
       ), # end of fluidRow
       

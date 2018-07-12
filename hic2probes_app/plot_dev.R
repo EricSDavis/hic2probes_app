@@ -82,3 +82,21 @@ if(sdist == 0){
 breaks <- gdist/(gdist*(0.01*(sdist/gdist)))
 
 breaks
+
+library(promises)
+library(future)
+plan(multisession)
+system.time({
+  f1 %<-% ({
+    cat("Resolving...\n")
+    rnorm(100000000)
+  })
+  
+  f2 %<-% ({
+    cat("Resolving...\n")
+    rnorm(100000000)
+  })
+  f1
+  f2
+})
+

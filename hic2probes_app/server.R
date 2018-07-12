@@ -43,9 +43,9 @@ shinyServer(function(input, output, session) {
                         " -e ", input$stop,
                         " -r ", input$resenz,
                         max_probes)
-
-      system(command, input = "yes")
       
+      system(command, input = "yes")
+
       ## Switch to Evaluate Page ####
       newtab <- switch(input$tabNav,
                        "Define" = "Evaluate",
@@ -56,8 +56,17 @@ shinyServer(function(input, output, session) {
     }
   })
   
+
+  ## Interrupt Script ####
+  # observeEvent(input$cancel_script, {
+  #   shinyalert()
+  #   system('trap exit INT')
+  # })
+  
   ## Get script results in reactive context ####
-  script_results <- eventReactive(input$run_script, {
+  script_results <- eventReactive(input$max_probes2, {
+    setwd("../hic2probes/") # Adjust working directory to find output/all_probes.bed
+    system(paste0("Rscript --vanilla ../hic2probes/scripts/reduce_probes.R ", input$max_probes2))
     data <- as.data.frame(read.delim("../hic2probes/output/filtered_probes.bed", header = F))
     colnames(data) <- c("chr", "start", "stop", "shift", "res.fragment", "dir", "AT", "GC", "seq", "pass")
     data
@@ -181,6 +190,8 @@ shinyServer(function(input, output, session) {
     data <- script_results()
     plot(density(data$shift), main = "Distance from Restriction Site")
   })
+  
+
   
   
 }) # END
