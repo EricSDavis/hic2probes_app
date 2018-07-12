@@ -4,4 +4,19 @@ git submodule update --recursive --remote
 
 git pull --recurse-submodules
 
+# change to the submodule directory
+cd submodule_dir
+
+# checkout desired branch
+git checkout master
+
+# update
+git pull
+
+# get back to your project root
+cd ..
+
+# now the submodules are in the state you want, so
+git commit -am "Pulled down update to submodule_dir"
+
 system("./hic2probes/shell/hicsq.sh -e 133100000 -n 10", input = "yes")
