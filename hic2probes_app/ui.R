@@ -38,9 +38,8 @@ body <- dashboardBody(
         box(
           class = "sidebar",
           solidHeader = T,
-          status = "primary",
           title = "DEFINE REGION",
-          width = 4,
+          width = 3,
           
           ## Genome Input ####
           selectInput(
@@ -103,6 +102,14 @@ body <- dashboardBody(
           ## Design Probes ####
           div(
             class = "rightAlign",
+            ## Tie return key to run_script button
+            tags$script('
+                        $(document).keyup(function(event) {
+                          if (event.keyCode == 13) {
+                             $("#run_script").click();
+                        }
+                        });
+                        '),
             actionButton(
               inputId = "run_script",
               label = "Design Probes",
@@ -111,14 +118,27 @@ body <- dashboardBody(
           ) # end of div
         ), # end of box
         
+        box(
+          class = "main-panel",
+          solidHeader = T,
+          #title = "LURE: A Probe Design Tool for Fishing Hi-C Data",
+          width = 9,
+          height = 527,
+          
+          h1("LURE"),
+          h3("A Probe Design Tool for Fishing Hi-C Data")
+          
+        ), # end of column
+        
         ## Page-load Spinner ####
         conditionalPanel(
           condition = "input.run_script > 0 && $('html').hasClass('shiny-busy')",
-          HTML('
+          
+            HTML('
              <div class="loader"></div>
-             <p id="loading-message1" class="loading-message"> Constructing Probes... </p>
-             <p id="loading-message2" class="loading-message"> They are going to be great... </p>
-               ')
+                 <p id="loading-message1" class="loading-message"> Constructing Probes... </p>
+                 <p id="loading-message2" class="loading-message"> They are going to be great... </p>
+                 ')
         ) # end of conditional panel
       ) # end of fluidRow
     ), # end of tabItem

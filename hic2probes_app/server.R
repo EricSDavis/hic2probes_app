@@ -43,16 +43,15 @@ shinyServer(function(input, output, session) {
                         " -e ", input$stop,
                         " -r ", input$resenz,
                         max_probes)
+
       system(command, input = "yes")
       
       ## Switch to Evaluate Page ####
-      observeEvent(input$run_script, {
-        newtab <- switch(input$tabNav,
-                         "Define" = "Evaluate",
-                         "Evaluate" = "Define"
-        )
-        updateTabItems(session, "tabNav", newtab)
-      })
+      newtab <- switch(input$tabNav,
+                       "Define" = "Evaluate",
+                       "Evaluate" = "Define"
+      )
+      updateTabItems(session, "tabNav", newtab)
       
     }
   })
