@@ -210,15 +210,21 @@ shinyServer(function(input, output, session) {
   
   ##-------------Download Results----------------####
   output$downloadProbes <- downloadHandler(
-    filename = paste0(Sys.Date(), "-",
-                      input$chr, ":",
-                      input$start, "-",
-                      input$stop, "-",
-                      ".txt"),
+    filename = function(){
+      req(input$chr)
+      req(input$start)
+      req(input$stop)
+      paste0(Sys.Date(), "-",
+             input$chr, ":",
+             input$start, "-",
+             input$stop, "-",
+             ".txt")
+    },
     content = function(file){
       readr::write_tsv(script_results(), file)
     }
   )
+
   
   
   ##--------------Summary View Plots-------------####
