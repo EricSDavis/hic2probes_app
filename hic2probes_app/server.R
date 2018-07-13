@@ -22,8 +22,9 @@ shinyServer(function(input, output, session) {
     newtab <- switch(input$tabNav,
                      "Evaluate" = "Define",
                      "Define" = "Evaluate"
-                     
     )
+    system("pwd")
+    system("rm -r ../hic2probes/output/")
     updateTabItems(session, "tabNav", newtab)
   })
 
@@ -86,6 +87,7 @@ shinyServer(function(input, output, session) {
   
   ## Get script results in reactive context ####
   script_results <- reactive({
+    req(input$index)
     if(input$max_probes2 > 0 || is.na(input$max_probes2)){
       wd <- getwd()
       setwd("../hic2probes/") # Adjust working directory to find output/all_probes.bed
@@ -98,7 +100,6 @@ shinyServer(function(input, output, session) {
         setwd(wd)
       }
     }
-    system("pwd")
     data <- as.data.frame(read.delim("../hic2probes/output/filtered_probes.bed", header = F))
     colnames(data) <- c("chr", "start", "stop", "shift", "res.fragment", "dir", "AT", "GC", "seq", "pass")
     data
