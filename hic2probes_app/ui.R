@@ -94,12 +94,12 @@ body <- dashboardBody(
           ),
 
           ## Number of Probes ####
-          numericInput(
-            inputId = "max_probes",
-            label = "Number of Probes:",
-            min = 0,
-            value = NA
-          ),
+          # numericInput(
+          #   inputId = "max_probes",
+          #   label = "Number of Probes:",
+          #   min = 0,
+          #   value = NA
+          # ),
           
           a(id = "toggleAdvanced1", p("Advanced options", icon("caret-down")), href = "#toggleAdvanced1"),
           shinyjs::hidden(
@@ -156,11 +156,6 @@ body <- dashboardBody(
             #             }
             #             });
             #             '),
-            # actionButton(
-            #   inputId = "cancel_script",
-            #   label = "Cancel",
-            #   icon = icon("times", lib = "font-awesome")
-            # ),
             actionButton(
               inputId = "run_script",
               label = "Design Probes",
@@ -216,7 +211,7 @@ body <- dashboardBody(
           ),
           numericInput(
             inputId = "max_probes2",
-            label = "Adjust Probe Number:",
+            label = "Reduce Probe Number:",
             value = NA,
             min = 0
           )

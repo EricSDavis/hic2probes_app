@@ -37,19 +37,18 @@ shinyServer(function(input, output, session) {
     } else {
       
       ## Handle NA values for input$max probes ####
-      if (is.na(input$max_probes)){
-        max_probes <- ""
-      } else {
-        max_probes <- paste0(" -n ", input$max_probes)
-      }
+      # if (is.na(input$max_probes)){
+      #   max_probes <- ""
+      # } else {
+      #   max_probes <- paste0(" -n ", input$max_probes)
+      # }
       
       ## Stitch command ####
       command <- paste0("./../hic2probes/shell/hicsq.sh",
                         " -c ", input$chr,
                         " -b ", input$start,
                         " -e ", input$stop,
-                        " -r ", input$resenz,
-                        max_probes)
+                        " -r ", input$resenz)
       
       system(command, input = "yes")
       
@@ -70,7 +69,6 @@ shinyServer(function(input, output, session) {
         StartIndex <- '""'
         EndIndex <- '""'
       }
-      system("pwd")
       command <- paste0("awk -v OFS='\t' '{print $1, $2, $3, $4, $5, $6, $7, $8, ",  StartIndex, "$9", EndIndex, " , $10}' ../hic2probes/output/all_probes.bed > ../hic2probes/output/temp.bed")
       system(command)
       system("mv ../hic2probes/output/temp.bed ../hic2probes/output/all_probes.bed")
