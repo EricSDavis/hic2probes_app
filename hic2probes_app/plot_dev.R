@@ -100,3 +100,13 @@ system.time({
   f2
 })
 
+StartIndex <- '"UUUUUUU"'
+EndIndex <- '"UUUUUUU"'
+command <- paste0("awk -v OFS='\t' '{print $1, $2, $3, $4, $5, $6, $7, $8, ",  StartIndex, "$9", EndIndex, " , $10}' ../hic2probes/output/filtered_probes.bed > ../hic2probes/output/temp.bed")
+system(command)
+system("mv ../hic2probes/output/temp.bed ../hic2probes/output/filtered_probes.bed")
+getwd()
+
+setwd("/Users/phanstiel2/Research/Eric/hic2probes_app/hic2probes_app")
+
+read.delim("../hic2probes/output/filtered_probes.bed", header = F)

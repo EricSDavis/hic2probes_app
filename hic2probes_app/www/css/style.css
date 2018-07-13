@@ -308,3 +308,12 @@ h6,.h6{
 
 /* End Spinner */
 
+#toggleAdvanced1 {
+  color: #FFFFFF;
+  text-align: right;
+}
+
+.shiny-options-group {
+    font-size: 90%;
+}
+

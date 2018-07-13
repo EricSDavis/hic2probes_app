@@ -1,9 +1,16 @@
 library(shiny)
 library(shinydashboard)
 library(shinyalert)
+library(shinyjs)
 
 # Define server logic
 shinyServer(function(input, output, session) {
+  
+  ##--------------- Shinyjs Toggles----------------####
+  shinyjs::onclick("toggleAdvanced1", shinyjs::toggle(id = "advanced1", anim = TRUE))
+  observe({
+    shinyjs::toggleState("custom_index", input$index == "Custom")
+  })
   
   ##--------------------Title----------------------####
   output$title <- renderUI({
@@ -19,7 +26,7 @@ shinyServer(function(input, output, session) {
     )
     updateTabItems(session, "tabNav", newtab)
   })
-  
+
   ##-------------Run script-----------------------####
   observeEvent(input$run_script, {
     
@@ -45,6 +52,29 @@ shinyServer(function(input, output, session) {
                         max_probes)
       
       system(command, input = "yes")
+      
+      ## Choose Index based on radioButton input ####
+      if (input$index == "Index1"){
+        StartIndex <- '"TCGCGCCCATAACTC"'
+        EndIndex <- '"CTGAGGGTCCGCCTT"'
+      } else if (input$index == "Index2"){
+        StartIndex <- '"ATCGCACCAGCGTGT"'
+        EndIndex <- '"CACTGCGGCTCCTCA"'
+      } else if (input$index == "Index3"){
+        StartIndex <- '"CCTCGCCTATCCCAT"'
+        EndIndex <- '"CACTACCGGGGTCTG"'
+      } else if (input$index == "Custom"){
+        StartIndex <- sprintf('"%s"', input$custom_index_1)
+        EndIndex <- sprintf('"%s"', input$custom_index_2)
+      } else {
+        StartIndex <- '""'
+        EndIndex <- '""'
+      }
+      system("pwd")
+      command <- paste0("awk -v OFS='\t' '{print $1, $2, $3, $4, $5, $6, $7, $8, ",  StartIndex, "$9", EndIndex, " , $10}' ../hic2probes/output/all_probes.bed > ../hic2probes/output/temp.bed")
+      system(command)
+      system("mv ../hic2probes/output/temp.bed ../hic2probes/output/all_probes.bed")
+      system("cat ../hic2probes/output/all_probes.bed")
 
       ## Switch to Evaluate Page ####
       newtab <- switch(input$tabNav,
@@ -56,15 +86,8 @@ shinyServer(function(input, output, session) {
     }
   })
   
-
-  ## Interrupt Script ####
-  # observeEvent(input$cancel_script, {
-  #   shinyalert()
-  #   system('trap exit INT')
-  # })
-  
   ## Get script results in reactive context ####
-  script_results <- eventReactive(input$max_probes2, {
+  script_results <- reactive({
     if(input$max_probes2 > 0 || is.na(input$max_probes2)){
       wd <- getwd()
       setwd("../hic2probes/") # Adjust working directory to find output/all_probes.bed
@@ -76,17 +99,21 @@ shinyServer(function(input, output, session) {
         system("Rscript --vanilla ../hic2probes/scripts/reduce_probes.R ")
         setwd(wd)
       }
-    } 
+    }
+    system("pwd")
     data <- as.data.frame(read.delim("../hic2probes/output/filtered_probes.bed", header = F))
     colnames(data) <- c("chr", "start", "stop", "shift", "res.fragment", "dir", "AT", "GC", "seq", "pass")
     data
   })
   
   ##--------------Probe data table----------------####
-  output$Probes <- DT::renderDataTable({
-    data <- script_results()
-    DT::datatable(data)
+  observe({
+    output$Probes <- DT::renderDataTable({
+      data <- script_results()
+      DT::datatable(data)
+    })
   })
+
   
   ##--------------Coverage Histogram----------------####
   output$coverageHistogram <- renderPlot({
@@ -124,12 +151,12 @@ shinyServer(function(input, output, session) {
            sub = paste0("N= ", sum(bdata$bins), ", ",
                         "bin size= ", bin_size, "bp"),
            frame.plot = F)
-      rect(bdata$bin_start, 0, bdata$bin_stop, bdata$bins)
-      rect(bdata$bin_start, 0, bdata$bin_stop, bdata$`0`, col = cols[1])
-      rect(bdata$bin_start, bdata$`0`, bdata$bin_stop, bdata$`0`+bdata$`1`, col = cols[2])
-      rect(bdata$bin_start, bdata$`0`+bdata$`1`, bdata$bin_stop, bdata$`0`+bdata$`1`+bdata$`2`, col = cols[3])
-      rect(bdata$bin_start, bdata$`0`+bdata$`1`+bdata$`2`, bdata$bin_stop, bdata$`0`+bdata$`1`+bdata$`2`+bdata$`3`, col = cols[4])
-      legend('topleft', title = "Pass Number", legend = c(0:3), fill = cols, bty = 'n', cex = 0.55)
+      rect(bdata$bin_start, 0, bdata$bin_stop, bdata$bins, border=NA)
+      rect(bdata$bin_start, 0, bdata$bin_stop, bdata$`0`, col = cols[1], border=NA)
+      rect(bdata$bin_start, bdata$`0`, bdata$bin_stop, bdata$`0`+bdata$`1`, col = cols[2], border=NA)
+      rect(bdata$bin_start, bdata$`0`+bdata$`1`, bdata$bin_stop, bdata$`0`+bdata$`1`+bdata$`2`, col = cols[3], border=NA)
+      rect(bdata$bin_start, bdata$`0`+bdata$`1`+bdata$`2`, bdata$bin_stop, bdata$`0`+bdata$`1`+bdata$`2`+bdata$`3`, col = cols[4], border=NA)
+      legend('topleft', title = "Pass Number", legend = c(0:3), fill = cols, bty = 'n', cex = 0.55, border=NA)
       
     }
     
@@ -182,6 +209,17 @@ shinyServer(function(input, output, session) {
     }
   })
   
+  ##-------------Download Results----------------####
+  output$downloadProbes <- downloadHandler(
+    filename = paste0(Sys.Date(), "-",
+                      input$chr, ":",
+                      input$start, "-",
+                      input$stop, "-",
+                      ".txt"),
+    content = function(file){
+      readr::write_tsv(script_results(), file)
+    }
+  )
   
   
   ##--------------Summary View Plots-------------####

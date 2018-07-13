@@ -2,6 +2,7 @@ library(shiny)
 library(shinydashboard)
 library(shinyalert)
 library(DT)
+library(shinyjs)
 
 ## Dashboard Header ####
 header <- dashboardHeader(
@@ -22,6 +23,7 @@ sidebar <- dashboardSidebar(
 ## Dashboard Body ####
 body <- dashboardBody(
   useShinyalert(),
+  shinyjs::useShinyjs(),
   
   ## Link in stylesheets ####
   tags$link(rel = "stylesheet", type = "text/css", href = "css/style.css"),
@@ -99,6 +101,50 @@ body <- dashboardBody(
             value = NA
           ),
           
+          a(id = "toggleAdvanced1", p("Advanced options", icon("caret-down")), href = "#toggleAdvanced1"),
+          shinyjs::hidden(
+            div(
+              id = "advanced1",
+              radioButtons(
+                inputId = "index",
+                label = "Add index sequences:",
+                choices = c("Index 1: TCGCGCCCATAACTC-N120-CTGAGGGTCCGCCTT" = "Index1",
+                            "Index 2: ATCGCACCAGCGTGT-N120-CACTGCGGCTCCTCA" = "Index2",
+                            "Index 3: CCTCGCCTATCCCAT-N120-CACTACCGGGGTCTG" = "Index3",
+                            "None",
+                            "Custom"),
+                selected = "None"
+              ), # end of radioButtons,
+              conditionalPanel(
+                condition = "input.index == 'Custom'",
+                fluidRow(
+                  column(
+                    width = 5,
+                    textInput(
+                      inputId = "custom_index_1",
+                      label = "",
+                      placeholder = "start index"
+                    ) # end of textInput
+                  ), # end of column
+                  column(
+                    width = 2,
+                    br(),
+                    span("-120-")
+                  ), # end of column
+                  column(
+                    width = 5,
+                    textInput(
+                      inputId = "custom_index_2",
+                      label = "",
+                      placeholder = "end index"
+                    ) # end of textInput
+                  ) # end of column
+                ) # end of fluidRow
+              ) # end of conditionalPanel
+            ) # end of div
+          ), # end of shinyjs::hidden
+
+          
           ## Design Probes ####
           div(
             class = "rightAlign",
@@ -164,6 +210,10 @@ body <- dashboardBody(
             label = "Start-Over",
             icon = icon("arrow-left", lib = "font-awesome")
           ), # end of actionButton
+          downloadButton(
+            outputId = "downloadProbes",
+            label = "Download Probes"
+          ),
           numericInput(
             inputId = "max_probes2",
             label = "Adjust Probe Number:",
