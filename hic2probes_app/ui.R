@@ -102,14 +102,14 @@ body <- dashboardBody(
           ## Design Probes ####
           div(
             class = "rightAlign",
-            ## Tie return key to run_script button
-            tags$script('
-                        $(document).keyup(function(event) {
-                          if (event.keyCode == 13) {
-                             $("#run_script").click();
-                        }
-                        });
-                        '),
+            ## Tie return key to run_script button this doesn't work correctly
+            # tags$script('
+            #             $(document).keyup(function(event) {
+            #               if(event.keyCode == 13) {
+            #                  $("#run_script").click();
+            #             }
+            #             });
+            #             '),
             # actionButton(
             #   inputId = "cancel_script",
             #   label = "Cancel",

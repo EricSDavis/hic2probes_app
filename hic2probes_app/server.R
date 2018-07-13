@@ -9,7 +9,7 @@ shinyServer(function(input, output, session) {
   output$title <- renderUI({
     paste0(input$chr, ": ", input$start, "-", input$stop)
   })
-  
+
   ##------------Return to Define Page--------------####
   observeEvent(input$return, {
     newtab <- switch(input$tabNav,
@@ -65,8 +65,18 @@ shinyServer(function(input, output, session) {
   
   ## Get script results in reactive context ####
   script_results <- eventReactive(input$max_probes2, {
-    setwd("../hic2probes/") # Adjust working directory to find output/all_probes.bed
-    system(paste0("Rscript --vanilla ../hic2probes/scripts/reduce_probes.R ", input$max_probes2))
+    if(input$max_probes2 > 0 || is.na(input$max_probes2)){
+      wd <- getwd()
+      setwd("../hic2probes/") # Adjust working directory to find output/all_probes.bed
+      system(paste0("Rscript --vanilla ../hic2probes/scripts/reduce_probes.R ", input$max_probes2))
+      setwd(wd)
+      if (is.na(input$max_probes2)){
+        wd <- getwd()
+        setwd("../hic2probes/") # Adjust working directory to find output/all_probes.bed
+        system("Rscript --vanilla ../hic2probes/scripts/reduce_probes.R ")
+        setwd(wd)
+      }
+    } 
     data <- as.data.frame(read.delim("../hic2probes/output/filtered_probes.bed", header = F))
     colnames(data) <- c("chr", "start", "stop", "shift", "res.fragment", "dir", "AT", "GC", "seq", "pass")
     data
