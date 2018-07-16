@@ -4,4 +4,4 @@ library(shinydashboard)
 library(shinyalert)
 library(DT)
 library(shinyjs)
-
+library(shinyWidgets)

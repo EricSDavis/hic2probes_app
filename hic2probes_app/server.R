@@ -10,7 +10,9 @@ shinyServer(function(input, output, session) {
   
   ##--------------------Title----------------------####
   output$title <- renderUI({
-    paste0(input$chr, ": ", input$start, "-", input$stop)
+    req(res.sites())
+    sites <- res.sites()
+    paste0(input$chr, ": ", input$start, "-", input$stop, ", found ", length(sites), " restriction sites")
   })
 
   ##------------Return to Define Page--------------####
@@ -20,7 +22,7 @@ shinyServer(function(input, output, session) {
                      "Define" = "Evaluate"
     )
     system("pwd")
-    system("rm -r ../hic2probes/output/")
+    # system("rm -r ../hic2probes/output/")
     updateTabItems(session, "tabNav", newtab)
   })
 
@@ -84,6 +86,7 @@ shinyServer(function(input, output, session) {
   ## Get script results in reactive context ####
   script_results <- reactive({
     req(input$index)
+    req(input$run_script)
     if(input$max_probes2 > 0 || is.na(input$max_probes2)){
       wd <- getwd()
       setwd("../hic2probes/") # Adjust working directory to find output/all_probes.bed
@@ -101,6 +104,16 @@ shinyServer(function(input, output, session) {
     data
   })
   
+  ##-----------Load in Restriction Sites----------####
+  res.sites <- reactive({
+    req(script_results())
+    ## Load in restriction sites
+    res.sites <- read.delim("../hic2probes/output/fragments.bed", header = F)
+    sites <- unique(sort(c(res.sites[,2], res.sites[,3])))
+    sites <- sites + input$start
+    sites
+  })
+  
   ##--------------Probe data table----------------####
   observe({
     output$Probes <- DT::renderDataTable({
@@ -113,6 +126,7 @@ shinyServer(function(input, output, session) {
   ##--------------Coverage Histogram----------------####
   output$coverageHistogram <- renderPlot({
     data <- script_results()
+    sites <- res.sites()
     values <- sort(unlist(lapply(seq(1:nrow(data)), function(x) data$start[x]:data$stop[x])))
     req(input$region_slider)
     req(input$region_slider[2] != input$region_slider[1])
@@ -139,49 +153,77 @@ shinyServer(function(input, output, session) {
       ## Plot stacked histogram barplot
       plot(c(0,1), c(0,1), "n",
            xlim = xlim, #c(min(bdata$bin_start), max(bdata$bin_stop)),
-           ylim = c(0, max(bdata$bins)),
+           ylim = c(0, 1.5*max(bdata$bins)),
            xlab = "genomic coordinates",
            ylab = "Number of Probes",
            main = "Histogram of Probe Coverage",
            sub = paste0("N= ", sum(bdata$bins), ", ",
                         "bin size= ", bin_size, "bp"),
-           frame.plot = F)
+           frame.plot = F,
+           las = 1)
       rect(bdata$bin_start, 0, bdata$bin_stop, bdata$bins, border=NA)
       rect(bdata$bin_start, 0, bdata$bin_stop, bdata$`0`, col = cols[1], border=NA)
       rect(bdata$bin_start, bdata$`0`, bdata$bin_stop, bdata$`0`+bdata$`1`, col = cols[2], border=NA)
       rect(bdata$bin_start, bdata$`0`+bdata$`1`, bdata$bin_stop, bdata$`0`+bdata$`1`+bdata$`2`, col = cols[3], border=NA)
       rect(bdata$bin_start, bdata$`0`+bdata$`1`+bdata$`2`, bdata$bin_stop, bdata$`0`+bdata$`1`+bdata$`2`+bdata$`3`, col = cols[4], border=NA)
-      legend('topleft', title = "Pass Number", legend = c(0:3), fill = cols, bty = 'n', cex = 0.55, border=NA)
-      
+      legend('topright', title = "Pass Number", legend = c(0:3), fill = cols, bty = 'n', border=NA)
+      if (input$toggle_res.sites == T){ #input$region_slider[2] - input$region_slider[1] <= 50000 & 
+        segments(sites, -1, sites, 0.65*max(bdata$bins))
+      }
     }
     
     ## Implement function
     custom_histogram(data, breaks = breaks, xlim = c(input$region_slider[1], input$region_slider[2]))
-    
   })
   
   ##--------------GC Content Plot----------------####
   output$gc_plot <- renderPlot({
     data <- script_results()
+    sites <- res.sites()
     req(input$region_slider)
     
     cols <- c("green", "blue", "purple", "red")[factor(data$pass)]
     cols <- adjustcolor(cols, alpha.f = 0.6)
     
-    plot(c(0,1), c(0,1), "n", xlim=c(input$region_slider[1], input$region_slider[2]), xlab = paste0(input$chr, " region"), frame.plot = F)
+    leg_cols <- c("green", "blue", "purple", "red")
+    leg_cols <- adjustcolor(leg_cols, alpha.f = 0.6)
+    
+    plot(c(0,1), c(0,1), "n",
+         xlim=c(input$region_slider[1], input$region_slider[2]),
+         xlab = paste0(input$chr, " region"),
+         ylab = "GC Fraction",
+         las = 1,
+         frame.plot = F)
     segments(data$start, data$GC, data$stop, data$GC, col = cols, lwd=5)
-    legend('topright', title = "Pass Number", legend = c(0, 1, 2, 3), fill = c("green", "blue", "purple", "red"))
+    legend('topright', title = "Pass Number", legend = c(0, 1, 2, 3), fill = leg_cols, bty = 'n', border = NA)
+    if (input$toggle_res.sites == T){ #input$region_slider[2] - input$region_slider[1] <= 50000 & 
+      segments(sites, -1, sites, 0.65)
+    }
   })
   
   ##--------------Plotting Shift-----------------####
   output$shift_plot <- renderPlot({
     data <- script_results()
+    sites <- res.sites()
     
     cols <- c("green", "blue", "purple", "red")[factor(data$pass)]
     cols <- adjustcolor(cols, alpha.f = 0.6)
     
-    plot(data$start, data$shift, "n", frame.plot = F, xlim = c(input$region_slider[1], input$region_slider[2]))
+    leg_cols <- c("green", "blue", "purple", "red")
+    leg_cols <- adjustcolor(leg_cols, alpha.f = 0.6)
+    
+    plot(data$start, data$shift, "n", frame.plot = F,
+         xlim = c(input$region_slider[1], input$region_slider[2]),
+         ylim = c(min(data$shift), max(data$shift)+0.45*(max(data$shift))),
+         xlab = paste0(input$chr, " region"),
+         ylab = "Base Pairs from Restriction Site",
+         las = 1
+         )
     segments(data$start, data$shift, data$stop, data$shift, col = cols, lwd = 5)
+    legend('topright', title = "Pass Number", legend = c(0, 1, 2, 3), fill = leg_cols, bty = 'n', border = NA)
+    if (input$toggle_res.sites == T){ #input$region_slider[2] - input$region_slider[1] <= 50000 & 
+      segments(sites, -1, sites, max(data$shift))
+    }
   })
   
   ##-------------Region View Slider--------------####
@@ -220,13 +262,24 @@ shinyServer(function(input, output, session) {
       readr::write_tsv(script_results(), file)
     }
   )
+  
+  output$downloadPlots <- downloadHandler(
+    filename = function(){
+      paste("test.pdf")
+    },
+    content = function(file){
+      pdf(file)
+      plot(0,1, 'n', main = "Test Plot")
+      dev.off()
+    }
+  )
 
   
   
   ##--------------Summary View Plots-------------####
   output$summary_gc <- renderPlot({
     data <- script_results()
-    plot(density(data$GC), main = "GC Content")
+    hist(data$GC, main = "GC Content")
   })
   
   output$summary_pass <- renderPlot({
@@ -237,7 +290,7 @@ shinyServer(function(input, output, session) {
   
   output$summary_shift <- renderPlot({
     data <- script_results()
-    plot(density(data$shift), main = "Distance from Restriction Site")
+    hist(data$shift, main = "Distance from Restriction Site")
   })
   
 

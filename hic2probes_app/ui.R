@@ -192,24 +192,61 @@ body <- dashboardBody(
       
       fluidRow(
         column(
-          width = 12,
-        
+          width = 6,
           ## Return to Start Page ####
           actionButton(
             inputId = "return",
             label = "Start-Over",
             icon = icon("arrow-left", lib = "font-awesome")
-          ), # end of actionButton
-          downloadButton(
-            outputId = "downloadProbes",
-            label = "Download Probes"
-          ),
-          numericInput(
-            inputId = "max_probes2",
-            label = "Reduce Probe Number:",
-            value = NA,
-            min = 0
-          )
+          ) # end of actionButton
+        ), # end of column
+        column(
+          width = 6,
+          fixedPanel(
+            class = "options",
+            dropdownButton(
+              size = "sm",
+              circle = T,
+              icon = icon("gear"),
+              width = 300,
+              right = T,
+              
+              h3("Options", style="font-weight:300;"),
+              numericInput(
+                inputId = "max_probes2",
+                label = "Reduce Probe Number:",
+                value = NA,
+                min = 0
+              ),
+              materialSwitch(
+                inputId = "toggle_res.sites",
+                label = "Show Restriction Sites?",
+                value = F,
+                status = "primary",
+                right = F
+              ),
+              dropdown(
+                circle = F,
+                label = "Download",
+                inputId = "Download_menu",
+                tooltip = tooltipOptions(title = "Select which data to download"),
+                downloadLink(
+                  outputId = "downloadProbes",
+                  label = "Download Probes"
+                ),
+                br(),
+                downloadLink(
+                  outputId = "downloadPlots",
+                  label = "Download Plots"
+                ),
+                br(),
+                downloadLink(
+                  outputId = "downloadAll",
+                  label = "Download All"
+                )
+              ) # end of dropdown
+            ) # end of dropdownButton
+          ) # end of fixedPanel
         ) # end of column
       ), # end of fluidRow
       

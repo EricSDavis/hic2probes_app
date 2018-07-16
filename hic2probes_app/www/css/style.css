@@ -317,3 +317,9 @@ h6,.h6{
     font-size: 90%;
 }
 
+.options {
+  position:absolute;
+  top:8%;
+  right:2%;
+  z-index: 10;
+}
