@@ -1,7 +1,3 @@
-library(shiny)
-library(shinydashboard)
-library(shinyalert)
-library(shinyjs)
 
 # Define server logic
 shinyServer(function(input, output, session) {
