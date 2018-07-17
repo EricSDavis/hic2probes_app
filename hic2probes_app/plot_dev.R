@@ -82,3 +82,25 @@ if (end - start <= 50000){
 }
 
 
+library(plotly)
+plotly::plot_ly(data, x = ~start, y = ~GC, color = ~GC) %>%
+  rangeslider() %>%
+  layout(
+    title = 'GC Content',
+    xaxis = list(
+      type = 'scatter',
+      title = 'Genomic Region'
+    ),
+    yaxis = list(
+      title = 'GC Fraction',
+      range = c(0,1)
+    )
+  )%>%
+  lapply(seq(1:nrow(data)), function(x) add_trace(x = ~start[x], y = ~GC[x], xend = ~stop[x], yend = ~GC[x]))
+  # add_trace(x = ~start, y = ~GC, xend = ~stop, yend = ~GC, mode = 'lines')
+
+p <- plot_ly(economics, x = ~date, y = ~uempmed)
+p
+p %>% add_markers()
+p %>% add_lines()
+p %>% add_text(text = ".")
