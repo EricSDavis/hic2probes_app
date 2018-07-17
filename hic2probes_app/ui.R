@@ -281,6 +281,17 @@ body <- dashboardBody(
             
             column(
               width = 12,
+              ## Histogram of Restriction Sites ####
+              box(
+                title = "Histogram of Restriction Sites",
+                width = 12,
+                collapsible = T,
+                plotOutput("restrictionHistogram")
+              )
+            ), # end of column
+          
+            column(
+              width = 12,
               ## Plot of GC Content ####
               box(
                 title = "GC Content and Probe Quality",

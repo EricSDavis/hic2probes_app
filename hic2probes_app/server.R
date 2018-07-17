@@ -156,7 +156,6 @@ shinyServer(function(input, output, session) {
            ylim = c(0, 1.5*max(bdata$bins)),
            xlab = "genomic coordinates",
            ylab = "Number of Probes",
-           main = "Histogram of Probe Coverage",
            sub = paste0("N= ", sum(bdata$bins), ", ",
                         "bin size= ", bin_size, "bp"),
            frame.plot = F,
@@ -174,6 +173,49 @@ shinyServer(function(input, output, session) {
     
     ## Implement function
     custom_histogram(data, breaks = breaks, xlim = c(input$region_slider[1], input$region_slider[2]))
+  })
+  
+  ##--------------Restriction Site Histogram----------------####
+  output$restrictionHistogram <- renderPlot({
+    data <- script_results()
+    sites <- res.sites()
+    values <- sort(unlist(lapply(seq(1:nrow(data)), function(x) data$start[x]:data$stop[x])))
+    req(input$region_slider)
+    req(input$region_slider[2] != input$region_slider[1])
+    
+    ## Dynamically resizing breakpoints
+    gdist <- input$stop - input$start
+    sdist <- input$region_slider[2] - input$region_slider[1]
+    breaks <- gdist/(gdist*(0.01*(sdist/gdist)))
+    
+    ## Custom histogram barplot
+    custom_histogram <- function(data=data, breaks = breaks, xlim){
+      ## Cut table into bins along with pass numbers
+      bins <- table(cut(data, breaks = breaks, include.lowest = T))
+      bin_start <- as.numeric(gsub("^[:(:]|\\[|,.*", "", rownames(bins)))
+      bin_stop <- as.numeric(gsub(".*,|\\]","", rownames(bins)))
+      bdata <- as.data.frame(cbind(bin_start, bin_stop, bins))
+      bin_size <- bdata$bin_stop[1] - bdata$bin_start[1]
+      
+      ## Define color palette
+      cols <- c("green", "blue", "purple", "red")
+      cols <- adjustcolor(cols, alpha.f = 0.6)
+      
+      ## Plot stacked histogram barplot
+      plot(c(0,1), c(0,1), "n",
+           xlim = xlim, #c(min(bdata$bin_start), max(bdata$bin_stop)),
+           ylim = c(0, 1.5*max(bdata$bins)),
+           xlab = "genomic coordinates",
+           ylab = "Number of Restriction Sites",
+           sub = paste0("N= ", sum(bdata$bins), ", ",
+                        "bin size= ", bin_size, "bp"),
+           frame.plot = F,
+           las = 1)
+      rect(bdata$bin_start, 0, bdata$bin_stop, bdata$bins, col = "grey", border = NA)
+    }
+    
+    ## Implement function
+    custom_histogram(sites, breaks = breaks, xlim = c(input$region_slider[1], input$region_slider[2]))
   })
   
   ##--------------GC Content Plot----------------####
