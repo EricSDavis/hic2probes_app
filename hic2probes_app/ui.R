@@ -87,14 +87,6 @@ body <- dashboardBody(
             selected = "^GATC,MobI",
             multiple = F
           ),
-
-          ## Number of Probes ####
-          # numericInput(
-          #   inputId = "max_probes",
-          #   label = "Number of Probes:",
-          #   min = 0,
-          #   value = NA
-          # ),
           
           a(id = "toggleAdvanced1", p("Advanced options", icon("caret-down")), href = "#toggleAdvanced1"),
           shinyjs::hidden(
@@ -208,16 +200,20 @@ body <- dashboardBody(
               size = "sm",
               circle = T,
               icon = icon("gear"),
-              width = 300,
+              width = 350,
               right = T,
-              
               h3("Options", style="font-weight:300;"),
-              numericInput(
-                inputId = "max_probes2",
-                label = "Reduce Probe Number:",
-                value = NA,
-                min = 0
-              ),
+              fluidRow(
+                width = 12,
+                column(
+                  width = 6,
+                  uiOutput("max_probes")
+                ), # end of column
+                column(
+                  width = 6,
+                  uiOutput("probe_density")
+                ) # end of column
+              ), # end of fluidRow
               materialSwitch(
                 inputId = "toggle_res.sites",
                 label = "Show Restriction Sites?",
@@ -227,6 +223,7 @@ body <- dashboardBody(
               ),
               dropdown(
                 circle = F,
+                size = "sm",
                 label = "Download",
                 inputId = "Download_menu",
                 tooltip = tooltipOptions(title = "Select which data to download"),
@@ -257,7 +254,8 @@ body <- dashboardBody(
         title = uiOutput("title"),
         side = "right",
         width = 12,
-        
+        id = "tab_view",
+
         tabPanel(
           title="Region View",
           fluidRow(
@@ -310,26 +308,38 @@ body <- dashboardBody(
                 collapsible = T,
                 plotOutput("shift_plot")
               )
-            ), # end of column
-            
-            column(
-              width = 12,
-              ## Probe Data Table ####
-              box(
-                title = "Probe Data Table",
-                width = 12,
-                div(style = 'overflow-x: scroll', DT::dataTableOutput('Probes')),
-                collapsible = T
-              )
-              
             ) # end of column
           ) # end of fluidRow
-
         ), # end of Region View tabPanel
         
-        ## Summary View Plots ####
+        ## Summary View ####
         tabPanel(
           title="Summary View",
+          fluidRow(
+            column(
+              width = 6,
+              box(
+                width = 12,
+                h1("Settings"),
+                textOutput("info_chr"),
+                textOutput("info_start"),
+                textOutput("info_stop"),
+                textOutput("info_resenz")
+              )
+            ), # end of column
+            column(
+              width = 6,
+              box(
+                width = 12,
+                h1("Results"),
+                textOutput("info_res.sites"),
+                textOutput("info_all_probes"),
+                textOutput("info_selected_probes")
+              )
+            ) # end of column
+          ), # end of fluidRow
+          
+          ## Summary View Plots ####
           fluidRow(
             column(
               width = 4,
@@ -343,6 +353,18 @@ body <- dashboardBody(
               width = 4,
               plotOutput("summary_shift")
             ) #end of column
+          ), # end of fluidRow
+          fluidRow(
+            column(
+              width = 12,
+              ## Probe Data Table ####
+              box(
+                title = "Probe Data Table",
+                width = 12,
+                div(style = 'overflow-x: scroll', DT::dataTableOutput('Probes')),
+                collapsible = T
+              )
+            ) # end of column
           ) # end of fluidRow
         ) # end of Summary View tabPanel
       ) # end of tabBox

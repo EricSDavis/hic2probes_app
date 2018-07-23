@@ -10,9 +10,8 @@ shinyServer(function(input, output, session) {
   
   ##--------------------Title----------------------####
   output$title <- renderUI({
-    req(res.sites())
-    sites <- res.sites()
-    paste0(input$chr, ": ", input$start, "-", input$stop, ", found ", length(sites), " restriction sites")
+    req(input$run_script)
+    paste0(input$chr, ": ", input$start, "-", input$stop)
   })
 
   ##------------Return to Define Page--------------####
@@ -22,9 +21,14 @@ shinyServer(function(input, output, session) {
                      "Define" = "Evaluate"
     )
     system("pwd")
-    # system("rm -r ../hic2probes/output/")
+    system("rm -r ../hic2probes/output/")
     updateTabItems(session, "tabNav", newtab)
   })
+  
+  ##------------------Set Default Tab-------------####
+  observeEvent(input$run_script, {
+    updateTabsetPanel(session, "tab_view", selected = "Summary View")
+  }) 
 
   ##-------------Run script-----------------------####
   observeEvent(input$run_script, {
@@ -34,13 +38,6 @@ shinyServer(function(input, output, session) {
       message <- "Start must be less than stop"
       shinyalert("Invalid Option:", message, type = "error")
     } else {
-      
-      ## Handle NA values for input$max probes ####
-      # if (is.na(input$max_probes)){
-      #   max_probes <- ""
-      # } else {
-      #   max_probes <- paste0(" -n ", input$max_probes)
-      # }
       
       ## Stitch command ####
       command <- paste0("./../hic2probes/shell/hicsq.sh",
@@ -87,12 +84,20 @@ shinyServer(function(input, output, session) {
   script_results <- reactive({
     req(input$index)
     req(input$run_script)
-    if(input$max_probes2 > 0 || is.na(input$max_probes2)){
+    
+    ## Handle NULL values for input$max_probes ####
+    if (is.null(input$max_probes)){
+      max_probes <- NA
+    }else{
+      max_probes <- input$max_probes
+    }
+    
+    if(max_probes > 0 || is.na(max_probes)){
       wd <- getwd()
       setwd("../hic2probes/") # Adjust working directory to find output/all_probes.bed
-      system(paste0("Rscript --vanilla ../hic2probes/scripts/reduce_probes.R ", input$max_probes2))
+      system(paste0("Rscript --vanilla ../hic2probes/scripts/reduce_probes.R ", max_probes))
       setwd(wd)
-      if (is.na(input$max_probes2)){
+      if (is.na(max_probes)){
         wd <- getwd()
         setwd("../hic2probes/") # Adjust working directory to find output/all_probes.bed
         system("Rscript --vanilla ../hic2probes/scripts/reduce_probes.R ")
@@ -114,14 +119,43 @@ shinyServer(function(input, output, session) {
     sites
   })
   
-  ##--------------Probe data table----------------####
-  observe({
-    output$Probes <- DT::renderDataTable({
-      data <- script_results()
-      DT::datatable(data)
-    })
+  ##------------Load in All Probes--------------####
+  all_probes <- reactive({
+    all_probes <- read.delim("../hic2probes/output/all_probes.bed", header = F)
+    all_probes
   })
-
+  
+  ##---------------Probe Number-----------------####
+  output$max_probes <- renderUI({
+    numericInput(
+      inputId = "max_probes",
+      label = "Specify Probe Number:",
+      value = NA,
+      min = 0
+    )
+  })
+  
+  ##--------------Probe Density-----------------####
+  output$probe_density <- renderUI({
+    req(input$run_script)
+    req(script_results())
+    req(input$start)
+    req(input$stop)
+    data <- script_results()
+    all_probes <- all_probes()
+    probes <- nrow(data)
+    max_possible <- nrow(all_probes)
+    region_length <- input$stop - input$start
+    density <- probes/region_length*1000
+    max_density <- max_possible/region_length*1000
+    numericInput(
+      inputId = "probe_density",
+      label = "Probe Density (p/kb)",
+      min = 0,
+      value = density,
+      max = max_density
+    )
+  })
   
   ##--------------Coverage Histogram----------------####
   output$coverageHistogram <- renderPlot({
@@ -315,9 +349,55 @@ shinyServer(function(input, output, session) {
       dev.off()
     }
   )
+  
+  
+  ##--------------Summary View Info-------------####
+  ## Settings ####
+  output$info_chr <- renderText({
+    paste0("Chromosome: ", input$chr)
+  })
+  output$info_start <- renderText({
+    paste0("Start: ", input$start)
+  })
+  output$info_stop <- renderText({
+    paste0("Stop: ", input$stop)
+  })
+  output$info_resenz <- renderText({
+    paste0("Restriction Enzyme: ", input$resenz)
+  })
 
-  
-  
+  ## Results ####
+  observe({
+    output$info_res.sites <- renderText({
+      req(input$run_script)
+      req(res.sites())
+      sites <- res.sites()
+      paste0("Restriction Sites: ", length(sites), " found")
+    })
+    output$info_all_probes <- renderText({
+      req(input$run_script)
+      req(script_results())
+      req(all_probes())
+      data <- script_results()
+      all_probes <- all_probes()
+      probes <- nrow(data)
+      max_possible <- nrow(all_probes)
+      region_length <- input$stop - input$start
+      density <- probes/region_length*1000
+      max_density <- max_possible/region_length*1000
+      paste0("Maximum Possible: ", max_possible, " probes, (", max_density, " probes/kb)" )
+    })
+    output$info_selected_probes <- renderText({
+      req(input$run_script)
+      req(script_results())
+      data <- script_results()
+      probes <- nrow(data)
+      region_length <- input$stop - input$start
+      density <- probes/region_length*1000
+      paste0("Selected: ", probes, " probes, (", density, " probes/kb)")
+    })
+  })
+
   ##--------------Summary View Plots-------------####
   output$summary_gc <- renderPlot({
     data <- script_results()
@@ -335,8 +415,13 @@ shinyServer(function(input, output, session) {
     hist(data$shift, main = "Distance from Restriction Site")
   })
   
-
-  
+  ##--------------Probe data table----------------####
+  observe({
+    output$Probes <- DT::renderDataTable({
+      data <- script_results()
+      DT::datatable(data)
+    })
+  })
   
 }) # END
 
