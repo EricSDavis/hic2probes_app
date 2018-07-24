@@ -403,6 +403,12 @@ shinyServer(function(input, output, session) {
       density <- probes/region_length*1000
       paste0("Selected: ", probes, " probes, (", density, " probes/kb)")
     })
+    output$info_avgGC <- renderText({
+      req(input$run_script)
+      req(script_results())
+      data <- script_results()
+      paste0("Average GC Fraction: ", round(mean(data$GC), 2))
+    })
   })
 
   ##--------------Summary View Plots-------------####

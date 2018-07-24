@@ -334,7 +334,8 @@ body <- dashboardBody(
                 h1("Results"),
                 textOutput("info_res.sites"),
                 textOutput("info_all_probes"),
-                textOutput("info_selected_probes")
+                textOutput("info_selected_probes"),
+                textOutput("info_avgGC")
               )
             ) # end of column
           ), # end of fluidRow
