@@ -23,6 +23,7 @@ shinyServer(function(input, output, session) {
     system("pwd")
     system("rm -r ../hic2probes/output/")
     updateTabItems(session, "tabNav", newtab)
+    session$reload() #reload session on input$return
   })
   
   ##------------------Set Default Tab-------------####
@@ -67,6 +68,12 @@ shinyServer(function(input, output, session) {
       }
       command <- paste0("awk -v OFS='\t' '{print $1, $2, $3, $4, $5, $6, $7, $8, ",  StartIndex, "$9", EndIndex, " , $10}' ../hic2probes/output/all_probes.bed > ../hic2probes/output/temp.bed")
       system(command)
+      ## Initial filtering with max_probes
+      wd <- getwd()
+      setwd("../hic2probes/") # Adjust working directory to find output/all_probes.bed
+      system("Rscript --vanilla ../hic2probes/scripts/reduce_probes.R ")
+      system("mv ../hic2probes/output/filtered_probes.bed ../hic2probes/output/temp.bed")
+      setwd(wd)
       system("mv ../hic2probes/output/temp.bed ../hic2probes/output/all_probes.bed")
       system("cat ../hic2probes/output/all_probes.bed")
 
