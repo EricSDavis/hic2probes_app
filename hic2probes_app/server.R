@@ -329,6 +329,7 @@ shinyServer(function(input, output, session) {
     }
   })
   
+  
   ##-------------Download Results----------------####
   output$downloadProbes <- downloadHandler(
     filename = function(){
@@ -414,18 +415,34 @@ shinyServer(function(input, output, session) {
   ##--------------Summary View Plots-------------####
   output$summary_gc <- renderPlot({
     data <- script_results()
-    hist(data$GC, main = "GC Content")
+    cols <- c("red", "purple", "blue", "green", "blue", "purple", "red")
+    cols <- adjustcolor(cols, alpha.f = 0.6)
+    breaks <- nrow(data)*0.05
+    if (breaks < 1) breaks <- 1
+    h <- hist(data$GC, breaks = breaks, plot = F)
+    cuts <- cut(h$breaks, c(-Inf, .25, .4, 0.5, 0.6, .7, .8, Inf))
+    cols[cuts]
+    plot(h, col = cols[cuts], xlim = c(0.2, 0.8),
+         main = "GC Content",
+         ylab = "Number of Probes",
+         xlab = "GC Fraction")
   })
   
   output$summary_pass <- renderPlot({
     data <- script_results()
-    plot(density(data$pass), main = "Probe Quality")
+    cols <- c("green", "blue", "purple", "red")
+    cols <- adjustcolor(cols, alpha.f = 0.6)
+    barplot(table(factor(data$pass, levels = 0:3)), col = cols,
+            main = "Probe Quality",
+            ylab = "Number of Probes",
+            xlab = "Pass Number")
   })
   
   
   output$summary_shift <- renderPlot({
     data <- script_results()
-    hist(data$shift, main = "Distance from Restriction Site")
+    hist(data$shift, main = "Distance from Restriction Site",
+         xlab = "Distance (bp)")
   })
   
   ##--------------Probe data table----------------####

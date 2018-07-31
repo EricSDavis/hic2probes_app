@@ -5,7 +5,7 @@ colnames(data) <- c("chr", "start", "stop", "shift", "res.fragment", "dir", "AT"
 
 values <- sort(unlist(lapply(seq(1:nrow(data)), function(x) data$start[x]:data$stop[x])))
 
-# col_func <- colorRampPalette(c("blue", "midnight blue", "purple", "maroon"))
+col_func <- colorRampPalette(c("blue", "midnight blue", "purple", "maroon"))
 # col_func(4)
 
 cols <- c("green", "blue", "purple", "red")[factor(data$pass)]
@@ -98,9 +98,9 @@ plotly::plot_ly(data, x = ~start, y = ~GC, color = ~GC) %>%
   )%>%
   #lapply(seq(1:nrow(data)), function(x) add_trace(x = ~start[x], y = ~GC[x], xend = ~stop[x], yend = ~GC[x]))
   add_trace(x = ~start, y = ~GC, xend = ~stop, yend = ~GC, mode = 'lines')
-
+  
 p <- plot_ly(economics, x = ~date, y = ~uempmed)
 p
 p %>% add_markers()
 p %>% add_lines()
-p %>% add_text(text = ".")
+p %>% add_text(text = "___")
