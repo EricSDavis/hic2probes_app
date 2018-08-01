@@ -324,7 +324,8 @@ body <- dashboardBody(
                 textOutput("info_chr"),
                 textOutput("info_start"),
                 textOutput("info_stop"),
-                textOutput("info_resenz")
+                textOutput("info_resenz"),
+                textOutput("info_index")
               )
             ), # end of column
             column(
@@ -335,6 +336,7 @@ body <- dashboardBody(
                 textOutput("info_res.sites"),
                 textOutput("info_all_probes"),
                 textOutput("info_selected_probes"),
+                textOutput("info_probeLength"),
                 textOutput("info_avgGC")
               )
             ) # end of column

@@ -68,6 +68,7 @@ shinyServer(function(input, output, session) {
       }
       command <- paste0("awk -v OFS='\t' '{print $1, $2, $3, $4, $5, $6, $7, $8, ",  StartIndex, "$9", EndIndex, " , $10}' ../hic2probes/output/all_probes.bed > ../hic2probes/output/temp.bed")
       system(command)
+      system("mv ../hic2probes/output/temp.bed ../hic2probes/output/all_probes.bed")
       ## Initial filtering with max_probes
       wd <- getwd()
       setwd("../hic2probes/") # Adjust working directory to find output/all_probes.bed
@@ -373,6 +374,25 @@ shinyServer(function(input, output, session) {
   output$info_resenz <- renderText({
     paste0("Restriction Enzyme: ", input$resenz)
   })
+  output$info_index <- renderText({
+    req(input$index)
+    if (input$index == "None"){
+      paste0("Index Sequence: None")
+    } else if (input$index == "Custom"){
+      req(input$custom_index_1)
+      req(input$custom_index_2)
+      paste0("Custom Index: ",
+             input$custom_index_1, " - N120 - ", input$custom_index_2)
+    } else if (input$index == "Index1"){
+      paste0("Index 1: TCGCGCCCATAACTC - N120 - CTGAGGGTCCGCCTT")
+    } else if (input$index == "Index2"){
+      paste0("Index 2: ATCGCACCAGCGTGT - N120 - CACTGCGGCTCCTCA")
+    } else if (input$index == "Index3"){
+      paste0("Index 3: CCTCGCCTATCCCAT - N120 - CACTACCGGGGTCTG")
+    } else {
+      print0("Error!")
+    }
+  })
 
   ## Results ####
   observe({
@@ -404,6 +424,18 @@ shinyServer(function(input, output, session) {
       density <- probes/region_length*1000
       paste0("Selected: ", probes, " probes, (", density, " probes/kb)")
     })
+    output$info_probeLength <- renderText({
+      req(input$index)
+      if(input$index == "None"){
+        paste0("Probe Length: 120 bp")
+      } else if (input$index == "Custom"){
+        req(input$custom_index_1)
+        req(input$custom_index_2)
+        paste0("Probe Length: ", nchar(input$custom_index_1)+120+nchar(input$custom_index_2), " bp")
+      } else {
+        paste0("Probe Length: 150 bp")
+      }
+    })
     output$info_avgGC <- renderText({
       req(input$run_script)
       req(script_results())
@@ -420,12 +452,15 @@ shinyServer(function(input, output, session) {
     breaks <- nrow(data)*0.05
     if (breaks < 1) breaks <- 1
     h <- hist(data$GC, breaks = breaks, plot = F)
-    cuts <- cut(h$breaks, c(-Inf, .25, .4, 0.5, 0.6, .7, .8, Inf))
+    cuts <- cut(h$breaks, c(-Inf, .25, .35, .49, .65, .7, .8, Inf))
     cols[cuts]
     plot(h, col = cols[cuts], xlim = c(0.2, 0.8),
          main = "GC Content",
          ylab = "Number of Probes",
          xlab = "GC Fraction")
+    legend('topright', legend = c("0", "1", "2", "3"), 
+           fill = adjustcolor(c("green", "blue", "purple", "red"), alpha.f = 0.6),
+           title = "Pass")
   })
   
   output$summary_pass <- renderPlot({
