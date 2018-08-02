@@ -20,8 +20,13 @@ body <- dashboardBody(
   useShinyalert(),
   shinyjs::useShinyjs(),
   
-  ## Link in stylesheets ####
-  tags$link(rel = "stylesheet", type = "text/css", href = "css/style.css"),
+  tags$head(
+    ## Link in stylesheets ####
+    tags$link(rel = "stylesheet", type = "text/css", href = "css/style.css"),
+    
+    ## Link in scripts ####
+    tags$script(src = "js/main.js")
+  ),
   
   ## Pages ####
   tabItems(
