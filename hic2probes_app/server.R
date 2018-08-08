@@ -476,8 +476,16 @@ shinyServer(function(input, output, session) {
   
   output$summary_shift <- renderPlot({
     data <- script_results()
-    hist(data$shift, main = "Distance from Restriction Site",
-         xlab = "Distance (bp)")
+    col_func <- colorRampPalette(c("green", "blue", "purple", "red"))
+    h <- hist(data$shift, plot = F)
+    plot(
+      h,
+      xlim = c(0, max(data$shift)+20),
+      col = adjustcolor(col_func(length(h$breaks)),alpha.f = 0.6),
+      main = "Restriction Site Distance",
+      xlab = "Distance (bp)",
+      ylab = "Number of Probes"
+    )
   })
   
   ##--------------Probe data table----------------####
