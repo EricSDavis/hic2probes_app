@@ -34,12 +34,8 @@ shinyServer(function(input, output, session) {
   ##-------------Run script-----------------------####
   observeEvent(input$run_script, {
     
-    ## Error Handling ####
-    if(input$stop <= input$start | is.na(input$stop) | is.na(input$start)){
-      message <- "Start must be less than stop"
-      shinyalert("Invalid Option:", message, type = "error")
-    } else {
-      
+    ## Define run_script ####
+    run_script <- function(){
       ## Stitch command ####
       command <- paste0("./../hic2probes/shell/hicsq.sh",
                         " -c ", input$chr,
@@ -77,14 +73,40 @@ shinyServer(function(input, output, session) {
       setwd(wd)
       system("mv ../hic2probes/output/temp.bed ../hic2probes/output/all_probes.bed")
       system("cat ../hic2probes/output/all_probes.bed")
-
+      
       ## Switch to Evaluate Page ####
       newtab <- switch(input$tabNav,
                        "Define" = "Evaluate",
                        "Evaluate" = "Define"
       )
       updateTabItems(session, "tabNav", newtab)
+    }
+    
+    ## Error Handling ####
+    if(input$stop <= input$start | is.na(input$stop) | is.na(input$start)){
+      message <- "Start must be less than stop"
+      shinyalert("Invalid Option:", message, type = "error")
+    } else if (input$stop - input$start > 2000000) {
+      shinyalert(
+        title = "Warning!",
+        text = "The region you selected is > 2Mb. \r This operation may take a while...",
+        closeOnEsc = TRUE,
+        closeOnClickOutside = FALSE,
+        html = FALSE,
+        type = "warning",
+        showConfirmButton = TRUE,
+        showCancelButton = TRUE,
+        confirmButtonText = "Continue",
+        confirmButtonCol = "#AEDEF4",
+        cancelButtonText = "Cancel",
+        timer = 0,
+        imageUrl = "",
+        animation = TRUE,
+        callbackR = function(x) {if(x != FALSE) run_script()}
+      )
+    } else {
       
+      run_script()
     }
   })
   
@@ -326,7 +348,7 @@ shinyServer(function(input, output, session) {
   observeEvent(input$region_slider, {
     if(input$region_slider[2] == input$region_slider[1]){
       updateSliderInput(session, "region_slider", value = c(input$start, input$stop))
-      shinyalert("You Cant Do That...", "Stop it!", type = "error")
+      shinyalert("You Can't Do That...", "Viewing range must be greater than 0 base pairs!", type = "error")
     }
   })
   
