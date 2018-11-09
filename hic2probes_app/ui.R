@@ -1,19 +1,19 @@
 
 fluidPage(
-           tabPanel("Home",
-                    
-                    useShinyalert(),
-                    shinyjs::useShinyjs(),
-                    tags$head(
-                      ## Link in stylesheets ####
-                      # tags$link(rel = "stylesheet", type = "text/css", href = "css/style.css"),
-                      
-                      ## Link in scripts ####
-                      tags$script(src = "js/main.js")
-
-                    ),
-                    
-                    tags$footer(tags$a(span(img(src="images/PhanstielLab.png",height=16,align="left", style="")), href="http://phanstiel-lab.med.unc.edu/"), align = "left", style = "
+  tabPanel("Home",
+           
+           useShinyalert(),
+           shinyjs::useShinyjs(),
+           tags$head(
+             ## Link in stylesheets ####
+             # tags$link(rel = "stylesheet", type = "text/css", href = "css/style.css"),
+             
+             ## Link in scripts ####
+             tags$script(src = "js/main.js")
+             
+           ),
+           
+           tags$footer(tags$a(span(img(src="images/PhanstielLab.png",height=16,align="left", style="")), href="http://phanstiel-lab.med.unc.edu/"), align = "left", style = "
               position: absolute;
                                 bottom:0;
                                 width:101%;
@@ -23,166 +23,169 @@ fluidPage(
                                 margin-left: -20px;
                                 background-color: #b8c2cc;
                                 z-index: 1000;",
-                                tags$ul("© 2018 Phanstiel Lab", align="right", style="font-weight:300") # c4c8cc
-                    ),
-                    
-              fluidRow(
-                align="center",
-                column(4),
-                column(1,"Home"),
-                column(1,"About"),
-                column(1,"Download"),
-                column(1,"Contact")
-              ),
-              
-            
-                    br(),
-                    
-                    # Add logo
-                    fluidRow(
-                      
-                      align="middle",
-                      # add image
-                      img(src='images/lure_logo_current.png',width=400)
-                    ),
-                    br(),
-                    
-                    
-                    # Add input row
-                    fluidRow(
-                      column(width=4, align="center",
-                             selectInput(
-                               inputId = "genome",
-                               label = "Genome:",
-                               choices = list("Human" = c("hg38", "hg19", "hg18"),
-                                              "Mouse" = c("GRCm38/mm10", "NCBI37/mm9"),
-                                              "Rat" = c("RGSC 6.0/rn6", "RGSC 5.0/rn5"),
-                                              "Fruitfly" = c(),
-                                              "Worm" = c(),
-                                              "Yeast" = c()
-                               ),
-                               selected = "hg19",
-                               multiple = F
-                             )
-                      ),
-                      
-                      # Coordinates
-                      column(width=4, align="center",
-                             textInput(
-                               inputId = "coordinates",
-                               label = "Target Region:",
-                               value = "chr3:133000000-133100000"
-                             )
-                      ),
-                      
-                      # Restriction Enzyme
-                      column(width=4, align="center",
-                             selectInput(
-                               inputId = "resenz",
-                               label = "Restriction Enzyme:",
-                               choices = c("^GATC,MobI", "A^AGCTT,HindIII"),
-                               selected = "^GATC,MobI",
-                               multiple = F
-                             )
-                      ) # end column
-                    ), # end fluidRow
-                    
-                    
-                    
-                    
-                    fluidRow(
-                      # column(2),
-                      column(12,align="center",
-                             
-                             actionButton(inputId = "AdvancedOptionsButton",
-                                          label = "Advanced Options")
-                      )
-                    ),
-                    
-                    conditionalPanel(
-                      condition = ("input.AdvancedOptionsButton%2==1"),
-                      fluidRow(
-                        column(width=12,align="left",
-                               id = "advanced1",
-                               radioButtons(width ="100%",
-                                            inputId = "index",inline=F,
-                                            label = "Add index sequences:",
-                                            choices = c("None",
-                                                        "Index 1: TCGCGCCCATAACTC-N120-CTGAGGGTCCGCCTT" = "Index1",
-                                                        "Index 2: ATCGCACCAGCGTGT-N120-CACTGCGGCTCCTCA" = "Index2",
-                                                        "Index 3: CCTCGCCTATCCCAT-N120-CACTACCGGGGTCTG" = "Index3",
-                                                        "Custom"),
-                                            selected = "None"
-                               ), # end of radioButtons,
-                               conditionalPanel(
-                                 condition = "input.index == 'Custom'",
-                                 fluidRow(
-                                   column(
-                                     width = 5,
-                                     textInput(
-                                       inputId = "custom_index_1",
-                                       label = "",
-                                       placeholder = "start index"
-                                     ) # end of textInput
-                                   ), # end of column
-                                   column(
-                                     width = 2,
-                                     br(),
-                                     span("-120-")
-                                   ), # end of column
-                                   column(
-                                     width = 5,
-                                     textInput(
-                                       inputId = "custom_index_2",
-                                       label = "",
-                                       placeholder = "end index"
-                                     ) # end of textInput
-                                   ) # end of column
-                                 ) # end of fluidRow
-                               ) # end of conditionalPanel
-                        ) # end of conditionalPanel
-                        
-                        
-                      ) # end of fluid Row
-                    ),
-                    
-                    br(),
-                    
-                    # Design Probes ####
-                    fluidRow(
-                      column(12,align="middle",
-                             actionButton(
-                               inputId = "run_script",
-                               label = "Design Probes",
-                               icon = icon("wrench", lib = "font-awesome")
-                             )
-                      ) # end column
-                    ), # end of row
-                    
-                    
-                    # Page-load Spinner ####
-                    fluidRow(
-                      column(12,
-                             conditionalPanel(
-                               condition = "input.run_script > 0 && $('html').hasClass('shiny-busy')",
-                               
-                               HTML('
-                                 <div class="loader"></div>
-                                     <p id="loading-message1" class="loading-message"> Constructing Probes... </p>
-                                     <p id="loading-message2" class="loading-message"> They are going to be great... </p>
-                                     ')
-                               
-                             ) # end of conditional panel
-                      ) # end of column
-                    ) # end of row
-                    
+                       tags$ul("© 2018 Phanstiel Lab", align="right", style="font-weight:300") # c4c8cc
            ),
+           
+           fluidRow(
+             align="center",
+             column(4),
+             column(1,"Home"),
+             column(1,"About"),
+             column(1,"Download"),
+             column(1,"Contact")
+           ),
+           
            
            br(),
            br(),
            br(),
+
+           # Add logo
+           fluidRow(
+             
+             align="middle",
+             # add image
+             img(src='images/lure_logo_current.png',width=400)
+           ),
            br(),
-           br()
+           br(),
+           
+           
+           # Add input row
+           fluidRow(
+             column(width=4, align="center",
+                    selectInput(
+                      inputId = "genome",
+                      label = "Genome:",
+                      choices = list("Human" = c("hg38", "hg19", "hg18"),
+                                     "Mouse" = c("GRCm38/mm10", "NCBI37/mm9"),
+                                     "Rat" = c("RGSC 6.0/rn6", "RGSC 5.0/rn5"),
+                                     "Fruitfly" = c(),
+                                     "Worm" = c(),
+                                     "Yeast" = c()
+                      ),
+                      selected = "hg19",
+                      multiple = F
+                    )
+             ),
+             
+             # Coordinates
+             column(width=4, align="center",
+                    textInput(
+                      inputId = "coordinates",
+                      label = "Target Region:",
+                      value = "chr3:133000000-133100000"
+                    )
+             ),
+             
+             # Restriction Enzyme
+             column(width=4, align="center",
+                    selectInput(
+                      inputId = "resenz",
+                      label = "Restriction Enzyme:",
+                      choices = c("^GATC,MobI", "A^AGCTT,HindIII"),
+                      selected = "^GATC,MobI",
+                      multiple = F
+                    )
+             ) # end column
+           ), # end fluidRow
+           
+           
+           
+           
+           fluidRow(
+             # column(2),
+             column(12,align="center",
+                    
+                    actionButton(inputId = "AdvancedOptionsButton",
+                                 label = "Advanced Options")
+             )
+           ),
+           
+           conditionalPanel(
+             condition = ("input.AdvancedOptionsButton%2==1"),
+             fluidRow(
+               column(width=12,align="left",
+                      id = "advanced1",
+                      radioButtons(width ="100%",
+                                   inputId = "index",inline=F,
+                                   label = "Add index sequences:",
+                                   choices = c("None",
+                                               "Index 1: TCGCGCCCATAACTC-N120-CTGAGGGTCCGCCTT" = "Index1",
+                                               "Index 2: ATCGCACCAGCGTGT-N120-CACTGCGGCTCCTCA" = "Index2",
+                                               "Index 3: CCTCGCCTATCCCAT-N120-CACTACCGGGGTCTG" = "Index3",
+                                               "Custom"),
+                                   selected = "None"
+                      ), # end of radioButtons,
+                      conditionalPanel(
+                        condition = "input.index == 'Custom'",
+                        fluidRow(
+                          column(
+                            width = 5,
+                            textInput(
+                              inputId = "custom_index_1",
+                              label = "",
+                              placeholder = "start index"
+                            ) # end of textInput
+                          ), # end of column
+                          column(
+                            width = 2,
+                            br(),
+                            span("-120-")
+                          ), # end of column
+                          column(
+                            width = 5,
+                            textInput(
+                              inputId = "custom_index_2",
+                              label = "",
+                              placeholder = "end index"
+                            ) # end of textInput
+                          ) # end of column
+                        ) # end of fluidRow
+                      ) # end of conditionalPanel
+               ) # end of conditionalPanel
+               
+               
+             ) # end of fluid Row
+           ),
+           
+           br(),
+           
+           # Design Probes ####
+           fluidRow(
+             column(12,align="middle",
+                    actionButton(
+                      inputId = "run_script",
+                      label = "Design Probes",
+                      icon = icon("wrench", lib = "font-awesome")
+                    )
+             ) # end column
+           ), # end of row
+           
+           
+           # Page-load Spinner ####
+           fluidRow(
+             column(12,
+                    conditionalPanel(
+                      condition = "input.run_script > 0 && $('html').hasClass('shiny-busy')",
+                      
+                      HTML('
+                                 <div class="loader"></div>
+                                     <p id="loading-message1" class="loading-message"> Constructing Probes... </p>
+                                     <p id="loading-message2" class="loading-message"> They are going to be great... </p>
+                                     ')
+                      
+                    ) # end of conditional panel
+             ) # end of column
+           ) # end of row
+           
+  ),
+  
+  br(),
+  br(),
+  br(),
+  br(),
+  br()
 )
 
 
