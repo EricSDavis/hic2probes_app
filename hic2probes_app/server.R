@@ -7,7 +7,7 @@ shinyServer(function(input, output, session) {
   ##--------------------Title----------------------####
   output$title <- renderUI({
     req(input$run_script)
-    paste0(extractcoords(inpt$coordinates)$chr, ": ", extractcoords(inpt$coordinates)$start, "-", extractcoords(inpt$coordinates)$stop)
+    paste0(extractcoords(input$coordinates)$chr, ": ", extractcoords(input$coordinates)$start, "-", extractcoords(input$coordinates)$stop)
   })
 
   ##------------Return to Define Page--------------####
@@ -54,9 +54,9 @@ shinyServer(function(input, output, session) {
     run_script <- function(){
       ## Stitch command ####
       command <- paste0("./../hic2probes/shell/hicsq.sh",
-                        " -c ", extractcoords(inpt$coordinates)$chr,
-                        " -b ", extractcoords(inpt$coordinates)$start,
-                        " -e ", extractcoords(inpt$coordinates)$stop,
+                        " -c ", extractcoords(input$coordinates)$chr,
+                        " -b ", extractcoords(input$coordinates)$start,
+                        " -e ", extractcoords(input$coordinates)$stop,
                         " -r ", input$resenz)
       
       system(command, input = "yes")
@@ -99,10 +99,10 @@ shinyServer(function(input, output, session) {
     }
     
     ## Error Handling ####
-    if(extractcoords(inpt$coordinates)$stop <= extractcoords(inpt$coordinates)$start | is.na(extractcoords(inpt$coordinates)$stop) | is.na(extractcoords(inpt$coordinates)$start)){
+    if(extractcoords(input$coordinates)$stop <= extractcoords(input$coordinates)$start | is.na(extractcoords(input$coordinates)$stop) | is.na(extractcoords(input$coordinates)$start)){
       message <- "Start must be less than stop"
       shinyalert("Invalid Option:", message, type = "error")
-    } else if (extractcoords(inpt$coordinates)$stop - extractcoords(inpt$coordinates)$start > 2000000) {
+    } else if (extractcoords(input$coordinates)$stop - extractcoords(input$coordinates)$start > 2000000) {
       shinyalert(
         title = "Warning!",
         text = "The region you selected is > 2Mb. \r This operation may take a while...",
@@ -161,7 +161,7 @@ shinyServer(function(input, output, session) {
     ## Load in restriction sites
     res.sites <- read.delim("../hic2probes/output/fragments.bed", header = F)
     sites <- unique(sort(c(res.sites[,2], res.sites[,3])))
-    sites <- sites + extractcoords(inpt$coordinates)$start
+    sites <- sites + extractcoords(input$coordinates)$start
     sites
   })
   
@@ -185,13 +185,13 @@ shinyServer(function(input, output, session) {
   output$probe_density <- renderUI({
     req(input$run_script)
     req(script_results())
-    req(extractcoords(inpt$coordinates)$start)
-    req(extractcoords(inpt$coordinates)$stop)
+    req(extractcoords(input$coordinates)$start)
+    req(extractcoords(input$coordinates)$stop)
     data <- script_results()
     all_probes <- all_probes()
     probes <- nrow(data)
     max_possible <- nrow(all_probes)
-    region_length <- extractcoords(inpt$coordinates)$stop - extractcoords(inpt$coordinates)$start
+    region_length <- extractcoords(input$coordinates)$stop - extractcoords(input$coordinates)$start
     density <- probes/region_length*1000
     max_density <- max_possible/region_length*1000
     numericInput(
@@ -212,7 +212,7 @@ shinyServer(function(input, output, session) {
     req(input$region_slider[2] != input$region_slider[1])
     
     ## Dynamically resizing breakpoints
-    gdist <- extractcoords(inpt$coordinates)$stop - extractcoords(inpt$coordinates)$start
+    gdist <- extractcoords(input$coordinates)$stop - extractcoords(input$coordinates)$start
     sdist <- input$region_slider[2] - input$region_slider[1]
     breaks <- gdist/(gdist*(0.01*(sdist/gdist)))
     
@@ -264,7 +264,7 @@ shinyServer(function(input, output, session) {
     req(input$region_slider[2] != input$region_slider[1])
     
     ## Dynamically resizing breakpoints
-    gdist <- extractcoords(inpt$coordinates)$stop - extractcoords(inpt$coordinates)$start
+    gdist <- extractcoords(input$coordinates)$stop - extractcoords(input$coordinates)$start
     sdist <- input$region_slider[2] - input$region_slider[1]
     breaks <- gdist/(gdist*(0.01*(sdist/gdist)))
     
@@ -312,7 +312,7 @@ shinyServer(function(input, output, session) {
     
     plot(c(0,1), c(0,1), "n",
          xlim=c(input$region_slider[1], input$region_slider[2]),
-         xlab = paste0(extractcoords(inpt$coordinates)$chr, " region"),
+         xlab = paste0(extractcoords(input$coordinates)$chr, " region"),
          ylab = "GC Fraction",
          las = 1,
          frame.plot = F)
@@ -337,7 +337,7 @@ shinyServer(function(input, output, session) {
     plot(data$start, data$shift, "n", frame.plot = F,
          xlim = c(input$region_slider[1], input$region_slider[2]),
          ylim = c(min(data$shift), max(data$shift)+0.45*(max(data$shift))),
-         xlab = paste0(extractcoords(inpt$coordinates)$chr, " region"),
+         xlab = paste0(extractcoords(input$coordinates)$chr, " region"),
          ylab = "Base Pairs from Restriction Site",
          las = 1
          )
@@ -354,16 +354,16 @@ shinyServer(function(input, output, session) {
     sliderInput(
       inputId = "region_slider",
       label = "Select Viewing Region:",
-      min = extractcoords(inpt$coordinates)$start,
-      max = extractcoords(inpt$coordinates)$stop,
-      value = c(extractcoords(inpt$coordinates)$start, extractcoords(inpt$coordinates)$stop),
+      min = extractcoords(input$coordinates)$start,
+      max = extractcoords(input$coordinates)$stop,
+      value = c(extractcoords(input$coordinates)$start, extractcoords(input$coordinates)$stop),
       step = 10
     )
   })
   
   observeEvent(input$region_slider, {
     if(input$region_slider[2] == input$region_slider[1]){
-      updateSliderInput(session, "region_slider", value = c(extractcoords(inpt$coordinates)$start, extractcoords(inpt$coordinates)$stop))
+      updateSliderInput(session, "region_slider", value = c(extractcoords(input$coordinates)$start, extractcoords(input$coordinates)$stop))
       shinyalert("You Can't Do That...", "Viewing range must be greater than 0 base pairs!", type = "error")
     }
   })
@@ -372,13 +372,13 @@ shinyServer(function(input, output, session) {
   ##-------------Download Results----------------####
   output$downloadProbes <- downloadHandler(
     filename = function(){
-      req(extractcoords(inpt$coordinates)$chr)
-      req(extractcoords(inpt$coordinates)$start)
-      req(extractcoords(inpt$coordinates)$stop)
+      req(extractcoords(input$coordinates)$chr)
+      req(extractcoords(input$coordinates)$start)
+      req(extractcoords(input$coordinates)$stop)
       paste0(Sys.Date(), "-",
-             extractcoords(inpt$coordinates)$chr, ":",
-             extractcoords(inpt$coordinates)$start, "-",
-             extractcoords(inpt$coordinates)$stop, "-",
+             extractcoords(input$coordinates)$chr, ":",
+             extractcoords(input$coordinates)$start, "-",
+             extractcoords(input$coordinates)$stop, "-",
              ".txt")
     },
     content = function(file){
@@ -401,13 +401,13 @@ shinyServer(function(input, output, session) {
   ##--------------Summary View Info-------------####
   ## Settings ####
   output$info_chr <- renderText({
-    paste0("Chromosome: ", extractcoords(inpt$coordinates)$chr)
+    paste0("Chromosome: ", extractcoords(input$coordinates)$chr)
   })
   output$info_start <- renderText({
-    paste0("Start: ", extractcoords(inpt$coordinates)$start)
+    paste0("Start: ", extractcoords(input$coordinates)$start)
   })
   output$info_stop <- renderText({
-    paste0("Stop: ", extractcoords(inpt$coordinates)$stop)
+    paste0("Stop: ", extractcoords(input$coordinates)$stop)
   })
   output$info_resenz <- renderText({
     paste0("Restriction Enzyme: ", input$resenz)
@@ -448,7 +448,7 @@ shinyServer(function(input, output, session) {
       all_probes <- all_probes()
       probes <- nrow(data)
       max_possible <- nrow(all_probes)
-      region_length <- extractcoords(inpt$coordinates)$stop - extractcoords(inpt$coordinates)$start
+      region_length <- extractcoords(input$coordinates)$stop - extractcoords(input$coordinates)$start
       density <- probes/region_length*1000
       max_density <- max_possible/region_length*1000
       paste0("Maximum Possible: ", max_possible, " probes, (", max_density, " probes/kb)" )
@@ -458,7 +458,7 @@ shinyServer(function(input, output, session) {
       req(script_results())
       data <- script_results()
       probes <- nrow(data)
-      region_length <- extractcoords(inpt$coordinates)$stop - extractcoords(inpt$coordinates)$start
+      region_length <- extractcoords(input$coordinates)$stop - extractcoords(input$coordinates)$start
       density <- probes/region_length*1000
       paste0("Selected: ", probes, " probes, (", density, " probes/kb)")
     })
