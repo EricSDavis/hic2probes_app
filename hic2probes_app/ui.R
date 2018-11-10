@@ -9,37 +9,45 @@ fluidPage(
              # tags$link(rel = "stylesheet", type = "text/css", href = "css/style.css"),
              
              ## Link in scripts ####
-             tags$script(src = "js/main.js")
-             
-           ),
+             tags$script(src = "js/main.js"),
+             tags$style(HTML("@media (min-width: 768px) {
+                             #home {text-align: left; margin-left:-.8%}
+                             #about {text-align: center; padding-right: 4%}
+                             #download {text-align: center;}
+                             #contact {text-align: right; padding-left: 4.85%}
+                             }"
+                            )
+             )
+             ),
            
            tags$footer(tags$a(span(img(src="images/PhanstielLab.png",height=16,align="left", style="")), href="http://phanstiel-lab.med.unc.edu/"), align = "left", style = "
-              position: absolute;
-                                bottom:0;
-                                width:101%;
-                                height:40px;
-                                color: #eceff3;
-                                padding: 12px 25px 0px 20px;
-                                margin-left: -20px;
-                                background-color: #b8c2cc;
-                                z-index: 1000;",
+                       position: fixed;
+                       bottom:0;
+                       width:101%;
+                       height:40px;
+                       color: #eceff3;
+                       padding: 12px 25px 0px 20px;
+                       margin-left: -20px;
+                       background-color: #b8c2cc;
+                       z-index: 1000;",
                        tags$ul("© 2018 Phanstiel Lab", align="right", style="font-weight:300") # c4c8cc
            ),
            
            fluidRow(
+             
              align="center",
              column(4),
-             column(1,"Home"),
-             column(1,"About"),
-             column(1,"Download"),
-             column(1,"Contact")
+             column(1, "Home", id="home"),
+             column(1,"About", id="about"),
+             column(1,"Download", id="download"),
+             column(1,"Contact", id="contact")
            ),
            
            
            br(),
            br(),
            br(),
-
+           
            # Add logo
            fluidRow(
              
@@ -170,23 +178,23 @@ fluidPage(
                       condition = "input.run_script > 0 && $('html').hasClass('shiny-busy')",
                       
                       HTML('
-                                 <div class="loader"></div>
-                                     <p id="loading-message1" class="loading-message"> Constructing Probes... </p>
-                                     <p id="loading-message2" class="loading-message"> They are going to be great... </p>
-                                     ')
+                           <div class="loader"></div>
+                           <p id="loading-message1" class="loading-message"> Constructing Probes... </p>
+                           <p id="loading-message2" class="loading-message"> They are going to be great... </p>
+                           ')
                       
-                    ) # end of conditional panel
-             ) # end of column
-           ) # end of row
+                      ) # end of conditional panel
+                    ) # end of column
+                    ) # end of row
            
-  ),
+                    ),
   
   br(),
   br(),
   br(),
   br(),
   br()
-)
+             )
 
 
 
