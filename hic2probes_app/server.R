@@ -2,11 +2,7 @@
 # Define server logic
 shinyServer(function(input, output, session) {
   
-  ##--------------- Shinyjs Toggles----------------####
-  shinyjs::onclick("toggleAdvanced1", shinyjs::toggle(id = "advanced1", anim = TRUE))
-  observe({
-    shinyjs::toggleState("custom_index", input$index == "Custom")
-  })
+
   
   ##--------------------Title----------------------####
   output$title <- renderUI({
