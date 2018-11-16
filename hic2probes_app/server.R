@@ -2,7 +2,7 @@
 # Define server logic
 shinyServer(function(input, output, session) {
   
-
+  options(scipen=999)
   
   ##--------------------Title----------------------####
   output$title <- renderUI({
@@ -58,7 +58,7 @@ shinyServer(function(input, output, session) {
                         " -b ", extractcoords(input$coordinates)$start,
                         " -e ", extractcoords(input$coordinates)$stop,
                         " -r ", input$resenz)
-      
+      print (command)
       system(command, input = "yes")
       
       ## Choose Index based on radioButton input ####
