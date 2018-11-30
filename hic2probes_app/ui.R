@@ -230,7 +230,7 @@ body <- dashboardBody(
         ## Return to Start Page ####
         actionButton(
           inputId = "return",
-          label = "Start-Over",
+          label = "Start Over",
           icon = icon("arrow-left", lib = "font-awesome")
         ) # end of actionButton
       ), # end of column
