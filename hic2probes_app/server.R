@@ -25,7 +25,22 @@ shinyServer(function(input, output, session) {
   ##------------------Set Default Tab-------------####
   observeEvent(input$run_script, {
     updateTabsetPanel(session, "tab_view", selected = "Summary View")
-  }) 
+  })
+  
+  # Define a function that extracts coords
+  extractcoords <- function (coordinates)
+  {
+    chr = strsplit(coordinates,":")[[1]][1]
+    positions = strsplit(coordinates,":")[[1]][2]
+    start = as.numeric(strsplit(positions,"-")[[1]][1])
+    stop = as.numeric(strsplit(positions,"-")[[1]][2])
+    coords = list()
+    coords[[1]] = chr
+    coords[[2]] = start
+    coords[[3]] = stop
+    names(coords) = c("chr","start","stop")
+    return(coords)
+  }
 
   ##-------------Run script-----------------------####
   observeEvent(input$run_script, {
@@ -35,21 +50,6 @@ shinyServer(function(input, output, session) {
     # split target region into chr, start, and stop
     
     
-    # Define a function that extracts coords
-    extractcoords <- function (coordinates)
-    {
-      chr = strsplit(coordinates,":")[[1]][1]
-      positions = strsplit(coordinates,":")[[1]][2]
-      start = as.numeric(strsplit(positions,"-")[[1]][1])
-      stop = as.numeric(strsplit(positions,"-")[[1]][2])
-      coords = list()
-      coords[[1]] = chr
-      coords[[2]] = start
-      coords[[3]] = stop
-      names(coords) = c("chr","start","stop")
-      return(coords)
-    }
-
     ## Define run_script ####
     run_script <- function(){
       ## Stitch command ####
