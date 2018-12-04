@@ -15,6 +15,8 @@ sidebar <- dashboardSidebar(
   )
 )
 
+genomes<-read.csv("./../genomes.csv", stringsAsFactors=F)
+
 ## Dashboard Body ####
 body <- dashboardBody(
   useShinyalert(),
@@ -55,9 +57,9 @@ body <- dashboardBody(
     align="center",
     column(4),
     column(1, "Home", id="home"),
-    column(1,"About", id="about"),
-    column(1,"Download", id="download"),
-    column(1,"Contact", id="contact")
+    column(1, "About", id="about"),
+    column(1, "Download", id="download"),
+    column(1, "Contact", id="contact")
   ),
   
   tabItems(
@@ -85,14 +87,8 @@ body <- dashboardBody(
            selectInput(
              inputId = "genome",
              label = "Genome:",
-             choices = list("Human" = c("hg38", "hg19", "hg18"),
-                            "Mouse" = c("GRCm38/mm10", "NCBI37/mm9"),
-                            "Rat" = c("RGSC 6.0/rn6", "RGSC 5.0/rn5"),
-                            "Fruitfly" = c(),
-                            "Worm" = c(),
-                            "Yeast" = c()
-             ),
-             selected = "hg19",
+             choices = as.list(split(genomes$Genome, genomes$Organism)),
+             selected = "hg38",
              multiple = F
            )
     ),

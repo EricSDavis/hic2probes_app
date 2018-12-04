@@ -57,7 +57,8 @@ shinyServer(function(input, output, session) {
                         " -c ", extractcoords(input$coordinates)$chr,
                         " -b ", extractcoords(input$coordinates)$start,
                         " -e ", extractcoords(input$coordinates)$stop,
-                        " -r ", input$resenz)
+                        " -r ", input$resenz,
+                        " -g ", paste0('"', "./../genomes/", basename(input$genome), ".fa", '"'))
       print (command)
       system(command, input = "yes")
       

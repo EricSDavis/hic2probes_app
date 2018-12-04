@@ -1,0 +1,11 @@
+Organism,Genome,URL
+Human,hg38,http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.2bit
+Human,hg19,http://hgdownload.soe.ucsc.edu/goldenPath/hg19/bigZips/hg19.2bit
+Human,hg18,http://hgdownload.soe.ucsc.edu/goldenPath/hg18/bigZips/hg18.2bit
+Mouse,GRCm38/mm10,http://hgdownload.soe.ucsc.edu/goldenPath/mm10/bigZips/mm10.2bit
+Mouse,NCBI37/mm9,http://hgdownload.soe.ucsc.edu/goldenPath/mm9/bigZips/mm9.2bit
+Rat,RGSC 6.0/rn6,http://hgdownload.soe.ucsc.edu/goldenPath/rn6/bigZips/rn6.2bit
+Rat,RGSC 5.0/rn5,http://hgdownload.soe.ucsc.edu/goldenPath/rn5/bigZips/rn5.2bit
+Fruitfly,BDGP Release 6 + ISO1 MT/dm6,http://hgdownload.soe.ucsc.edu/goldenPath/dm6/bigZips/dm6.2bit
+Worm,WS220/ce11,http://hgdownload.soe.ucsc.edu/goldenPath/ce11/bigZips/ce11.2bit
+Yeast,SacCer_Apr2011/sacCer3,http://hgdownload.soe.ucsc.edu/goldenPath/sacCer3/bigZips/sacCer3.2bit
