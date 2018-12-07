@@ -110,10 +110,12 @@ shinyServer(function(input, output, session) {
     ## Error Handling ####
     coords <- extractcoords(input$coordinates)
     if(is.null(coords)) {
-      shinyalert("Invalid Option:", "Chromosome coordinates are not in a valid format", type = "error")
+      shinyalert("Invalid Option", "Chromosome coordinates are not in a valid format.", type = "error")
     } else if(coords$stop <= coords$start) {
-      message <- "Start must be less than stop"
-      shinyalert("Invalid Option:", message, type = "error")
+      message <- "Start must be less than stop."
+      shinyalert("Invalid Option", message, type = "error")
+    } else if(coords$stop - coords$start > 5000000) {
+      shinyalert("Invalid Option", "Chromosome region cannot be larger than 5Mb.", type = "error")
     } else if(coords$stop - coords$start > 2000000) {
       shinyalert(
         title = "Warning!",
