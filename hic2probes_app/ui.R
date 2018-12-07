@@ -222,72 +222,51 @@ body <- dashboardBody(
     tabName = "Evaluate",
     
     fluidRow(
-      column(
-        width = 6,
-        ## Return to Start Page ####
-        actionButton(
-          inputId = "return",
-          label = "Start Over",
-          icon = icon("arrow-left", lib = "font-awesome")
-        ) # end of actionButton
-      ), # end of column
-      column(
-        width = 6,
-        fixedPanel(
-          class = "options",
-          dropdownButton(
-            size = "sm",
-            circle = T,
-            icon = icon("gear"),
-            width = 350,
-            right = T,
-            h3("Options", style="font-weight:300;"),
-            fluidRow(
-              width = 12,
-              column(
-                width = 6,
-                uiOutput("max_probes")
-              ), # end of column
-              column(
-                width = 6,
-                uiOutput("probe_density")
-              ) # end of column
-            ), # end of fluidRow
-            materialSwitch(
-              inputId = "toggle_res.sites",
-              label = "Show Restriction Sites?",
-              value = F,
-              status = "primary",
-              right = F
-            ),
-            dropdown(
-              circle = F,
-              size = "sm",
-              label = "Download",
-              inputId = "Download_menu",
-              tooltip = tooltipOptions(title = "Select which data to download"),
-              downloadLink(
-                outputId = "downloadProbes",
-                label = "Download Probes"
-              ),
-              br(),
-              downloadLink(
-                outputId = "downloadPlots",
-                label = "Download Plots"
-              ),
-              br(),
-              downloadLink(
-                outputId = "downloadAll",
-                label = "Download All"
-              )
-            ) # end of dropdown
-          ) # end of dropdownButton
-        ) # end of fixedPanel
+      column(width = 6, 
+        h3("Options", style="font-weight:300;"),
+        fluidRow(
+          width = 12,
+          column(
+            width = 6,
+            uiOutput("max_probes")
+          ), # end of column
+          column(
+            width = 6,
+            uiOutput("probe_density")
+          ) # end of column
+        ), # end of fluidRow
+        materialSwitch(
+          inputId = "toggle_res.sites",
+          label = "Show Restriction Sites?",
+          value = F,
+          status = "primary",
+          right = F
+        ),
+        dropdown(
+          circle = F,
+          size = "sm",
+          label = "Download",
+          inputId = "Download_menu",
+          tooltip = tooltipOptions(title = "Select which data to download"),
+          downloadLink(
+            outputId = "downloadProbes",
+            label = "Download Probes"
+          ),
+          br(),
+          downloadLink(
+            outputId = "downloadPlots",
+            label = "Download Plots"
+          ),
+          br(),
+          downloadLink(
+            outputId = "downloadAll",
+            label = "Download All"
+          )
+        ) # end of dropdown
       ) # end of column
     ), # end of fluidRow
     
     tags$br(),
-    
     
     tabBox(
       title = uiOutput("title"),
