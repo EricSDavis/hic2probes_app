@@ -11,7 +11,10 @@ sidebar <- dashboardSidebar(
   sidebarMenu(
     id = "tabNav",
     menuItem("Define", tabName = "Define"),
-    menuItem("Evaluate", tabName = "Evaluate")
+    menuItem("Evaluate", tabName = "Evaluate"), 
+    menuItem("About", tabName = "About"), 
+    menuItem("Download", tabName = "Download"), 
+    menuItem("Contact", tabName = "Contact")
   )
 )
 
@@ -57,10 +60,10 @@ body <- dashboardBody(
     
     align="center",
     column(4),
-    column(1, "Home", id="home"),
-    column(1, "About", id="about"),
-    column(1, "Download", id="download"),
-    column(1, "Contact", id="contact")
+    column(1, actionLink(inputId = "return", label = "Home"), id="home"),
+    column(1, actionLink(inputId = "about", label = "About"), id="about"),
+    column(1, actionLink(inputId = "download", label = "Download"), id="download"),
+    column(1, actionLink(inputId = "contact", label = "Contact"), id="contact")
   ),
   
   tabItems(
@@ -389,6 +392,15 @@ body <- dashboardBody(
         ) # end of fluidRow
       ) # end of Summary View tabPanel
     ) # end of tabBox
+  ), # end of tabItem
+  tabItem(tabName = "About", 
+    h3("About")
+  ),
+  tabItem(tabName = "Download", 
+    h3("Download")
+  ),
+  tabItem(tabName = "Contact", 
+    h3("Contact")
   ) # end of tabItem
 ) # end of tabItems
 ) # end of body

@@ -12,14 +12,26 @@ shinyServer(function(input, output, session) {
 
   ##------------Return to Define Page--------------####
   observeEvent(input$return, {
-    newtab <- switch(input$tabNav,
-                     "Evaluate" = "Define",
-                     "Define" = "Evaluate"
-    )
-    system("pwd")
-    system("rm -r ../hic2probes/output/")
-    updateTabItems(session, "tabNav", newtab)
-    session$reload() #reload session on input$return
+    if(input$tabNav == "Evaluate") {
+      system("pwd")
+      system("rm -r ../hic2probes/output/")
+    }
+    updateTabItems(session, "tabNav", "Define")
+  })
+  
+  ##----------------Set About Tab------------------####
+  observeEvent(input$about, {
+    updateTabItems(session, "tabNav", "About")
+  })
+  
+  ##----------------Set Download Tab------------------####
+  observeEvent(input$download, {
+    updateTabItems(session, "tabNav", "Download")
+  })
+  
+  ##----------------Set Contact Tab------------------####
+  observeEvent(input$contact, {
+    updateTabItems(session, "tabNav", "Contact")
   })
   
   ##------------------Set Default Tab-------------####
