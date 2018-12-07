@@ -16,6 +16,7 @@ sidebar <- dashboardSidebar(
 )
 
 genomes<-read.csv("./../genomes.csv", stringsAsFactors=F)
+genomes<-genomes[file.exists(paste0("./../genomes/", basename(sub(".2bit", ".fa", genomes$URL)))), ]
 
 ## Dashboard Body ####
 body <- dashboardBody(
