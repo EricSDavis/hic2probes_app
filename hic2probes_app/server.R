@@ -53,11 +53,6 @@ shinyServer(function(input, output, session) {
   ##-------------Run script-----------------------####
   observeEvent(input$run_script, {
     
-    # Need code that checks for proper formating of coordinates
-    
-    # split target region into chr, start, and stop
-    
-    
     ## Define run_script ####
     run_script <- function(coords) {
       ## Stitch command ####
@@ -68,43 +63,46 @@ shinyServer(function(input, output, session) {
                         " -r ", input$resenz,
                         " -g ", paste0('"', "./../genomes/", basename(input$genome), ".fa", '"'))
       print (command)
-      system(command, input = "yes")
-      
-      ## Choose Index based on radioButton input ####
-      if (input$index == "Index1"){
-        StartIndex <- '"TCGCGCCCATAACTC"'
-        EndIndex <- '"CTGAGGGTCCGCCTT"'
-      } else if (input$index == "Index2"){
-        StartIndex <- '"ATCGCACCAGCGTGT"'
-        EndIndex <- '"CACTGCGGCTCCTCA"'
-      } else if (input$index == "Index3"){
-        StartIndex <- '"CCTCGCCTATCCCAT"'
-        EndIndex <- '"CACTACCGGGGTCTG"'
-      } else if (input$index == "Custom"){
-        StartIndex <- sprintf('"%s"', input$custom_index_1)
-        EndIndex <- sprintf('"%s"', input$custom_index_2)
+      console_output <- system(command, input = "yes", intern = T)
+      if(grepl("Skipping", console_output[length(console_output)])) {
+        shinyalert("Invalid Option", console_output[length(console_output)], type = "error")
       } else {
-        StartIndex <- '""'
-        EndIndex <- '""'
+        ## Choose Index based on radioButton input ####
+        if (input$index == "Index1"){
+          StartIndex <- '"TCGCGCCCATAACTC"'
+          EndIndex <- '"CTGAGGGTCCGCCTT"'
+        } else if (input$index == "Index2"){
+          StartIndex <- '"ATCGCACCAGCGTGT"'
+          EndIndex <- '"CACTGCGGCTCCTCA"'
+        } else if (input$index == "Index3"){
+          StartIndex <- '"CCTCGCCTATCCCAT"'
+          EndIndex <- '"CACTACCGGGGTCTG"'
+        } else if (input$index == "Custom"){
+          StartIndex <- sprintf('"%s"', input$custom_index_1)
+          EndIndex <- sprintf('"%s"', input$custom_index_2)
+        } else {
+          StartIndex <- '""'
+          EndIndex <- '""'
+        }
+        command <- paste0("awk -v OFS='\t' '{print $1, $2, $3, $4, $5, $6, $7, $8, ",  StartIndex, "$9", EndIndex, " , $10}' ../hic2probes/output/all_probes.bed > ../hic2probes/output/temp.bed")
+        system(command)
+        system("mv ../hic2probes/output/temp.bed ../hic2probes/output/all_probes.bed")
+        ## Initial filtering with max_probes
+        wd <- getwd()
+        setwd("../hic2probes/") # Adjust working directory to find output/all_probes.bed
+        system("Rscript --vanilla ../hic2probes/scripts/reduce_probes.R ")
+        system("mv ../hic2probes/output/filtered_probes.bed ../hic2probes/output/temp.bed")
+        setwd(wd)
+        system("mv ../hic2probes/output/temp.bed ../hic2probes/output/all_probes.bed")
+        system("cat ../hic2probes/output/all_probes.bed")
+        
+        ## Switch to Evaluate Page ####
+        newtab <- switch(input$tabNav,
+                         "Define" = "Evaluate",
+                         "Evaluate" = "Define"
+        )
+        updateTabItems(session, "tabNav", newtab)
       }
-      command <- paste0("awk -v OFS='\t' '{print $1, $2, $3, $4, $5, $6, $7, $8, ",  StartIndex, "$9", EndIndex, " , $10}' ../hic2probes/output/all_probes.bed > ../hic2probes/output/temp.bed")
-      system(command)
-      system("mv ../hic2probes/output/temp.bed ../hic2probes/output/all_probes.bed")
-      ## Initial filtering with max_probes
-      wd <- getwd()
-      setwd("../hic2probes/") # Adjust working directory to find output/all_probes.bed
-      system("Rscript --vanilla ../hic2probes/scripts/reduce_probes.R ")
-      system("mv ../hic2probes/output/filtered_probes.bed ../hic2probes/output/temp.bed")
-      setwd(wd)
-      system("mv ../hic2probes/output/temp.bed ../hic2probes/output/all_probes.bed")
-      system("cat ../hic2probes/output/all_probes.bed")
-      
-      ## Switch to Evaluate Page ####
-      newtab <- switch(input$tabNav,
-                       "Define" = "Evaluate",
-                       "Evaluate" = "Define"
-      )
-      updateTabItems(session, "tabNav", newtab)
     }
     
     ## Error Handling ####
