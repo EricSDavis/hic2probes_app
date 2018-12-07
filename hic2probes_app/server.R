@@ -1,3 +1,13 @@
+# Define a function that extracts coords
+extractcoords <- function (coordinates)
+{
+  coordinates<-gsub(" ", "", coordinates)
+  match<-str_match(coordinates, "(chr\\d+):(\\d+)-(\\d+)")
+  if(is.na(match[1, 1]) || nchar(match[1, 1]) != nchar(coordinates)) {
+    return(NULL)
+  }
+  return(list("chr"=match[1, 2], "start"=as.numeric(match[1, 3]), "stop"=as.numeric(match[1, 4])))
+}
 
 # Define server logic
 shinyServer(function(input, output, session) {
@@ -7,7 +17,8 @@ shinyServer(function(input, output, session) {
   ##--------------------Title----------------------####
   output$title <- renderUI({
     req(input$run_script)
-    paste0(extractcoords(input$coordinates)$chr, ": ", extractcoords(input$coordinates)$start, "-", extractcoords(input$coordinates)$stop)
+    coords<-extractcoords(input$coordinates)
+    paste0(coords$chr, ": ", coords$start, "-", coords$stop)
   })
 
   ##------------Return to Define Page--------------####
@@ -38,21 +49,6 @@ shinyServer(function(input, output, session) {
   observeEvent(input$run_script, {
     updateTabsetPanel(session, "tab_view", selected = "Summary View")
   })
-  
-  # Define a function that extracts coords
-  extractcoords <- function (coordinates)
-  {
-    chr = strsplit(coordinates,":")[[1]][1]
-    positions = strsplit(coordinates,":")[[1]][2]
-    start = as.numeric(strsplit(positions,"-")[[1]][1])
-    stop = as.numeric(strsplit(positions,"-")[[1]][2])
-    coords = list()
-    coords[[1]] = chr
-    coords[[2]] = start
-    coords[[3]] = stop
-    names(coords) = c("chr","start","stop")
-    return(coords)
-  }
 
   ##-------------Run script-----------------------####
   observeEvent(input$run_script, {
@@ -63,12 +59,12 @@ shinyServer(function(input, output, session) {
     
     
     ## Define run_script ####
-    run_script <- function(){
+    run_script <- function(coords) {
       ## Stitch command ####
       command <- paste0("./../hic2probes/shell/hicsq.sh",
-                        " -c ", extractcoords(input$coordinates)$chr,
-                        " -b ", extractcoords(input$coordinates)$start,
-                        " -e ", extractcoords(input$coordinates)$stop,
+                        " -c ", coords$chr,
+                        " -b ", coords$start,
+                        " -e ", coords$stop,
                         " -r ", input$resenz,
                         " -g ", paste0('"', "./../genomes/", basename(input$genome), ".fa", '"'))
       print (command)
@@ -112,10 +108,13 @@ shinyServer(function(input, output, session) {
     }
     
     ## Error Handling ####
-    if(extractcoords(input$coordinates)$stop <= extractcoords(input$coordinates)$start | is.na(extractcoords(input$coordinates)$stop) | is.na(extractcoords(input$coordinates)$start)){
+    coords <- extractcoords(input$coordinates)
+    if(is.null(coords)) {
+      shinyalert("Invalid Option:", "Chromosome coordinates are not in a valid format", type = "error")
+    } else if(coords$stop <= coords$start) {
       message <- "Start must be less than stop"
       shinyalert("Invalid Option:", message, type = "error")
-    } else if (extractcoords(input$coordinates)$stop - extractcoords(input$coordinates)$start > 2000000) {
+    } else if(coords$stop - coords$start > 2000000) {
       shinyalert(
         title = "Warning!",
         text = "The region you selected is > 2Mb. \r This operation may take a while...",
@@ -131,11 +130,10 @@ shinyServer(function(input, output, session) {
         timer = 0,
         imageUrl = "",
         animation = TRUE,
-        callbackR = function(x) {if(x != FALSE) run_script()}
+        callbackR = function(x) {if(x != FALSE) run_script(coords)}
       )
     } else {
-      
-      run_script()
+      run_script(coords)
     }
   })
   
