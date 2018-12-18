@@ -65,7 +65,7 @@ shinyServer(function(input, output, session) {
       print (command)
       console_output <- system(command, input = "yes", intern = T)
       if(!is.null(attr(console_output, "status"))) {
-        shinyalert("Invalid Option", console_output[length(console_output)], type = "error")
+        shinyalert("Error", console_output[length(console_output)], type = "error")
       } else {
         ## Choose Index based on radioButton input ####
         if (input$index == "Index1"){
