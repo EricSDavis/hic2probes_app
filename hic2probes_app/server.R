@@ -64,7 +64,7 @@ shinyServer(function(input, output, session) {
                         " -g ", paste0('"', "./../genomes/", basename(input$genome), ".fa", '"'))
       print (command)
       console_output <- system(command, input = "yes", intern = T)
-      if(grepl("Skipping", console_output[length(console_output)])) {
+      if(!is.null(attr(console_output, "status"))) {
         shinyalert("Invalid Option", console_output[length(console_output)], type = "error")
       } else {
         ## Choose Index based on radioButton input ####
