@@ -91,8 +91,8 @@ body <- dashboardBody(
            selectInput(
              inputId = "genome",
              label = "Genome:",
-             choices = as.list(split(genomes$Genome, genomes$Organism)),
-             selected = "hg38",
+             choices = paste0(genomes$Organism, ": ", genomes$Genome),
+             selected = "Human: hg38",
              multiple = F
            )
     ),
