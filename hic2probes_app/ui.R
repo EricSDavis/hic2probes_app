@@ -90,7 +90,7 @@ body <- dashboardBody(
     column(width=4, align="center",
            selectInput(
              inputId = "genome",
-             label = "Genome:",
+             label = "Genome",
              choices = paste0(genomes$Organism, ": ", genomes$Genome),
              selected = "Human: hg38",
              multiple = F
@@ -101,7 +101,7 @@ body <- dashboardBody(
     column(width=4, align="center",
            textInput(
              inputId = "coordinates",
-             label = "Target Region:",
+             label = "Target Region",
              value = "chr3:133000000-133100000"
            )
     ),
@@ -110,7 +110,7 @@ body <- dashboardBody(
     column(width=4, align="center",
            selectInput(
              inputId = "resenz",
-             label = "Restriction Enzyme:",
+             label = "Restriction Enzyme",
              choices = c("^GATC,MobI", "A^AGCTT,HindIII"),
              selected = "^GATC,MobI",
              multiple = F
@@ -137,7 +137,7 @@ body <- dashboardBody(
              id = "advanced1",
              radioButtons(width ="100%",
                           inputId = "index",inline=F,
-                          label = "Add index sequences:",
+                          label = "Add index sequences",
                           choices = c("None",
                                       "Index 1: TCGCGCCCATAACTC-N120-CTGAGGGTCCGCCTT" = "Index1",
                                       "Index 2: ATCGCACCAGCGTGT-N120-CACTGCGGCTCCTCA" = "Index2",
