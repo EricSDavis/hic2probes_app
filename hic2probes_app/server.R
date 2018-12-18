@@ -61,7 +61,7 @@ shinyServer(function(input, output, session) {
                         " -b ", coords$start,
                         " -e ", coords$stop,
                         " -r ", input$resenz,
-                        " -g ", paste0('"', "./../genomes/", basename(input$genome), ".fa", '"'))
+                        " -g ", paste0('"', "./../genomes/", sub(".+: ", "", basename(input$genome)), ".fa", '"'))
       print (command)
       console_output <- system(command, input = "yes", intern = T)
       if(!is.null(attr(console_output, "status"))) {
