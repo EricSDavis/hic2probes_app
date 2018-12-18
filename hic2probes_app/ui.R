@@ -122,59 +122,44 @@ body <- dashboardBody(
   
   
   fluidRow(
-    # column(2),
-    column(12,align="center",
-           
-           actionButton(inputId = "AdvancedOptionsButton",
-                        label = "Advanced Options")
-    )
-  ),
-  
-  conditionalPanel(
-    condition = ("input.AdvancedOptionsButton%2==1"),
-    fluidRow(
-      column(width=12,align="left",
-             id = "advanced1",
-             radioButtons(width ="100%",
-                          inputId = "index",inline=F,
-                          label = "Add index sequences",
-                          choices = c("None",
-                                      "Index 1: TCGCGCCCATAACTC-N120-CTGAGGGTCCGCCTT" = "Index1",
-                                      "Index 2: ATCGCACCAGCGTGT-N120-CACTGCGGCTCCTCA" = "Index2",
-                                      "Index 3: CCTCGCCTATCCCAT-N120-CACTACCGGGGTCTG" = "Index3",
-                                      "Custom"),
-                          selected = "None"
-             ), # end of radioButtons,
-             conditionalPanel(
-               condition = "input.index == 'Custom'",
-               fluidRow(
-                 column(
-                   width = 5,
-                   textInput(
-                     inputId = "custom_index_1",
-                     label = "",
-                     placeholder = "start index"
-                   ) # end of textInput
-                 ), # end of column
-                 column(
-                   width = 2,
-                   br(),
-                   span("-120-")
-                 ), # end of column
-                 column(
-                   width = 5,
-                   textInput(
-                     inputId = "custom_index_2",
-                     label = "",
-                     placeholder = "end index"
-                   ) # end of textInput
-                 ) # end of column
-               ) # end of fluidRow
-             ) # end of conditionalPanel
-      ) # end of conditionalPanel
-      
-      
-    ) # end of fluid Row
+    column(width=12,align="center",
+           radioButtons(width ="100%",
+                        inputId = "index",inline=F,
+                        label = "Add index sequences",
+                        choices = c("None",
+                                    "Index 1: TCGCGCCCATAACTC-N120-CTGAGGGTCCGCCTT" = "Index1",
+                                    "Index 2: ATCGCACCAGCGTGT-N120-CACTGCGGCTCCTCA" = "Index2",
+                                    "Index 3: CCTCGCCTATCCCAT-N120-CACTACCGGGGTCTG" = "Index3",
+                                    "Custom"),
+                        selected = "None"
+           ), # end of radioButtons,
+           conditionalPanel(
+             condition = "input.index == 'Custom'",
+             fluidRow(
+               column(
+                 width = 5,
+                 textInput(
+                   inputId = "custom_index_1",
+                   label = "",
+                   placeholder = "start index"
+                 ) # end of textInput
+               ), # end of column
+               column(
+                 width = 2,
+                 br(),
+                 span("-120-")
+               ), # end of column
+               column(
+                 width = 5,
+                 textInput(
+                   inputId = "custom_index_2",
+                   label = "",
+                   placeholder = "end index"
+                 ) # end of textInput
+               ) # end of column
+             ) # end of fluidRow
+           ) # end of conditionalPanel
+    ) # end of column
   ),
   
   br(),
