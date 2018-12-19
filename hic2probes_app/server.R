@@ -205,12 +205,11 @@ shinyServer(function(input, output, session) {
     region_length <- extractcoords(input$coordinates)$stop - extractcoords(input$coordinates)$start
     density <- probes/region_length*1000
     max_density <- max_possible/region_length*1000
-    numericInput(
-      inputId = "probe_density",
-      label = "Probe Density (p/kb)",
-      min = 0,
-      value = density,
-      max = max_density
+    fluidRow(
+      column(width=12, 
+        p(tags$b("Probe Density (p/kb)")), 
+        p(density)
+      )
     )
   })
   
