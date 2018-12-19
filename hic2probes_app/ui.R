@@ -215,7 +215,6 @@ body <- dashboardBody(
         column(width = 12, 
           div(id = "borderless-box", 
             box(width = 12, 
-              title = "Refine probe design",
               solidHeader = T,
                 fluidRow(
                   column(
@@ -225,14 +224,12 @@ body <- dashboardBody(
                   column(
                     width = 3,
                     uiOutput("probe_density")
-                  ) # end of column
-                ),
-                br(),
-                fluidRow(
+                  ), # end of column
                   column(
-                    width = 3,
+                    width = 6,
+                    align = "right",
                     dropdown(
-                      right = F, 
+                      right = T, 
                       circle = F,
                       size = "md",
                       label = "Download",
