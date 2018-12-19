@@ -2,7 +2,7 @@
 extractcoords <- function (coordinates)
 {
   coordinates<-gsub(" ", "", coordinates)
-  match<-str_match(coordinates, "(chr\\d+):(\\d+)-(\\d+)")
+  match<-str_match(coordinates, "(chr.+):(\\d+)-(\\d+)")
   if(is.na(match[1, 1]) || nchar(match[1, 1]) != nchar(coordinates)) {
     return(NULL)
   }
@@ -18,7 +18,7 @@ shinyServer(function(input, output, session) {
   output$title <- renderUI({
     req(input$run_script)
     coords<-extractcoords(input$coordinates)
-    paste0(coords$chr, ": ", coords$start, "-", coords$stop)
+    paste0(input$genome, " - ", coords$chr, ":", coords$start, "-", coords$stop)
   })
 
   ##------------Return to Define Page--------------####
@@ -186,7 +186,7 @@ shinyServer(function(input, output, session) {
   output$max_probes <- renderUI({
     numericInput(
       inputId = "max_probes",
-      label = "Specify Probe Number",
+      label = "Maximum Number of Probes",
       value = NA,
       min = 0
     )
@@ -411,6 +411,9 @@ shinyServer(function(input, output, session) {
   
   ##--------------Summary View Info-------------####
   ## Settings ####
+  output$info_genome <- renderText({
+    paste0("Genome: ", input$genome)
+  })
   output$info_chr <- renderText({
     paste0("Chromosome: ", extractcoords(input$coordinates)$chr)
   })
@@ -462,7 +465,7 @@ shinyServer(function(input, output, session) {
       region_length <- extractcoords(input$coordinates)$stop - extractcoords(input$coordinates)$start
       density <- probes/region_length*1000
       max_density <- max_possible/region_length*1000
-      paste0("Maximum Possible: ", max_possible, " probes, (", max_density, " probes/kb)" )
+      paste0("Maximum Possible: ", max_possible, " probes (", max_density, " probes/kb)" )
     })
     output$info_selected_probes <- renderText({
       req(input$run_script)
@@ -471,7 +474,7 @@ shinyServer(function(input, output, session) {
       probes <- nrow(data)
       region_length <- extractcoords(input$coordinates)$stop - extractcoords(input$coordinates)$start
       density <- probes/region_length*1000
-      paste0("Selected: ", probes, " probes, (", density, " probes/kb)")
+      paste0("Selected: ", probes, " probes (", density, " probes/kb)")
     })
     output$info_probeLength <- renderText({
       req(input$index)
