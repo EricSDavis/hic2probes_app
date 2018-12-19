@@ -38,7 +38,8 @@ body <- dashboardBody(
                              #contact {text-align: right; padding-left: 4.85%}
                               .content-wrapper, .right-side {
                                 background-color: #FFFFFF;
-                             }"
+                             }
+                             #borderless-box div { -webkit-box-shadow: none; -moz-box-shadow: none; box-shadow: none; }"
     )
     )
   ),
@@ -209,176 +210,195 @@ body <- dashboardBody(
   tabItem(
     tabName = "Evaluate",
     
+    br(),
+    
     fluidRow(
-      fluidRow(
-        column(width = 6, 
-          h3("Options", style="font-weight:300;"),
-          fluidRow(
-            width = 12,
-            column(
-              width = 6,
-              uiOutput("max_probes")
-            ), # end of column
-            column(
-              width = 6,
-              uiOutput("probe_density")
-            ) # end of column
-          ), # end of fluidRow
-          materialSwitch(
-            inputId = "toggle_res.sites",
-            label = "Show Restriction Sites?",
-            value = F,
-            status = "primary",
-            right = F
-          ),
-          dropdown(
-            circle = F,
-            size = "sm",
-            label = "Download",
-            inputId = "Download_menu",
-            tooltip = tooltipOptions(title = "Select which data to download"),
-            downloadLink(
-              outputId = "downloadProbes",
-              label = "Download Probes"
-            ),
-            br(),
-            downloadLink(
-              outputId = "downloadPlots",
-              label = "Download Plots"
-            ),
-            br(),
-            downloadLink(
-              outputId = "downloadAll",
-              label = "Download All"
-            )
-          ) # end of dropdown
-        ) # end of column
-      ), # end of fluidRow
+      column(width = 12, 
+        div(id = "borderless-box", 
+          box(width = 12, 
+            title = "Refine probe design",
+            solidHeader = T,
+              fluidRow(
+                column(
+                  width = 4,
+                  uiOutput("max_probes")
+                ), # end of column
+                column(
+                  width = 4,
+                  uiOutput("probe_density")
+                ) # end of column
+              ), 
+              fluidRow(
+                column(
+                  width = 4,
+                  dropdown(
+                    right = F, 
+                    circle = F,
+                    size = "sm",
+                    label = "Download",
+                    inputId = "Download_menu",
+                    downloadLink(
+                      outputId = "downloadProbes",
+                      label = "Download Probes"
+                    ),
+                    br(),
+                    downloadLink(
+                      outputId = "downloadPlots",
+                      label = "Download Plots"
+                    ),
+                    br(),
+                    downloadLink(
+                      outputId = "downloadAll",
+                      label = "Download All"
+                    )
+                  ) # end of dropdown
+                ) # end of column
+              ) # end of fluidRow
+            ) # end of box
+          ), # end of div
       
-      tags$br(),
-      
-      tabBox(
-        title = uiOutput("title"),
-        side = "right",
-        width = 12,
-        id = "tab_view",
+        tags$br(),
         
-        tabPanel(
-          title="Region View",
-          fluidRow(
-            column(
-              width = 12,
-              
-              ## Region view slider ####
-              box(
-                width = 12,
-                uiOutput("region_slider")
-              ),
-              
-              ## Histogram of Probe Coverage ####
-              box(
-                title = "Histogram of Probe Coverage",
-                width = 12,
-                collapsible = T,
-                plotOutput("coverageHistogram")
-              )
-            ), # end of column
-            
-            column(
-              width = 12,
-              ## Histogram of Restriction Sites ####
-              box(
-                title = "Histogram of Restriction Sites",
-                width = 12,
-                collapsible = T,
-                plotOutput("restrictionHistogram")
-              )
-            ), # end of column
-            
-            column(
-              width = 12,
-              ## Plot of GC Content ####
-              box(
-                title = "GC Content and Probe Quality",
-                width = 12,
-                collapsible = T,
-                plotOutput("gc_plot")
-              )
-            ), # end of column
-            
-            column(
-              width = 12,
-              ## Plot of Shift ####
-              box(
-                title = "Distance from Restriction Site",
-                width = 12,
-                collapsible = T,
-                plotOutput("shift_plot")
-              )
-            ) # end of column
-          ) # end of fluidRow
-        ), # end of Region View tabPanel
-        
-        ## Summary View ####
-        tabPanel(
-          title="Summary View",
-          fluidRow(
-            column(
-              width = 6,
-              box(
-                width = 12,
-                h1("Settings"),
-                textOutput("info_chr"),
-                textOutput("info_start"),
-                textOutput("info_stop"),
-                textOutput("info_resenz"),
-                textOutput("info_index")
-              )
-            ), # end of column
-            column(
-              width = 6,
-              box(
-                width = 12,
-                h1("Results"),
-                textOutput("info_res.sites"),
-                textOutput("info_all_probes"),
-                textOutput("info_selected_probes"),
-                textOutput("info_probeLength"),
-                textOutput("info_avgGC")
-              )
-            ) # end of column
-          ), # end of fluidRow
+        tabBox(
+          title = uiOutput("title"),
+          side = "right",
+          width = 12,
+          id = "tab_view",
           
-          ## Summary View Plots ####
-          fluidRow(
-            column(
-              width = 4,
-              plotOutput("summary_gc")
-            ), #end of column
-            column(
-              width = 4,
-              plotOutput("summary_pass")
-            ), #end of column
-            column(
-              width = 4,
-              plotOutput("summary_shift")
-            ) #end of column
-          ), # end of fluidRow
-          fluidRow(
-            column(
-              width = 12,
-              ## Probe Data Table ####
-              box(
-                title = "Probe Data Table",
+          tabPanel(
+            title="Region View",
+            fluidRow(
+              column(
                 width = 12,
-                div(style = 'overflow-x: scroll', DT::dataTableOutput('Probes')),
-                collapsible = T
-              )
-            ) # end of column
-          ) # end of fluidRow
-        ) # end of Summary View tabPanel
-      ) # end of tabBox
-    ) # end of fluidRow
+                
+                ## Region view slider ####
+                box(
+                  width = 12,
+                  uiOutput("region_slider")
+                ),
+                
+                div(id = "borderless-box", 
+                  box(
+                    width = 12, 
+                    solidHeader = T,
+                    materialSwitch(
+                      inputId = "toggle_res.sites",
+                      label = "Show Restriction Sites?",
+                      value = F,
+                      status = "primary",
+                      right = F
+                    )
+                  )
+                ),
+                
+                ## Histogram of Probe Coverage ####
+                box(
+                  title = "Histogram of Probe Coverage",
+                  width = 12,
+                  collapsible = T,
+                  plotOutput("coverageHistogram")
+                )
+              ), # end of column
+              
+              column(
+                width = 12,
+                ## Histogram of Restriction Sites ####
+                box(
+                  title = "Histogram of Restriction Sites",
+                  width = 12,
+                  collapsible = T,
+                  plotOutput("restrictionHistogram")
+                )
+              ), # end of column
+              
+              column(
+                width = 12,
+                ## Plot of GC Content ####
+                box(
+                  title = "GC Content and Probe Quality",
+                  width = 12,
+                  collapsible = T,
+                  plotOutput("gc_plot")
+                )
+              ), # end of column
+              
+              column(
+                width = 12,
+                ## Plot of Shift ####
+                box(
+                  title = "Distance from Restriction Site",
+                  width = 12,
+                  collapsible = T,
+                  plotOutput("shift_plot")
+                )
+              ) # end of column
+            ) # end of fluidRow
+          ), # end of Region View tabPanel
+          
+          ## Summary View ####
+          tabPanel(
+            title="Summary View",
+            fluidRow(
+              column(
+                width = 6,
+                box(
+                  width = 12,
+                  h1("Settings"),
+                  textOutput("info_chr"),
+                  textOutput("info_start"),
+                  textOutput("info_stop"),
+                  textOutput("info_resenz"),
+                  textOutput("info_index")
+                )
+              ), # end of column
+              column(
+                width = 6,
+                box(
+                  width = 12,
+                  h1("Results"),
+                  textOutput("info_res.sites"),
+                  textOutput("info_all_probes"),
+                  textOutput("info_selected_probes"),
+                  textOutput("info_probeLength"),
+                  textOutput("info_avgGC")
+                )
+              ) # end of column
+            ), # end of fluidRow
+            
+            ## Summary View Plots ####
+            fluidRow(
+              column(width = 12, 
+                box(
+                  width = 4,
+                  plotOutput("summary_gc")
+                ), # end of box
+                box(
+                  width = 4,
+                  plotOutput("summary_pass")
+                ), # end of box
+                box(
+                  width = 4,
+                  plotOutput("summary_shift")
+                ) # end of box
+              ) # end of column
+            ), # end of fluidRow
+            fluidRow(
+              column(
+                width = 12,
+                ## Probe Data Table ####
+                box(
+                  title = "Probe Data Table",
+                  width = 12,
+                  div(style = 'overflow-x: scroll', DT::dataTableOutput('Probes')),
+                  collapsible = T
+                )
+              ) # end of column
+            ) # end of fluidRow
+          ) # end of Summary View tabPanel
+        ) # end of tabBox
+      ) # end of column
+    ), # end of fluidRow
+    br()
   ), # end of tabItem
   tabItem(tabName = "About", 
     h3("About")

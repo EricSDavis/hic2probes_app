@@ -186,7 +186,7 @@ shinyServer(function(input, output, session) {
   output$max_probes <- renderUI({
     numericInput(
       inputId = "max_probes",
-      label = "Specify Probe Number:",
+      label = "Specify Probe Number",
       value = NA,
       min = 0
     )
