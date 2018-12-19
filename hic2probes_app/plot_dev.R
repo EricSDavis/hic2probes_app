@@ -1,6 +1,6 @@
 setwd("/Users/phanstiel2/Research/Eric/hic2probes_app/hic2probes_app/")
 
-data <- as.data.frame(read.delim("../hic2probes/output/filtered_probes.bed", header = F))
+data <- as.data.frame(read.delim("/tmp/hicsq/filtered_probes.bed", header = F))
 colnames(data) <- c("chr", "start", "stop", "shift", "res.fragment", "dir", "AT", "GC", "seq", "pass")
 
 values <- sort(unlist(lapply(seq(1:nrow(data)), function(x) data$start[x]:data$stop[x])))
@@ -66,7 +66,7 @@ custom_histogram(data, 100)
 setwd("/Users/phanstiel2/Research/Eric/hic2probes_app/hic2probes_app")
 
 ## Load in restriction sites
-res.sites <- read.delim("../hic2probes/output/fragments.bed", header = F)
+res.sites <- read.delim("/tmp/hicsq/fragments.bed", header = F)
 sites <- unique(sort(c(res.sites[,2], res.sites[,3])))
 sites <- sites + 133000000
 

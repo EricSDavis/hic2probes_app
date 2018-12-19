@@ -25,7 +25,7 @@ shinyServer(function(input, output, session) {
   observeEvent(input$return, {
     if(input$tabNav == "Evaluate") {
       system("pwd")
-      system("rm -r ../hic2probes/output/")
+      system("rm -r /tmp/hicsq/")
     }
     updateTabItems(session, "tabNav", "Define")
   })
@@ -84,17 +84,17 @@ shinyServer(function(input, output, session) {
           StartIndex <- '""'
           EndIndex <- '""'
         }
-        command <- paste0("awk -v OFS='\t' '{print $1, $2, $3, $4, $5, $6, $7, $8, ",  StartIndex, "$9", EndIndex, " , $10}' ../hic2probes/output/all_probes.bed > ../hic2probes/output/temp.bed")
+        command <- paste0("awk -v OFS='\t' '{print $1, $2, $3, $4, $5, $6, $7, $8, ",  StartIndex, "$9", EndIndex, " , $10}' /tmp/hicsq/all_probes.bed > /tmp/hicsq/temp.bed")
         system(command)
-        system("mv ../hic2probes/output/temp.bed ../hic2probes/output/all_probes.bed")
+        system("mv /tmp/hicsq/temp.bed /tmp/hicsq/all_probes.bed")
         ## Initial filtering with max_probes
         wd <- getwd()
         setwd("../hic2probes/") # Adjust working directory to find output/all_probes.bed
         system("Rscript --vanilla ../hic2probes/scripts/reduce_probes.R ")
-        system("mv ../hic2probes/output/filtered_probes.bed ../hic2probes/output/temp.bed")
+        system("mv /tmp/hicsq/filtered_probes.bed /tmp/hicsq/temp.bed")
         setwd(wd)
-        system("mv ../hic2probes/output/temp.bed ../hic2probes/output/all_probes.bed")
-        system("cat ../hic2probes/output/all_probes.bed")
+        system("mv /tmp/hicsq/temp.bed /tmp/hicsq/all_probes.bed")
+        system("cat /tmp/hicsq/all_probes.bed")
         
         ## Switch to Evaluate Page ####
         newtab <- switch(input$tabNav,
@@ -161,7 +161,7 @@ shinyServer(function(input, output, session) {
         setwd(wd)
       }
     }
-    data <- as.data.frame(read.delim("../hic2probes/output/filtered_probes.bed", header = F))
+    data <- as.data.frame(read.delim("/tmp/hicsq/filtered_probes.bed", header = F))
     colnames(data) <- c("chr", "start", "stop", "shift", "res.fragment", "dir", "AT", "GC", "seq", "pass")
     data
   })
@@ -170,7 +170,7 @@ shinyServer(function(input, output, session) {
   res.sites <- reactive({
     req(script_results())
     ## Load in restriction sites
-    res.sites <- read.delim("../hic2probes/output/fragments.bed", header = F)
+    res.sites <- read.delim("/tmp/hicsq/fragments.bed", header = F)
     sites <- unique(sort(c(res.sites[,2], res.sites[,3])))
     sites <- sites + extractcoords(input$coordinates)$start
     sites
@@ -178,7 +178,7 @@ shinyServer(function(input, output, session) {
   
   ##------------Load in All Probes--------------####
   all_probes <- reactive({
-    all_probes <- read.delim("../hic2probes/output/all_probes.bed", header = F)
+    all_probes <- read.delim("/tmp/hicsq/all_probes.bed", header = F)
     all_probes
   })
   
