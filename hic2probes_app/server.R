@@ -28,6 +28,7 @@ shinyServer(function(input, output, session) {
       system("rm -r /tmp/hicsq/")
     }
     updateTabItems(session, "tabNav", "Define")
+    session$reload() #reload session on input$return
   })
   
   ##----------------Set About Tab------------------####
