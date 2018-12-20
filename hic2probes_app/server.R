@@ -183,7 +183,7 @@ shinyServer(function(input, output, session) {
     all_probes
   })
   
-  ##---------------Probe Number-----------------####
+  ##----------Maximum Number of Probes----------####
   output$max_probes <- renderUI({
     req(input$run_script)
     req(script_results())
@@ -195,8 +195,8 @@ shinyServer(function(input, output, session) {
     sliderInput(
       inputId = "max_probes",
       label = "Maximum Number of Probes",
-      value = input$max_probes,
-      min = 0, 
+      value = ifelse(is.null(input$max_probes), max_possible, input$max_probes),
+      min = 1, 
       max = max_possible
     )
   })
