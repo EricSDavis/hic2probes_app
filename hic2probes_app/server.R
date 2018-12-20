@@ -184,32 +184,19 @@ shinyServer(function(input, output, session) {
   
   ##---------------Probe Number-----------------####
   output$max_probes <- renderUI({
-    numericInput(
-      inputId = "max_probes",
-      label = "Maximum Number of Probes",
-      value = NA,
-      min = 0
-    )
-  })
-  
-  ##--------------Probe Density-----------------####
-  output$probe_density <- renderUI({
     req(input$run_script)
     req(script_results())
-    req(extractcoords(input$coordinates)$start)
-    req(extractcoords(input$coordinates)$stop)
+    req(all_probes())
     data <- script_results()
     all_probes <- all_probes()
     probes <- nrow(data)
     max_possible <- nrow(all_probes)
-    region_length <- extractcoords(input$coordinates)$stop - extractcoords(input$coordinates)$start
-    density <- probes/region_length*1000
-    max_density <- max_possible/region_length*1000
-    fluidRow(
-      column(width=12, 
-        p(tags$b("Probe Density (p/kb)")), 
-        p(density)
-      )
+    sliderInput(
+      inputId = "max_probes",
+      label = "Maximum Number of Probes",
+      value = input$max_probes,
+      min = 0, 
+      max = max_possible
     )
   })
   

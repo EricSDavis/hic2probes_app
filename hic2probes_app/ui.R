@@ -218,12 +218,8 @@ body <- dashboardBody(
               solidHeader = T,
                 fluidRow(
                   column(
-                    width = 3,
+                    width = 6,
                     uiOutput("max_probes")
-                  ), # end of column
-                  column(
-                    width = 3,
-                    uiOutput("probe_density")
                   ), # end of column
                   column(
                     width = 6,
