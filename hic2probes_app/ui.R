@@ -147,7 +147,7 @@ body <- dashboardBody(
                  column(
                    width = 2,
                    br(),
-                   span("-120-")
+                   span("-N120-")
                  ), # end of column
                  column(
                    width = 5,
@@ -224,27 +224,10 @@ body <- dashboardBody(
                   column(
                     width = 6,
                     align = "right",
-                    dropdown(
-                      right = T, 
-                      circle = F,
-                      size = "md",
-                      label = "Download",
-                      inputId = "Download_menu",
-                      downloadLink(
-                        outputId = "downloadProbes",
-                        label = "Download Probes"
-                      ),
-                      br(),
-                      downloadLink(
-                        outputId = "downloadPlots",
-                        label = "Download Plots"
-                      ),
-                      br(),
-                      downloadLink(
-                        outputId = "downloadAll",
-                        label = "Download All"
-                      )
-                    ) # end of dropdown
+                    downloadButton(
+                      outputId = "downloadProbes",
+                      label = "Download Probes"
+                    )
                   ) # end of column
                 ) # end of fluidRow
               ) # end of box

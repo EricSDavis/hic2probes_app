@@ -376,11 +376,40 @@ shinyServer(function(input, output, session) {
       paste0(Sys.Date(), "-",
              extractcoords(input$coordinates)$chr, ":",
              extractcoords(input$coordinates)$start, "-",
-             extractcoords(input$coordinates)$stop, "-",
+             extractcoords(input$coordinates)$stop,
              ".txt")
     },
     content = function(file){
-      readr::write_tsv(script_results(), file)
+      write(paste0("# Genome: ", input$genome), file, append = T)
+      write(paste0("# Chromosome: ", extractcoords(input$coordinates)$chr), file, append = T)
+      write(paste0("# Start: ", extractcoords(input$coordinates)$start), file, append = T)
+      write(paste0("# Stop: ", extractcoords(input$coordinates)$stop), file, append = T)
+      write(paste0("# Restriction Enzyme: ", input$resenz), file, append = T)
+      req(input$index)
+      if (input$index == "None"){
+        write(paste0("# Index Sequence: None"), file, append = T)
+      } else if (input$index == "Custom"){
+        req(input$custom_index_1)
+        req(input$custom_index_2)
+        write(paste0("# Custom Index: ",
+               input$custom_index_1, " - N120 - ", input$custom_index_2), file, append = T)
+      } else if (input$index == "Index1"){
+        write(paste0("# Index 1: TCGCGCCCATAACTC - N120 - CTGAGGGTCCGCCTT"), file, append = T)
+      } else if (input$index == "Index2"){
+        write(paste0("# Index 2: ATCGCACCAGCGTGT - N120 - CACTGCGGCTCCTCA"), file, append = T)
+      } else if (input$index == "Index3"){
+        write(paste0("# Index 3: CCTCGCCTATCCCAT - N120 - CACTACCGGGGTCTG"), file, append = T)
+      }
+      req(input$run_script)
+      req(script_results())
+      data <- script_results()
+      probes <- nrow(data)
+      region_length <- extractcoords(input$coordinates)$stop - extractcoords(input$coordinates)$start
+      density <- probes/region_length*1000
+      write(paste0("# Number of Probes: ", probes), file, append = T)
+      write(paste0("# Probe Density (probes/kb): ", density), file, append = T)
+      write(NULL, file, append = T)
+      readr::write_tsv(script_results(), file, append = T)
     }
   )
   
