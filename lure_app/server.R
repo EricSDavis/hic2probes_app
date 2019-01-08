@@ -25,7 +25,7 @@ shinyServer(function(input, output, session) {
   observeEvent(input$return, {
     if(input$tabNav == "Evaluate") {
       system("pwd")
-      system("rm -r /tmp/hicsq/")
+      system("rm -r /tmp/lure/")
     }
     updateTabItems(session, "tabNav", "Define")
     session$reload() #reload session on input$return
@@ -57,7 +57,7 @@ shinyServer(function(input, output, session) {
     ## Define run_script ####
     run_script <- function(coords) {
       ## Stitch command ####
-      command <- paste0("./../hic2probes/shell/hicsq.sh",
+      command <- paste0("./../lure/shell/lure.sh",
                         " -c ", coords$chr,
                         " -b ", coords$start,
                         " -e ", coords$stop,
@@ -85,17 +85,17 @@ shinyServer(function(input, output, session) {
           StartIndex <- '""'
           EndIndex <- '""'
         }
-        command <- paste0("awk -v OFS='\t' '{print $1, $2, $3, $4, $5, $6, $7, $8, ",  StartIndex, "$9", EndIndex, " , $10}' /tmp/hicsq/all_probes.bed > /tmp/hicsq/temp.bed")
+        command <- paste0("awk -v OFS='\t' '{print $1, $2, $3, $4, $5, $6, $7, $8, ",  StartIndex, "$9", EndIndex, " , $10}' /tmp/lure/all_probes.bed > /tmp/lure/temp.bed")
         system(command)
-        system("mv /tmp/hicsq/temp.bed /tmp/hicsq/all_probes.bed")
+        system("mv /tmp/lure/temp.bed /tmp/lure/all_probes.bed")
         ## Initial filtering with max_probes
         wd <- getwd()
-        setwd("../hic2probes/") # Adjust working directory to find output/all_probes.bed
-        system("Rscript --vanilla ../hic2probes/scripts/reduce_probes.R ")
-        system("mv /tmp/hicsq/filtered_probes.bed /tmp/hicsq/temp.bed")
+        setwd("../lure/") # Adjust working directory to find output/all_probes.bed
+        system("Rscript --vanilla ../lure/scripts/reduce_probes.R ")
+        system("mv /tmp/lure/filtered_probes.bed /tmp/lure/temp.bed")
         setwd(wd)
-        system("mv /tmp/hicsq/temp.bed /tmp/hicsq/all_probes.bed")
-        system("cat /tmp/hicsq/all_probes.bed")
+        system("mv /tmp/lure/temp.bed /tmp/lure/all_probes.bed")
+        system("cat /tmp/lure/all_probes.bed")
         
         ## Switch to Evaluate Page ####
         newtab <- switch(input$tabNav,
@@ -152,17 +152,17 @@ shinyServer(function(input, output, session) {
     
     if(max_probes > 0 || is.na(max_probes)){
       wd <- getwd()
-      setwd("../hic2probes/") # Adjust working directory to find output/all_probes.bed
-      system(paste0("Rscript --vanilla ../hic2probes/scripts/reduce_probes.R ", max_probes))
+      setwd("../lure/") # Adjust working directory to find output/all_probes.bed
+      system(paste0("Rscript --vanilla ../lure/scripts/reduce_probes.R ", max_probes))
       setwd(wd)
       if (is.na(max_probes)){
         wd <- getwd()
-        setwd("../hic2probes/") # Adjust working directory to find output/all_probes.bed
-        system("Rscript --vanilla ../hic2probes/scripts/reduce_probes.R ")
+        setwd("../lure/") # Adjust working directory to find output/all_probes.bed
+        system("Rscript --vanilla ../lure/scripts/reduce_probes.R ")
         setwd(wd)
       }
     }
-    data <- as.data.frame(read.delim("/tmp/hicsq/filtered_probes.bed", header = F))
+    data <- as.data.frame(read.delim("/tmp/lure/filtered_probes.bed", header = F))
     colnames(data) <- c("chr", "start", "stop", "shift", "res.fragment", "dir", "AT", "GC", "seq", "pass")
     data
   })
@@ -171,7 +171,7 @@ shinyServer(function(input, output, session) {
   res.sites <- reactive({
     req(script_results())
     ## Load in restriction sites
-    res.sites <- read.delim("/tmp/hicsq/fragments.bed", header = F)
+    res.sites <- read.delim("/tmp/lure/fragments.bed", header = F)
     sites <- unique(sort(c(res.sites[,2], res.sites[,3])))
     sites <- sites + extractcoords(input$coordinates)$start
     sites
@@ -179,7 +179,7 @@ shinyServer(function(input, output, session) {
   
   ##------------Load in All Probes--------------####
   all_probes <- reactive({
-    all_probes <- read.delim("/tmp/hicsq/all_probes.bed", header = F)
+    all_probes <- read.delim("/tmp/lure/all_probes.bed", header = F)
     all_probes
   })
   

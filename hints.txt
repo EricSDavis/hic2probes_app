@@ -19,4 +19,4 @@ cd ..
 # now the submodules are in the state you want, so
 git commit -am "Pulled down update to submodule_dir"
 
-system("./hic2probes/shell/hicsq.sh -e 133100000 -n 10", input = "yes")
+system("./lure/shell/lure.sh -e 133100000 -n 10", input = "yes")
