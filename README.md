@@ -1,2 +1,2 @@
-# hic2probes_app
+# lure_app
 Web app to design and evaluate HiC squared probes
