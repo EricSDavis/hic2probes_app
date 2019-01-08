@@ -20,6 +20,10 @@ sidebar <- dashboardSidebar(
 
 genomes<-read.csv("./../genomes.csv", stringsAsFactors=F)
 genomes<-genomes[file.exists(paste0("./../genomes/", basename(sub(".2bit", ".fa", genomes$URL)))), ]
+genome.names<-NULL
+if(nrow(genomes)>0) {
+  genome.names<-paste0(genomes$Organism, ": ", genomes$Genome)
+}
 
 ## Dashboard Body ####
 body <- dashboardBody(
@@ -91,7 +95,7 @@ body <- dashboardBody(
              selectInput(
                inputId = "genome",
                label = "Genome",
-               choices = paste0(genomes$Organism, ": ", genomes$Genome),
+               choices = genome.names,
                selected = "Human: hg38",
                multiple = F
              )
