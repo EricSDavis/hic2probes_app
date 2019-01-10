@@ -31,18 +31,12 @@ body <- dashboardBody(
   shinyjs::useShinyjs(),
   tags$head(
     ## Link in stylesheets ####
-    # tags$link(rel = "stylesheet", type = "text/css", href = "css/style.css"),
+     tags$link(rel = "stylesheet", type = "text/css", href = "css/style.css"),
     
     ## Link in scripts ####
     tags$script(src = "js/main.js"),
     tags$style(
-      HTML("@media (min-width: 768px) {
-                             #home {text-align: left; margin-left:-.8%}
-                             #about {text-align: center; padding-right: 4%}
-                             #download {text-align: center;}
-                             #contact {text-align: right; padding-left: 4.85%}
-                             .content-wrapper, .right-side { background-color: #FFFFFF;}
-                             #borderless-box div { -webkit-box-shadow: none; -moz-box-shadow: none; box-shadow: none; } }"
+      HTML(""
       )
     )
   ),
@@ -60,14 +54,15 @@ body <- dashboardBody(
               tags$ul("© 2018 Phanstiel Lab", align="right", style="font-weight:300") # c4c8cc
   ),
   
-  fluidRow(
-    
+  fluidRow( 
+    class="nav-margins",
     align="center",
-    column(4),
-    column(1, actionLink(inputId = "return", label = "Home"), id="home"),
-    column(1, actionLink(inputId = "about", label = "About"), id="about"),
-    column(1, actionLink(inputId = "download", label = "Download"), id="download"),
-    column(1, actionLink(inputId = "contact", label = "Contact"), id="contact")
+    column(2),
+    column(2, class="nav-btn", actionLink(inputId = "return", label = "HOME"), id="home"),
+    column(2, class="nav-btn", actionLink(inputId = "about", label = "ABOUT"), id="about"),
+    column(2, class="nav-btn", actionLink(inputId = "download", label = "DOWNLOAD"), id="download"),
+    column(2, class="nav-btn", actionLink(inputId = "contact", label = "CONTACT"), id="contact"),
+    column(2)
   ),
   
   tabItems(
@@ -91,6 +86,7 @@ body <- dashboardBody(
     
     # Add input row
     fluidRow(
+      class="input-row-margins",
       column(width=4, align="center",
              selectInput(
                inputId = "genome",
@@ -126,7 +122,7 @@ body <- dashboardBody(
     
     
     fluidRow(
-      column(width=12,align="center",
+      column(width=12,align="center", style="margin-top:10px",
              radioButtons(width ="100%",
                           inputId = "index",inline=F,
                           label = "Add index sequences",
@@ -215,7 +211,7 @@ body <- dashboardBody(
       
       br(),
       
-      fluidRow(
+      fluidRow( 
         column(width = 12, 
           div(id = "borderless-box", 
             box(width = 12, 
@@ -226,8 +222,8 @@ body <- dashboardBody(
                     uiOutput("max_probes")
                   ), # end of column
                   column(
-                    width = 6,
-                    align = "right",
+                    width = 2,
+                    align = "left",
                     downloadButton(
                       outputId = "downloadProbes",
                       label = "Download Probes"
@@ -239,7 +235,7 @@ body <- dashboardBody(
         
           tags$br(),
           
-          tabBox(
+          tabBox( 
             title = uiOutput("title"),
             side = "right",
             width = 12,
@@ -318,12 +314,13 @@ body <- dashboardBody(
             ## Summary View ####
             tabPanel(
               title="Summary View",
-              fluidRow(
+              fluidRow( style = "margin-top:5px",
                 column(
                   width = 6,
                   box(
                     width = 12,
                     title = "Settings",
+                    status = "primary",
                     textOutput("info_genome"),
                     textOutput("info_chr"),
                     textOutput("info_start"),
@@ -337,6 +334,7 @@ body <- dashboardBody(
                   box(
                     width = 12,
                     title = "Results",
+                    status = "primary",
                     textOutput("info_res.sites"),
                     textOutput("info_all_probes"),
                     textOutput("info_selected_probes"),
@@ -348,7 +346,7 @@ body <- dashboardBody(
               ), # end of fluidRow
               
               ## Summary View Plots ####
-              fluidRow(
+              fluidRow( id="plot-margin",
                 column(width = 12, 
                   box(
                     width = 4,
@@ -364,12 +362,13 @@ body <- dashboardBody(
                   ) # end of box
                 ) # end of column
               ), # end of fluidRow
-              fluidRow(
+              fluidRow( id="tab-margin",
                 column(
                   width = 12,
                   ## Probe Data Table ####
                   box(
                     title = "Probe Data Table",
+                    status = "success",
                     width = 12,
                     div(style = 'overflow-x: scroll', DT::dataTableOutput('Probes')),
                     collapsible = T

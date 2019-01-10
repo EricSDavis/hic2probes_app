@@ -13,234 +13,370 @@ body {
   font-family: 'Heebo', Calibri, Candara, Arial, sans-serif;
   font-size: 130%;
   font-weight: 400 !important;
-  letter-spacing: .25;
+  letter-spacing: .25px;
+  line-height: 1.5em
 }
 
 textarea {
   font-family: inherit;
 }
 
-a {
- color: #43bbef;
+a:hover {
+  color: #eceff3;
+}
+
+/* navigation links */
+
+.nav-btn .action-button{
+  color: #fff; 
+  font-weight: 400;
+  font-size: 90%;
+  letter-spacing: .75px;
+}
+
+.nav-btn .action-button:hover{
+  color: #fff; 
+  font-weight: 400;
+  font-size: 90%;
+  letter-spacing: .75px;
+}
+
+.nav-btn:hover{
+  background-color:#1b8fc1; 
+  color:#ffffff
+}
+
+@media (max-width: 767px) {
+  .nav-btn .action-button:link{
+    color: #779bb5 
+  }
+}
+
+@media (min-width: 768px) {
+  .nav-btn{
+    background-color:#b8c2cc; 
+    color:#ffffff; 
+    margin: 0px 3px 0px 3px; 
+    padding: 1px 0px 0px 0px;
+  }
+  .nav-margins{
+    margin-left: 60px; 
+    margin-right: 85px
+  }
+}
+
+@media (min-width: 1150px) {
+  .nav-margins{
+    margin-left: 12%; 
+    margin-right: 15%
+  }
+}
+
+/* buttons */
+.action-button{
+  color: #fff; 
+  font-weight: 400;
+  font-size: 90%;
+  letter-spacing: .75px
+}
+
+.action-button:hover{
+  color: #fff; 
+  font-weight: 400;
+  font-size: 90%;
+  letter-spacing: .75px;
+}
+
+.btn.btn-default{
+  color: #fff;
+  background-color:#1b8fc1;
+  font-family: inherit;
+  font-weight: 400 !important;
+  font-size: 100% !important;
+  letter-spacing: .25px;
+  border-radius: 0; 
+  border: none;
+  margin-right: 5px;
+}
+
+/* download probes button */
+@media (min-width: 768px) {
+  .btn.btn-default.shiny-download-link.shiny-bound-output{
+    margin: 55px 5px 0px 25px
+  }
 }
    
-h1,.h1{
-  font-family: inherit;
-  font-weight: 300;
-  font-size: 185%;
-  margin-top: 20px;
-  margin-bottom: 8px;
-}
-
-h2,.h2{
-  font-family: inherit;
-  font-weight: 300;
-  font-size: 140%;
-  letter-spacing: .25px;
-  margin-top: 20px;
-  margin-bottom: 4px;
-}
-
+/* header text - evaluation page */
 h3,.h3{
   font-family: inherit;
-  font-weight: 300;
-  font-size: 120%;
+  font-weight: 500 !important;
+  font-size: 120% !important;
   letter-spacing: .25px;
   margin-top: 20px;
   margin-bottom: 4px;
 } 
 
-h4,.h4{
-  font-family: inherit;
-  font-weight: 200;
-  font-size: 120%;
-  letter-spacing: .25px;
-  margin-top: 20px;
-  margin-bottom: 4px;
+.box.box-primary>.box-header,
+.box.box-success>.box-header{
+  color:#000;
+  background:#fff;
 }
 
-h5,.h5{
-  font-family: inherit;
-  font-weight: 200;
-  font-size: 120%;
-  letter-spacing: .25px;
-  margin-top: 20px;
-  margin-bottom: 4px;
-} 
-
-h6,.h6{
-  font-family: inherit;
-  font-weight: 200;
-  font-size: 100%;
-  letter-spacing: .25px;
-  margin-top: 2px;
-}
-
-.control-label{
-  font-family: inherit;
-  font-weight: 200;
-  font-size: 100%;
-  letter-spacing: .25px;
-  margin-top: 2px;
-}
-
+/*   ?  
 .shiny-input-container label{
   font-family: inherit;
-  font-weight: 200;
-  font-size: 100%;
+  font-weight: 500 !important;
+  font-size: 100% !important;
   letter-spacing: .25px;
   margin-top: 2px;
+} */
+
+/* header text - sliders & homepage inputs */
+.form-group.shiny-input-container label.control-label,
+.form-group.shiny-input-container label[for=coordinates]{
+  font-family: inherit;
+  font-weight: 500 !important;
+  font-size: 100% !important;
+  letter-spacing: .25px;
+  margin-top: 2px;
+  margin-bottom:7px;
 }
 
-
-/* original font sizes:
-   h1 - 280%, h2 - 230%, h3 - 185%, h4 - 140%, h5 - 110%, h6 - 90% 
-   font weight: 500 */
-
-.box.box-solid.box-primary>.box-header,
-.box.box-solid.box-success>.box-header,
-.box.box-solid.box-info>.box-header,
-.box.box-solid.box-warning>.box-header,
-.box.box-solid.box-danger>.box-header{
- padding-top: 11px;
- padding-bottom: 9px;
+/* text - radio options on home page */
+.shiny-options-group label{
+  font-family: inherit;
+  font-weight: 400 !important;
+  font-size: 100% !important;
+  letter-spacing: .25px;
+  margin-top: 1px;
 }
 
-/* header logo text */
-.main-header .logo {
-  font-family: "Heebo", sans-serif;
-  font-weight: 400;
-  letter-spacing: 10px;
-  text-align: left;
-  padding-left: 25px;
+/* background color */
+.content-wrapper{
+background-color: #eceff3;
 }
 
-/*  header */
-.skin-blue .main-header .navbar,
-.skin-blue .main-header .logo,
-.skin-blue .main-header .logo:hover{
-  background-color: #0b3469;
-}        
-
-.btn.radiobtn.btn-primary:hover{
-  background: #99b1c7;
+/* selection boxes on home page */
+.selectize-input{
+  border-radius: 0 !important;
+  border-color: #fff !important;
 }
 
-.btn.radiobtn.btn-primary.active{
+.form-control.shinyjs-resettable.shiny-bound-input{
+  border-radius: 0 !important;
+  border-color: #fff !important;
+}
+
+.option.selected,
+.option.selected.active{
+  background-color: #1b8fc1;
   color: #fff;
-  background:#333;
-  border-bottom-color:#eceff3;
-  border-left-color:#eceff3;
-  border-right-color:#eceff3;
-  border-top-color:#eceff3;
 }
 
-.btn.radiobtn.btn-primary.active{
-  -webkit-box-shadow: none; 
-  -moz-box-shadow: none;
-  box-shadow: none;
+.option.active{
+  background-color: #eceff3;
 }
 
-.btn-group{
-   padding: 0px 0px 2px 0px;
+@media (min-width: 768px) {
+  .input-row-margins{
+    margin-left: 20px; 
+    margin-right: 20px
+  }
 }
 
-.box.box-solid.box-primary>.box-header{
-  color:#fff;
-  background:#0b3469;
+@media (min-width: 1150px) {
+  .input-row-margins{
+    margin-left: 8%; 
+    margin-right: 10%
+  }
 }
 
-.box.box-solid.box-primary{
-  border-bottom-color:#eceff3;
-  border-left-color:#eceff3;
-  border-right-color:#eceff3;
-  border-top-color:#eceff3;
+/* boxes */
+.box{
+  border-bottom-color: #fff;
+  border-left-color: #fff;
+  border-right-color: #fff;
+  border-top-color: #fff;
 }
 
 .box.box-primary{
- border-top-color:#;
+  border-top: none;
+  border-radius: 0px;
+  padding-top: -20px;
 }
 
-.box.box-solid.box-success{
-  border-bottom-color:#eceff3;
-  border-left-color:#eceff3;
-  border-right-color:#eceff3;
-  border-top-color:#eceff3;
+.box.box-success{
+  border-top: none;
+  border-radius: 0px;
 }
 
-.box.box-solid.box-info{
-  border-bottom-color:#eceff3;
-  border-left-color:#eceff3;
-  border-right-color:#eceff3;
-  border-top-color:#eceff3;
-}
-
-.box.box-solid.box-warning{
-  border-bottom-color:#eceff3;
-  border-left-color:#eceff3;
-  border-right-color:#eceff3;
-  border-top-color:#eceff3;
-}
-
-.box.box-warning{
- border-top-color:#;
-}
-
-.box.box-solid.box-danger{
-  border-bottom-color:#eceff3;
-  border-left-color:#eceff3;
-  border-right-color:#eceff3;
-  border-top-color:#eceff3;
-}
-
-.btn.action-button.btn-primary.btn-xs.shiny-bound-input>.fa.fa-question{
- color: #fff;
-}
-
-.btn.action-button.btn-primary.btn-xs.shiny-bound-input{
-  width: 14px;
-  height: 17px;
-  line-height: 16px;
-  min-height: 16px;
-  vertical-align: center;
-  font-size: 11px;
-  padding: 1.5px 1.25px 0px 1px;
-  margin: 0;
-}
-
-.nav-tabs-custom{
+.box{
   -webkit-box-shadow: none; 
   -moz-box-shadow: none;
   box-shadow: none;
 }
 
-.tab-pane.active {
- overflow: hidden;
+/* genome title */
+#title.shiny-html-output.shiny-bound-output{
+  margin-bottom: 15px;
+  padding-top: 10px;
+  line-height: 1.2em;
 }
 
-/* right align action button */
-.rightAlign{
-  float: right;
+@media (min-width: 768px) {
+#title.shiny-html-output.shiny-bound-output{ 
+  margin-bottom: 0px;
+    padding-top: 6px;
+    padding-left: 25px
+  }
 }
 
-.sidebar{
-  background-color: #0b3469;
+ul.nav li.header{
+  background-color: none;
+  color: #000;
+  border: none;
 }
 
-.main-panel{
-  background-color: #0b3469;
-  color:#ffffff;
-  background-size: cover;
-  background-repeat: no-repeat;
+/* tabs */
+.nav.nav-tabs.shiny-tab-input.pull-right.shiny-bound-input{
+  background: #eceff3;
 }
 
-.box-header{
-  background-color: #0b3469;
-  color: #ffffff;
+ul.nav li.active{
+  border-top: none;
 }
 
+ul.nav li{
+  border-top-color: #fff !important;
+  color: #fff;
+}
 
-/* Spinner */
+ul.nav{
+  border: none;
+}
+
+@media (min-width: 768px) {
+  .nav.nav-tabs.shiny-tab-input.pull-right.shiny-bound-input{
+    padding-bottom:5px
+  }
+  ul.nav li.active{
+    margin-bottom: 10px
+  }
+}
+
+/* plot margins */
+@media (min-width: 768px) {
+  #plot-margin.row{ 
+    margin-right:-30px
+  }
+}
+
+/* SLIDERS */
+
+@media (min-width: 768px) {
+  #max_probes.shiny-html-output.shiny-bound-output{
+    margin: 10px 25px 0px 25px;
+  }
+}
+                                
+#borderless-box div{ 
+  -webkit-box-shadow: none; 
+  -moz-box-shadow: none; 
+  box-shadow: none; 
+}
+
+/* slider bar */
+.irs .irs-bar, 
+.irs .irs-bar-edge{
+  background: #1b8fc1;
+  border: #1b8fc1;
+}
+
+.irs .irs-line{
+  background: #dde1e6;
+  border:none;
+}
+
+.irs-shadow{
+  opacity: 0;
+  background: #fff;
+  display: none;
+}
+
+/* slider circle */
+.irs-slider.single,
+.irs-slider.from,
+.irs-slider.to{
+  background: #fff;
+  border-color: #b8c2cc;
+  border-width: 6px;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+}
+
+/* slider value boxes */
+.irs .irs-single, 
+.irs .irs-from, 
+.irs .irs-to{
+  padding: 2px 3px 0px 3.5px;
+  vertical-align: bottom;
+}
+
+.irs .irs-single, 
+.irs .irs-from, 
+.irs .irs-to{
+  background: #1b8fc1;
+}
+
+.irs .irs-min, .irs .irs-max{
+  background: #fff;
+}
+
+/* SWITCH */
+
+/* circle - off */
+.label-primary:after{
+  background: #fff !important;
+  border: solid !important;
+  border-color: #b8c2cc !important;
+  border-width: 6px !important;
+  -webkit-box-shadow: none !important; 
+  -moz-box-shadow: none !important;
+  box-shadow: none !important;
+}
+
+/* circle - on */
+.label-primary:before{
+  background: #eceff3 !important;
+  border: none !important;
+  border-color: #b8c2cc !important;
+  border-width: 6px !important;
+  opacity: 1 !important;
+  -webkit-box-shadow: none !important; 
+  -moz-box-shadow: none !important;
+  box-shadow: none !important;
+}
+
+/* bar - off */
+.shinyjs-resettable.shiny-bound-input:checked + .label-primary:after {
+  background-color:#fff !important;
+  -webkit-box-shadow: none; 
+  -moz-box-shadow: none;
+  box-shadow: none;
+}
+
+/* bar - on */
+.shinyjs-resettable.shiny-bound-input:checked + .label-primary:before {
+  background-color:#1b8fc1 !important;
+  opacity: 1 !important;
+  -webkit-box-shadow: none; 
+  -moz-box-shadow: none;
+  box-shadow: none;
+}
+
+/* SPINNER */
+
 .loader {
   position: absolute;
   left: 65%;
@@ -345,4 +481,20 @@ h6,.h6{
   padding-top: 25px;
   color: #FFFFFF;
   background-color: #0b3469;
+}
+
+/* right align action button */
+.rightAlign{
+  float: right;
+}
+
+.sidebar{
+  background-color: #0b3469;
+}
+
+.main-panel{
+  background-color: #0b3469;
+  color:#ffffff;
+  background-size: cover;
+  background-repeat: no-repeat;
 }
