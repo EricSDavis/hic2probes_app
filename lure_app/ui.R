@@ -184,9 +184,11 @@ body <- dashboardBody(
                
                HTML('
                              <div class="loader"></div>
+                             <div class = "loading-message-block">
                              <p id="loading-message1" class="loading-message"> Constructing Probes... </p>
                              <p id="loading-message2" class="loading-message"> They are going to be great... </p>
-                             ')
+                             </div>
+                    ')
                
              ) # end of conditional panel
       ) # end of column
