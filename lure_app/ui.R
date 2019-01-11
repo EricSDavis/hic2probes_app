@@ -58,10 +58,10 @@ body <- dashboardBody(
     class="nav-margins",
     align="center",
     column(2),
-    column(2, class="nav-btn", actionLink(inputId = "return", label = "HOME"), id="home"),
-    column(2, class="nav-btn", actionLink(inputId = "about", label = "ABOUT"), id="about"),
-    column(2, class="nav-btn", actionLink(inputId = "download", label = "DOWNLOAD"), id="download"),
-    column(2, class="nav-btn", actionLink(inputId = "contact", label = "CONTACT"), id="contact"),
+    column(2, class="nav-btn", actionButton(inputId = "return", label = "HOME", class="nav-btn"), id="home"),
+    column(2, class="nav-btn", actionButton(inputId = "about", label = "ABOUT", class="nav-btn"), id="about"),
+    column(2, class="nav-btn", actionButton(inputId = "download", label = "DOWNLOAD", class="nav-btn"), id="download"),
+    column(2, class="nav-btn", actionButton(inputId = "contact", label = "CONTACT", class="nav-btn"), id="contact"),
     column(2)
   ),
   

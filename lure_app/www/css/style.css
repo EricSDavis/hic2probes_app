@@ -34,19 +34,33 @@ a:hover {
   letter-spacing: .75px;
 }
 
-.nav-btn .action-button:hover{
+.btn.btn-default.action-button.nav-btn.shiny-bound-input{
+  font-weight: 400;
+  font-size: 90% !important;
+  letter-spacing: .75px;
+}
+
+.nav-btn .action-button:hover,
+.btn.btn-default.action-button.nav-btn.shiny-bound-input:hover{
   color: #fff ; 
   font-weight: 400;
   font-size: 90%;
   letter-spacing: .75px;
 }
 
-.nav-btn:hover{
+.nav-btn:hover,
+.btn.btn-default.action-button.nav-btn.shiny-bound-input:hover{
   background-color:#1b8fc1; 
-  color:#ffffff
+  color:#ffffff;
 }
 
 @media (max-width: 767px) {
+  .btn.btn-default.action-button.nav-btn.shiny-bound-input{
+    background-color: rgb(184,194,204, 0);
+    color: #779bb5 ;
+    padding: 4px 0 2px 0;
+    width: 100%;
+  }
   .nav-btn .action-button:link{
     color: #779bb5 
   }
@@ -59,12 +73,22 @@ a:hover {
   .nav-btn{
     background-color:#b8c2cc; 
     color:#ffffff; 
-    margin: 0px 3px 0px 3px; 
-    padding: 1px 0px 0px 0px;
+    margin: 0px 6px 0px 6px; 
+    padding: 0px 10px 0px 0px;
   }
+  .btn.btn-default.action-button.nav-btn.shiny-bound-input{
+    color: #fff; 
+    background-color: rgb(184,194,204, 0);
+    font-weight: 400;
+    font-size: 90% !important;
+    letter-spacing: .75px;
+    padding: 3.5px 0 1.5px 0;
+width: 100%;
+text-align: center;}
+
   .nav-margins{
-    margin-left: 60px; 
-    margin-right: 85px
+    margin-left: 50px; 
+    margin-right: 95px
   }
 }
 
