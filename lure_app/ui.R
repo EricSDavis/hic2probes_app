@@ -170,8 +170,8 @@ body <- dashboardBody(
              actionButton(
                inputId = "run_script",
                label = "Design Probes",
-               icon = icon("wrench", lib = "font-awesome")
-               
+               icon = icon("wrench", lib = "font-awesome"),
+               class = "design-btn"
              )
       ) # end column
     ), # end of row

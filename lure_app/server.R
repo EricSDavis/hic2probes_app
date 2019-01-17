@@ -225,25 +225,53 @@ shinyServer(function(input, output, session) {
       bin_size <- bdata$bin_stop[1] - bdata$bin_start[1]
       
       ## Define color palette
-      cols <- c("green", "blue", "purple", "red")
-      cols <- adjustcolor(cols, alpha.f = 0.6)
+      cols <- c("#71CAE4", "#666EE5", "#FF7F5C", "#FFD770")
+      cols <- adjustcolor(cols, alpha.f = 1)
       
       ## Plot stacked histogram barplot
+      par(lty = 0, mgp=c(2.75,.7,.2), bg="NA")
+      plot(c(0,1), c(0,1), "n",
+           xlim = xlim, #c(min(bdata$bin_start), max(bdata$bin_stop)),
+           ylim = c(0, 1.5*max(bdata$bins)),
+           xlab = "",
+           ylab = "",
+           frame.plot = F,
+           las = 1,
+           axes = FALSE)
+      
+      abline(h=c(2,4,6,8,10,12), col="#d2d9e0", lty = 3)
+      
+      par(lty = 0, mgp=c(2.75,.7,.2), bg="NA", new = TRUE)
       plot(c(0,1), c(0,1), "n",
            xlim = xlim, #c(min(bdata$bin_start), max(bdata$bin_stop)),
            ylim = c(0, 1.5*max(bdata$bins)),
            xlab = "genomic coordinates",
            ylab = "Number of Probes",
+           yaxs='i',
            sub = paste0("N= ", sum(bdata$bins), ", ",
                         "bin size= ", bin_size, "bp"),
            frame.plot = F,
+           las = 1,
+           axes = FALSE,
+           cex.lab = 1.1
+           )
+      axis(2, 
+           lwd = 0,
+           lwd.ticks = 0,
+           las = 2)
+      axis(1, 
+           col = "#b8c2cc",
+           lwd = 1,
+           lwd.ticks = 1,
+           tcl = -.4,
            las = 1)
+      
       rect(bdata$bin_start, 0, bdata$bin_stop, bdata$bins, border=NA)
       rect(bdata$bin_start, 0, bdata$bin_stop, bdata$`0`, col = cols[1], border=NA)
       rect(bdata$bin_start, bdata$`0`, bdata$bin_stop, bdata$`0`+bdata$`1`, col = cols[2], border=NA)
       rect(bdata$bin_start, bdata$`0`+bdata$`1`, bdata$bin_stop, bdata$`0`+bdata$`1`+bdata$`2`, col = cols[3], border=NA)
       rect(bdata$bin_start, bdata$`0`+bdata$`1`+bdata$`2`, bdata$bin_stop, bdata$`0`+bdata$`1`+bdata$`2`+bdata$`3`, col = cols[4], border=NA)
-      legend('topright', title = "Pass Number", legend = c(0:3), fill = cols, bty = 'n', border=NA)
+      legend('topright', title = "Pass Number", adj=1, legend = c(0:3), fill = cols, bg = "#ffffff", border=NA)
       if (input$toggle_res.sites == T){ #input$region_slider[2] - input$region_slider[1] <= 50000 & 
         segments(sites, -1, sites, 0.65*max(bdata$bins))
       }
@@ -276,20 +304,47 @@ shinyServer(function(input, output, session) {
       bin_size <- bdata$bin_stop[1] - bdata$bin_start[1]
       
       ## Define color palette
-      cols <- c("green", "blue", "purple", "red")
-      cols <- adjustcolor(cols, alpha.f = 0.6)
+      cols <- c("#71CAE4", "#666EE5", "#FF7F5C", "#FFD770")
+      cols <- adjustcolor(cols, alpha.f = 1)
       
       ## Plot stacked histogram barplot
-      plot(c(0,1), c(0,1), "n",
+      plot(c(0,1), c(0,1), "n", 
+           xlim = xlim, #c(min(bdata$bin_start), max(bdata$bin_stop)),
+           ylim = c(0, 1.5*max(bdata$bins)),
+           xlab = "",
+           ylab = "",
+           frame.plot = F,
+           las = 1,
+           axes = FALSE
+      )
+      abline(h=c(2,4,6,8,10,12), col="#d2d9e0", lty = 3)
+      
+      par(lty = 0, mgp=c(2.75,.7,.2), bg="NA", new = TRUE)
+      plot(c(0,1), c(0,1), "n", 
            xlim = xlim, #c(min(bdata$bin_start), max(bdata$bin_stop)),
            ylim = c(0, 1.5*max(bdata$bins)),
            xlab = "genomic coordinates",
            ylab = "Number of Restriction Sites",
+           yaxs='i',
            sub = paste0("N= ", sum(bdata$bins), ", ",
                         "bin size= ", bin_size, "bp"),
            frame.plot = F,
+           las = 1,
+           axes = FALSE,
+           cex.lab = 1.1
+      )
+      axis(2, 
+           lwd = 0,
+           lwd.ticks = 0,
+           las = 2)
+      axis(1, 
+           col = "#b8c2cc",
+           lwd = 1,
+           lwd.ticks = 1,
+           tcl = -.4,
            las = 1)
-      rect(bdata$bin_start, 0, bdata$bin_stop, bdata$bins, col = "grey", border = NA)
+      
+      rect(bdata$bin_start, 0, bdata$bin_stop, bdata$bins, col = "#b8c2cc", border = NA)
     }
     
     ## Implement function
@@ -301,21 +356,47 @@ shinyServer(function(input, output, session) {
     data <- script_results()
     sites <- res.sites()
     req(input$region_slider)
+
+    cols <- c("#71CAE4", "#666EE5", "#FF7F5C", "#FFD770")[factor(data$pass)]
+    cols <- adjustcolor(cols, alpha.f = 1)
     
-    cols <- c("green", "blue", "purple", "red")[factor(data$pass)]
-    cols <- adjustcolor(cols, alpha.f = 0.6)
+    leg_cols <- c("#71CAE4", "#666EE5", "#FF7F5C", "#FFD770")
+    leg_cols <- adjustcolor(leg_cols, alpha.f = 1)
     
-    leg_cols <- c("green", "blue", "purple", "red")
-    leg_cols <- adjustcolor(leg_cols, alpha.f = 0.6)
+    par(mgp=c(2.75,.7,.2))
+    plot(c(0,1), c(0,1), "n",
+         xlim=c(input$region_slider[1], input$region_slider[2]),
+         xlab = "",
+         ylab = "",
+         las = 1,
+         frame.plot = F,
+         axes = FALSE)
+    abline(h=c(.2,.4,.6,.8,1), col="#d2d9e0", lty = 3)
     
+    par(mgp=c(2.75,.7,.2), bg="NA", new = TRUE)
     plot(c(0,1), c(0,1), "n",
          xlim=c(input$region_slider[1], input$region_slider[2]),
          xlab = paste0(extractcoords(input$coordinates)$chr, " region"),
          ylab = "GC Fraction",
+         yaxs='i',
          las = 1,
-         frame.plot = F)
+         frame.plot = F,
+         axes = FALSE,
+         cex.lab = 1.1
+         )
+    axis(2, 
+         lwd = 0,
+         lwd.ticks = 0,
+         las = 2)
+    axis(1, 
+         col = "#b8c2cc",
+         lwd = 1,
+         lwd.ticks = 1,
+         tcl = -.4,
+         las = 1)
+    
     segments(data$start, data$GC, data$stop, data$GC, col = cols, lwd=5)
-    legend('topright', title = "Pass Number", legend = c(0, 1, 2, 3), fill = leg_cols, bty = 'n', border = NA)
+    legend('topright', title = "Pass Number", legend = c(0, 1, 2, 3), fill = leg_cols, bg = "white", box.lty = 0)
     if (input$toggle_res.sites == T){ #input$region_slider[2] - input$region_slider[1] <= 50000 & 
       segments(sites, -1, sites, 0.65)
     }
@@ -326,21 +407,47 @@ shinyServer(function(input, output, session) {
     data <- script_results()
     sites <- res.sites()
     
-    cols <- c("green", "blue", "purple", "red")[factor(data$pass)]
-    cols <- adjustcolor(cols, alpha.f = 0.6)
+    cols <- c("#71CAE4", "#666EE5", "#FF7F5C", "#FFD770")[factor(data$pass)]
+    cols <- adjustcolor(cols, alpha.f = 1)
     
-    leg_cols <- c("green", "blue", "purple", "red")
-    leg_cols <- adjustcolor(leg_cols, alpha.f = 0.6)
+    leg_cols <- c("#71CAE4", "#666EE5", "#FF7F5C", "#FFD770")
+    leg_cols <- adjustcolor(leg_cols, alpha.f = 1)
     
+    par(mgp=c(2.75,.7,.2))
+    plot(data$start, data$shift, "n", frame.plot = F,
+         xlim = c(input$region_slider[1], input$region_slider[2]),
+         ylim = c(min(data$shift), max(data$shift)+0.45*(max(data$shift))),
+         xlab = "",
+         ylab = "",
+         las = 1,
+         axes = FALSE)
+    
+    abline(h=c(50,100,150), col="#d2d9e0", lty = 3)
+    
+    par(mgp=c(2.75,.7,.2), bg="NA", new = TRUE)
     plot(data$start, data$shift, "n", frame.plot = F,
          xlim = c(input$region_slider[1], input$region_slider[2]),
          ylim = c(min(data$shift), max(data$shift)+0.45*(max(data$shift))),
          xlab = paste0(extractcoords(input$coordinates)$chr, " region"),
          ylab = "Base Pairs from Restriction Site",
-         las = 1
+         yaxs='i',
+         las = 1,
+         axes = FALSE,
+         cex.lab = 1.1
          )
+    axis(2, 
+         lwd = 0,
+         lwd.ticks = 0,
+         las = 2)
+    axis(1, 
+         col = "#b8c2cc",
+         lwd = 1,
+         lwd.ticks = 1,
+         tcl = -.4,
+         las = 1)
+    
     segments(data$start, data$shift, data$stop, data$shift, col = cols, lwd = 5)
-    legend('topright', title = "Pass Number", legend = c(0, 1, 2, 3), fill = leg_cols, bty = 'n', border = NA)
+    legend('topright', title = "Pass Number", legend = c(0, 1, 2, 3), fill = leg_cols, bg = "white", box.lty = 0)
     if (input$toggle_res.sites == T){ #input$region_slider[2] - input$region_slider[1] <= 50000 & 
       segments(sites, -1, sites, max(data$shift))
     }
@@ -351,7 +458,7 @@ shinyServer(function(input, output, session) {
   output$region_slider <- renderUI({
     sliderInput(
       inputId = "region_slider",
-      label = "Select Viewing Region:",
+      label = "Viewing Region",
       min = extractcoords(input$coordinates)$start,
       max = extractcoords(input$coordinates)$stop,
       value = c(extractcoords(input$coordinates)$start, extractcoords(input$coordinates)$stop),
@@ -509,51 +616,142 @@ shinyServer(function(input, output, session) {
       req(script_results())
       data <- script_results()
       paste0("Average GC Fraction: ", round(mean(data$GC), 2))
-    })
+    }) 
   })
 
   ##--------------Summary View Plots-------------####
   output$summary_gc <- renderPlot({
     data <- script_results()
-    cols <- c("red", "purple", "blue", "green", "blue", "purple", "red")
-    cols <- adjustcolor(cols, alpha.f = 0.6)
+    cols <- c("#FFD770", "#FF7F5C", "#666EE5", "#71CAE4", "#666EE5", "#FF7F5C", "#FFD770")
+    cols <- adjustcolor(cols, alpha.f = 1)
     breaks <- nrow(data)*0.05
     if (breaks < 1) breaks <- 1
     h <- hist(data$GC, breaks = breaks, plot = F)
     cuts <- cut(h$breaks, c(-Inf, .25, .35, .49, .65, .7, .8, Inf))
     cols[cuts]
+    par(lty = 0, mgp=c(2.75,.7,0.2), bg="NA")
     plot(h, col = cols[cuts], xlim = c(0.2, 0.8),
          main = "GC Content",
          ylab = "Number of Probes",
-         xlab = "GC Fraction")
-    legend('topright', legend = c("0", "1", "2", "3"), 
-           fill = adjustcolor(c("green", "blue", "purple", "red"), alpha.f = 0.6),
+         xlab = "GC Fraction",
+         axes = FALSE,
+         yaxs='i',
+         ylim = c(0,max(h$counts)),
+         cex.main = 1.3,
+         cex.lab = 1.1
+         )
+    abline(h=c(20, 40, 60, 80), col="#eceff3", lty = 1)
+    par(lty = 0, mgp=c(2.75,.7,0.2), bg="NA")
+    plot(h, col = cols[cuts], xlim = c(0.2, 0.8),
+         main = "GC Content",
+         ylab = "Number of Probes",
+         xlab = "GC Fraction",
+         add = TRUE, 
+         axes = FALSE,
+         ylim = c(0,max(h$counts)),
+         )
+    axis(2, 
+         lwd = 0,
+         lwd.ticks = 0,
+         las = 2)
+    axis(1, 
+         col = "#b8c2cc",
+         lwd = 1,
+         lwd.ticks = 1,
+         tcl = -.4,
+         las = 1)
+    legend('topright', legend = c("0", "1", "2", "3"), bg = "#ffffff",
+           fill = adjustcolor(c("#71CAE4", "#666EE5", "#FF7F5C", "#FFD770"), alpha.f = 1),
            title = "Pass")
   })
   
   output$summary_pass <- renderPlot({
     data <- script_results()
-    cols <- c("green", "blue", "purple", "red")
-    cols <- adjustcolor(cols, alpha.f = 0.6)
-    barplot(table(factor(data$pass, levels = 0:3)), col = cols,
+    cols <- c("#71CAE4", "#666EE5", "#FF7F5C", "#FFD770")
+    cols <- adjustcolor(cols, alpha.f = 1)
+    par(lty = 0, mgp=c(2.75,.7,0.2), bg="NA")
+    barplot(table(factor(data$pass, levels = 0:3)), col = NA,
+            main = "",
+            ylab = "",
+            xlab = "",
+            border = NA,
+            xaxt = "n",
+            yaxt = "n",
+            axes = FALSE,
+            yaxs='i',
+            ylim = c(0,max(table(factor(data$pass, levels = 0:3))))
+            )
+    abline(h=c(50, 100, 150), col="#eceff3", lty = 1)
+    par(lty = 0, mgp=c(2.75,.7,0.2), bg="NA")
+    bp=barplot(table(factor(data$pass, levels = 0:3)), col = cols,
             main = "Probe Quality",
-            ylab = "Number of Probes",
-            xlab = "Pass Number")
+            ylab = "",
+            xlab = "Pass Number",
+            add = TRUE,
+            axes = FALSE,
+            xaxt = "n",
+            yaxs='i',
+            ylim = c(0,max(table(factor(data$pass, levels = 0:3)))),
+            cex.main = 1.3,
+            cex.lab = 1.1
+            )
+    axis(2, 
+         lwd = 0,
+         lwd.ticks = 0,
+         las = 2)
+    axis(1, 
+         lwd = 0,
+         lwd.ticks = 0,
+         at = bp,
+         labels = c(0,1,2,3),
+         line = 0)
   })
   
   
   output$summary_shift <- renderPlot({
     data <- script_results()
-    col_func <- colorRampPalette(c("green", "blue", "purple", "red"))
+    col_func <- colorRampPalette(c("#71CAE4", "#666EE5", "#FF7F5C", "#FFD770"))
     h <- hist(data$shift, plot = F)
+    par(lty = 0, mgp=c(2.75,.7,0.2), bg="NA")
     plot(
       h,
       xlim = c(0, max(data$shift)+20),
-      col = adjustcolor(col_func(length(h$breaks)),alpha.f = 0.6),
+      col = adjustcolor(col_func(length(h$breaks)),alpha.f = 1),
       main = "Restriction Site Distance",
       xlab = "Distance (bp)",
-      ylab = "Number of Probes"
-    )
+      ylab = "",
+      las = 1,
+      axes = FALSE,
+      yaxs='i',
+      ylim = c(0,max(h$counts)),
+      cex.main = 1.3,
+      cex.lab = 1.1
+      )
+    abline(h=c(50,100,150,200,250,300), col="#eceff3", lty = 1)
+    par(lty = 0, mgp=c(2.75,.7,0.2), bg="NA")
+    plot(
+      h,
+      xlim = c(0, max(data$shift)+20),
+      col = adjustcolor(col_func(length(h$breaks)),alpha.f = 1),
+      main = "Restriction Site Distance",
+      xlab = "Distance (bp)",
+      ylab = "Number of Probes",
+      las = 1,
+      add = TRUE,
+      axes = FALSE,
+      yaxs='i',
+      ylim = c(0,max(h$counts)))
+    axis(2, 
+         col = "#b8c2cc",
+         lwd = 0,
+         lwd.ticks = 0,
+         las = 2)
+    axis(1, 
+         col = "#b8c2cc",
+         lwd = 1,
+         lwd.ticks = 1,
+         tcl = -.4,
+         las = 1)
   })
   
   ##--------------Probe data table----------------####

@@ -38,20 +38,17 @@ a:hover {
   font-weight: 400;
   font-size: 90% !important;
   letter-spacing: .75px;
+  outline: none;
 }
 
-.nav-btn .action-button:hover,
-.btn.btn-default.action-button.nav-btn.shiny-bound-input:hover{
-  color: #fff ; 
-  font-weight: 400;
-  font-size: 90%;
-  letter-spacing: .75px;
-}
-
-.nav-btn:hover,
-.btn.btn-default.action-button.nav-btn.shiny-bound-input:hover{
+.nav-btn:hover{
   background-color:#1b8fc1; 
   color:#ffffff;
+}
+
+.nav-btn:active{
+  color: #fff; 
+  background-color:#1985B3;
 }
 
 @media (max-width: 767px) {
@@ -114,6 +111,14 @@ text-align: center;}
   letter-spacing: .75px;
 }
 
+.action-button:active{
+  background-color: #1985B3 !important;
+  color: #fff !important;
+  -webkit-box-shadow: none; 
+  -moz-box-shadow: none;
+  box-shadow: none;
+}
+
 .btn.btn-default{
   color: #fff;
   background-color:#1b8fc1;
@@ -127,31 +132,36 @@ text-align: center;}
 }
 
 /* design probes button */
-.btn.btn-default.action-button.shiny-bound-input{
+.design-btn{
   background-color: #1b8fc1;
   color: #fff;
   position: relative;
   z-index: 1;
+  margin-top: 7px;
 }
 
-.btn.btn-default.action-button.shiny-bound-input:focus{
+.design-btn:hover{
+  background-color: #1A93C7;
+}
+  
+.design-btn:focus{
   background-color: #eceff3;
   opacity: 0;
 }
 
-.van{
-  display: none !important;
-}
-
-.clicked-class{
-  display: none !important;
-  visibility: hidden !important;
-}
 
 /* download probes button */
-.btn.btn-default.shiny-download-link.shiny-bound-output:focus{
+
+.btn.btn-default.shiny-download-link.shiny-bound-output:active{
   color: #fff;
-  background-color:#1b8fc1;
+  background-color:#1985B3;
+  -webkit-box-shadow: none; 
+  -moz-box-shadow: none;
+  box-shadow: none;
+}
+
+.btn.btn-default.shiny-download-link.shiny-bound-output:hover{
+  background-color:#1A93C7;
 }
 
 @media (min-width: 768px) {
@@ -194,6 +204,12 @@ h3,.h3{
   letter-spacing: .25px;
   margin-top: 2px;
   margin-bottom:7px;
+}
+
+.form-group.shiny-input-container label.control-label[for=max_probes],
+.form-group.shiny-input-container label.control-label[for=region_slider]{
+  font-size: 115% !important;
+  margin-bottom: 15px;
 }
 
 /* text - radio options on home page */
@@ -274,7 +290,7 @@ background-color: #eceff3;
 #title.shiny-html-output.shiny-bound-output{
   margin-bottom: 15px;
   padding-top: 10px;
-  line-height: 1.2em;
+  line-height: 1.3em;
 }
 
 @media (min-width: 768px) {
@@ -291,7 +307,7 @@ ul.nav li.header{
   border: none;
 }
 
-/* tabs */
+/* summary/region tabs */
 .nav.nav-tabs.shiny-tab-input.pull-right.shiny-bound-input{
   background: #eceff3;
 }
@@ -303,6 +319,18 @@ ul.nav li.active{
 ul.nav li{
   border-top-color: #fff !important;
   color: #fff;
+}
+
+ul.nav li:hover{
+  background: #f3f5f7;
+}
+
+ul.nav li a:hover{
+  color: #444 !important;
+}
+
+ul.nav li.active a:hover{
+  color: #444 !important;
 }
 
 ul.nav{
@@ -321,9 +349,87 @@ ul.nav{
 /* plot margins */
 @media (min-width: 768px) {
   #plot-margin.row{ 
-    margin-right:-30px
+    margin-right:-40px;
+    margin-left:-20px;
   }
 }
+
+#coverageHistogram.shiny-plot-output.shiny-bound-output,
+#restrictionHistogram.shiny-plot-output.shiny-bound-output,
+#gc_plot.shiny-plot-output.shiny-bound-output,
+#shift_plot.shiny-plot-output.shiny-bound-output{
+  margin-left:-6px;
+}
+
+/* data table */
+
+.dataTables_length label,
+.dataTables_filter label,
+.display.dataTable thead tr th{
+  font-weight: 500;
+}
+
+.dataTables_filter label input[type="search"]{
+  border: 2px solid #eceff3;
+  outline: none;
+}
+
+/* .dataTables_length label select[name="DataTables_Table_1_length"]{
+} */
+
+.odd{
+  background: #f6f7f9 !important;
+}
+
+.even td,
+.odd td{
+  border-top: none !important;
+}
+
+.even:hover,
+.odd:hover{
+  background: #d0e2ef !important;
+}
+
+.dataTable tbody tr.odd.selected td,
+.dataTable tbody tr.even.selected td{
+  background-color: #94abce !important;
+  color: #fff !important;
+}
+
+.fa.fa-minus,
+.fa.fa-plus{
+  color: #1b8fc1;
+}
+
+.dataTables_paginate .paginate_button.current,
+.dataTables_paginate .paginate_button.current:hover{
+  background: #eceff3 !important;
+  color: #ffffff!important;
+  border: solid 1px #fff !important;
+  border-radius: 0px !important;
+  font-style: normal;
+}
+
+.dataTables_paginate .paginate_button:hover{
+  background: #94abce !important;
+  color: #ffffff!important;
+  border: solid 1px #fff !important;
+  border-radius: 0px !important;
+  font-style: normal;
+}
+
+.dataTables_paginate.paging_simple_numbers .paginate_button.current{
+  color: #ffffff !important;
+}
+
+.dataTables_paginate.paging_simple_numbers .paginate_button.previous.disabled,
+.dataTables_paginate.paging_simple_numbers .paginate_button.previous.disabled:hover{
+  color: #b8c2cc !important;
+  background: none !important;
+}
+
+
 
 /* SLIDERS */
 
@@ -469,7 +575,7 @@ ul.nav{
 .loading-message-block {
   position: absolute;
   left: 50%;
-  margin: 35px 0px 0px -64px;
+  margin: 40px 0px 0px -64px;
   width: 180px;
   text-align: center;
 }
