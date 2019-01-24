@@ -34,24 +34,24 @@ body <- dashboardBody(
      tags$link(rel = "stylesheet", type = "text/css", href = "css/style.css"),
     
     ## Link in scripts ####
-    tags$script(src = "js/main.js"),
-    tags$style(
-      HTML(""
-      )
-    )
+    tags$script(src = "js/main.js")
   ),
   
-  tags$footer(tags$a(span(img(src="images/PhanstielLab.png",height=16,align="left", style="")), href="http://phanstiel-lab.med.unc.edu/"), align = "left", style = "
-                       position: fixed;
-                       bottom:0;
-                       width:101%;
-                       height:40px;
-                       color: #eceff3;
-                       padding: 12px 25px 0px 20px;
-                       margin-left: -20px;
-                       background-color: #b8c2cc;
-                       z-index: 1000;",
-              tags$ul("© 2018 Phanstiel Lab", align="right", style="font-weight:300") # c4c8cc
+  tags$footer(tags$a(span(img(src="images/lrrr.png", height=32),
+                          style="position:fixed; bottom:50px; right:0px"),
+                     href="https://futurama.fandom.com/wiki/Lrrr"),
+    tags$a(span(img(src="images/PhanstielLab.png", height=16, align="left")),
+           href="http://phanstiel-lab.med.unc.edu/"), align="left",
+                style="position:fixed;
+                bottom:0px;
+                width:101%;
+                height:50px;
+                color:#eceff3;
+                padding: 12px 25px 0px 20px;
+                margin-left:-20px;
+                background-color:#b8c2cc;
+                z-index:1000;",
+           tags$ul("© 2018 Phanstiel Lab", align="right", style="font-weight:300") # c4c8cc
   ),
   
   fluidRow( 
@@ -201,7 +201,6 @@ body <- dashboardBody(
     ), # end of row
     
     
-    br(),
     br(),
     br(),
     br(),
@@ -387,6 +386,7 @@ body <- dashboardBody(
           ) # end of tabBox
         ) # end of column
       ), # end of fluidRow
+      br(),
       br()
     ), # end of tabItem
     tabItem(tabName = "About", 
