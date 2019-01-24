@@ -28,7 +28,9 @@ shinyServer(function(input, output, session) {
       system("rm -r /tmp/lure/")
     }
     updateTabItems(session, "tabNav", "Define")
-    session$reload() #reload session on input$return
+    if(input$tabNav == "Evaluate") {
+      session$reload() #reload session on input$return
+    }
   })
   
   ##----------------Set About Tab------------------####
