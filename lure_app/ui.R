@@ -45,7 +45,7 @@ body <- dashboardBody(
                 style="position:fixed;
                 bottom:0px;
                 width:101%;
-                height:50px;
+                height:40px;
                 color:#eceff3;
                 padding: 12px 25px 0px 20px;
                 margin-left:-20px;
