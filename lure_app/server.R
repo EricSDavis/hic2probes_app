@@ -23,9 +23,8 @@ shinyServer(function(input, output, session) {
 
   ##------------Return to Define Page--------------####
   observeEvent(input$return, {
-    if(input$tabNav == "Evaluate") {
-      system("pwd")
-      system("rm -r /tmp/lure/")
+    if(dir.exists(output_folder)) {
+      unlink(output_folder, recursive = T, force = T)
     }
     updateTabItems(session, "tabNav", "Define")
     if(input$tabNav == "Evaluate") {
@@ -52,6 +51,8 @@ shinyServer(function(input, output, session) {
   observeEvent(input$run_script, {
     updateTabsetPanel(session, "tab_view", selected = "Summary View")
   })
+  
+  output_folder <- paste0(tempdir(), '/', session$token)
 
   ##-------------Run script-----------------------####
   observeEvent(input$run_script, {
@@ -64,7 +65,8 @@ shinyServer(function(input, output, session) {
                         " -b ", coords$start,
                         " -e ", coords$stop,
                         " -r ", input$resenz,
-                        " -g ", paste0('"', "./../genomes/", sub(".+: ", "", basename(input$genome)), ".fa", '"'))
+                        " -g ", paste0('"', "./../genomes/", sub(".+: ", "", basename(input$genome)), ".fa", '"'),
+                        " -o ", output_folder)
       print (command)
       console_output <- system(command, input = "yes", intern = T)
       if(!is.null(attr(console_output, "status"))) {
@@ -87,17 +89,17 @@ shinyServer(function(input, output, session) {
           StartIndex <- '""'
           EndIndex <- '""'
         }
-        command <- paste0("awk -v OFS='\t' '{print $1, $2, $3, $4, $5, $6, $7, $8, ",  StartIndex, "$9", EndIndex, " , $10}' /tmp/lure/all_probes.bed > /tmp/lure/temp.bed")
+        command <- paste0("awk -v OFS='\t' '{print $1, $2, $3, $4, $5, $6, $7, $8, ",  StartIndex, "$9", EndIndex, " , $10}' ", output_folder, "/all_probes.bed > ", output_folder, "/temp.bed")
         system(command)
-        system("mv /tmp/lure/temp.bed /tmp/lure/all_probes.bed")
+        system(paste0("mv ", output_folder, "/temp.bed ", output_folder, "/all_probes.bed"))
         ## Initial filtering with max_probes
         wd <- getwd()
         setwd("../lure/") # Adjust working directory to find output/all_probes.bed
-        system("Rscript --vanilla ../lure/scripts/reduce_probes.R ")
-        system("mv /tmp/lure/filtered_probes.bed /tmp/lure/temp.bed")
+        system(paste0("Rscript --vanilla ../lure/scripts/reduce_probes.R "))
+        system(paste0("mv ", output_folder, "/filtered_probes.bed ", output_folder, "/temp.bed"))
         setwd(wd)
-        system("mv /tmp/lure/temp.bed /tmp/lure/all_probes.bed")
-        system("cat /tmp/lure/all_probes.bed")
+        system(paste0("mv ", output_folder, "/temp.bed ", output_folder, "/all_probes.bed"))
+        system(paste0("cat ", output_folder, "/all_probes.bed"))
         
         ## Switch to Evaluate Page ####
         newtab <- switch(input$tabNav,
@@ -155,16 +157,16 @@ shinyServer(function(input, output, session) {
     if(max_probes > 0 || is.na(max_probes)){
       wd <- getwd()
       setwd("../lure/") # Adjust working directory to find output/all_probes.bed
-      system(paste0("Rscript --vanilla ../lure/scripts/reduce_probes.R ", max_probes))
+      system(paste0("Rscript --vanilla ../lure/scripts/reduce_probes.R ", output_folder, " ", max_probes))
       setwd(wd)
       if (is.na(max_probes)){
         wd <- getwd()
         setwd("../lure/") # Adjust working directory to find output/all_probes.bed
-        system("Rscript --vanilla ../lure/scripts/reduce_probes.R ")
+        system(paste0("Rscript --vanilla ../lure/scripts/reduce_probes.R ", output_folder))
         setwd(wd)
       }
     }
-    data <- as.data.frame(read.delim("/tmp/lure/filtered_probes.bed", header = F))
+    data <- as.data.frame(read.delim(paste0(output_folder, "/filtered_probes.bed"), header = F))
     colnames(data) <- c("chr", "start", "stop", "shift", "res.fragment", "dir", "AT", "GC", "seq", "pass")
     data
   })
@@ -173,7 +175,7 @@ shinyServer(function(input, output, session) {
   res.sites <- reactive({
     req(script_results())
     ## Load in restriction sites
-    res.sites <- read.delim("/tmp/lure/fragments.bed", header = F)
+    res.sites <- read.delim(paste0(output_folder, "/fragments.bed"), header = F)
     sites <- unique(sort(c(res.sites[,2], res.sites[,3])))
     sites <- sites + extractcoords(input$coordinates)$start
     sites
@@ -181,7 +183,7 @@ shinyServer(function(input, output, session) {
   
   ##------------Load in All Probes--------------####
   all_probes <- reactive({
-    all_probes <- read.delim("/tmp/lure/all_probes.bed", header = F)
+    all_probes <- read.delim(paste0(output_folder, "/all_probes.bed"), header = F)
     all_probes
   })
   
@@ -762,6 +764,12 @@ shinyServer(function(input, output, session) {
       data <- script_results()
       DT::datatable(data)
     })
+  })
+  
+  session$onSessionEnded(function() {
+    if(dir.exists(output_folder)) {
+      unlink(output_folder, recursive = T, force = T)
+    }
   })
   
 }) # END
