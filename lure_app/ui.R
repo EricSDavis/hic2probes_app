@@ -78,7 +78,7 @@ body <- dashboardBody(
       
       align="middle",
       # add image
-      img(src='images/lure_logo_current.png',width=400)
+      img(src='images/Lure_logo_new.png',width=400)
     ),
     br(),
     br(),
@@ -86,7 +86,7 @@ body <- dashboardBody(
     
     # Add input row
     fluidRow(
-      class="input-row-margins",
+      class="input-row",
       column(width=4, align="center",
              selectInput(
                inputId = "genome",
@@ -123,21 +123,22 @@ body <- dashboardBody(
     
     fluidRow(
       column(width=12,align="center", style="margin-top:10px",
-             radioButtons(width ="100%",
+             radioButtons(width ="100%", 
                           inputId = "index",inline=F,
                           label = "Add index sequences",
                           choices = c("None",
-                                      "Index 1: TCGCGCCCATAACTC-N120-CTGAGGGTCCGCCTT" = "Index1",
-                                      "Index 2: ATCGCACCAGCGTGT-N120-CACTGCGGCTCCTCA" = "Index2",
-                                      "Index 3: CCTCGCCTATCCCAT-N120-CACTACCGGGGTCTG" = "Index3",
-                                      "Custom"),
+                                      "1: TCGCGCCCATAACTC-N120-CTGAGGGTCCGCCTT" = "Index1",
+                                      "2: ATCGCACCAGCGTGT-N120-CACTGCGGCTCCTCA" = "Index2",
+                                      "3: CCTCGCCTATCCCAT-N120-CACTACCGGGGTCTG" = "Index3",
+                                      "Custom"), 
                           selected = "None"
              ), # end of radioButtons,
              conditionalPanel(
                condition = "input.index == 'Custom'",
-               fluidRow(
+               fluidRow(      
+                 class="custom-row",
                  column(
-                   width = 5,
+                   width = 3, offset=2,
                    textInput(
                      inputId = "custom_index_1",
                      label = "",
@@ -145,12 +146,13 @@ body <- dashboardBody(
                    ) # end of textInput
                  ), # end of column
                  column(
-                   width = 2,
+                   class="n120",
+                   width = 1,
                    br(),
                    span("-N120-")
                  ), # end of column
                  column(
-                   width = 5,
+                   width = 3, 
                    textInput(
                      inputId = "custom_index_2",
                      label = "",
