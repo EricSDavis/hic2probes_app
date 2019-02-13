@@ -1,6 +1,6 @@
 ## Dashboard Header ####
 header <- dashboardHeader(
-  title = "LURE",
+  title = "lure",
   disable = TRUE
 )
 
