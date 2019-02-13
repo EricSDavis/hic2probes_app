@@ -644,7 +644,7 @@ shinyServer(function(input, output, session) {
          cex.main = 1.3,
          cex.lab = 1.1
          )
-    abline(h=c(20, 40, 60, 80), col="#eceff3", lty = 1)
+    abline(h=c(0.2, 0.4, 0.6, 0.8, 1.0) * max(h$counts), col="#eceff3", lty = 1)
     par(lty = 0, mgp=c(2.75,.7,0.2), bg="NA")
     plot(h, col = cols[cuts], xlim = c(0.2, 0.8),
          main = "GC Content",
@@ -685,7 +685,7 @@ shinyServer(function(input, output, session) {
             yaxs='i',
             ylim = c(0,max(table(factor(data$pass, levels = 0:3))))
             )
-    abline(h=c(50, 100, 150), col="#eceff3", lty = 1)
+    abline(h=c(0.2, 0.4, 0.6, 0.8, 1.0) * max(table(factor(data$pass, levels = 0:3))), col="#eceff3", lty = 1)
     par(lty = 0, mgp=c(2.75,.7,0.2), bg="NA")
     bp=barplot(table(factor(data$pass, levels = 0:3)), col = cols,
             main = "Probe Quality",
@@ -731,7 +731,7 @@ shinyServer(function(input, output, session) {
       cex.main = 1.3,
       cex.lab = 1.1
       )
-    abline(h=c(50,100,150,200,250,300), col="#eceff3", lty = 1)
+    abline(h=c(0.2, 0.4, 0.6, 0.8, 1.0) * max(h$counts), col="#eceff3", lty = 1)
     par(lty = 0, mgp=c(2.75,.7,0.2), bg="NA")
     plot(
       h,
