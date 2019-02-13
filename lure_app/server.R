@@ -243,7 +243,7 @@ shinyServer(function(input, output, session) {
            las = 1,
            axes = FALSE)
       
-      abline(h=c(2,4,6,8,10,12), col="#d2d9e0", lty = 3)
+      abline(h=c(0.25, 0.50, 0.75, 1.00, 1.25, 1.50) * max(bdata$bins), col="#d2d9e0", lty = 3)
       
       par(lty = 0, mgp=c(2.75,.7,.2), bg="NA", new = TRUE)
       plot(c(0,1), c(0,1), "n",
@@ -321,7 +321,7 @@ shinyServer(function(input, output, session) {
            las = 1,
            axes = FALSE
       )
-      abline(h=c(2,4,6,8,10,12), col="#d2d9e0", lty = 3)
+      abline(h=c(0.5, 1.0, 1.5) * max(bdata$bins), col="#d2d9e0", lty = 3)
       
       par(lty = 0, mgp=c(2.75,.7,.2), bg="NA", new = TRUE)
       plot(c(0,1), c(0,1), "n", 
@@ -420,13 +420,13 @@ shinyServer(function(input, output, session) {
     par(mgp=c(2.75,.7,.2))
     plot(data$start, data$shift, "n", frame.plot = F,
          xlim = c(input$region_slider[1], input$region_slider[2]),
-         ylim = c(min(data$shift), max(data$shift)+0.45*(max(data$shift))),
+         ylim = c(min(data$shift), 1.5 * max(data$shift)),
          xlab = "",
          ylab = "",
          las = 1,
          axes = FALSE)
     
-    abline(h=c(50,100,150), col="#d2d9e0", lty = 3)
+    abline(h=c(0.5, 1.0, 1.5) * max(data$shift), col="#d2d9e0", lty = 3)
     
     par(mgp=c(2.75,.7,.2), bg="NA", new = TRUE)
     plot(data$start, data$shift, "n", frame.plot = F,
