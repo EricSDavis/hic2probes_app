@@ -118,8 +118,11 @@ body <- dashboardBody(
       ) # end column
     ), # end fluidRow
     
-    
-    
+    fluidRow(
+      column(width=12, align="center", 
+        textOutput("range")
+      )
+    ),
     
     fluidRow(
       column(width=12,align="center", style="margin-top:10px",

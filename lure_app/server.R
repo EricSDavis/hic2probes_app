@@ -117,26 +117,8 @@ shinyServer(function(input, output, session) {
     } else if(coords$stop <= coords$start) {
       message <- "Start must be less than stop."
       shinyalert("Invalid Option", message, type = "error")
-    } else if(coords$stop - coords$start > 5000000) {
-      shinyalert("Invalid Option", "Chromosome region cannot be larger than 5Mb.", type = "error")
-    } else if(coords$stop - coords$start > 2000000) {
-      shinyalert(
-        title = "Warning!",
-        text = "The region you selected is > 2Mb. \r This operation may take a while...",
-        closeOnEsc = TRUE,
-        closeOnClickOutside = FALSE,
-        html = FALSE,
-        type = "warning",
-        showConfirmButton = TRUE,
-        showCancelButton = TRUE,
-        confirmButtonText = "Continue",
-        confirmButtonCol = "#AEDEF4",
-        cancelButtonText = "Cancel",
-        timer = 0,
-        imageUrl = "",
-        animation = TRUE,
-        callbackR = function(x) {if(x != FALSE) run_script(coords)}
-      )
+    } else if(coords$stop - coords$start + 1 > 5000000) {
+      shinyalert("Invalid Option", "Chromosome region cannot be larger than 5 Mb.", type = "error")
     } else {
       run_script(coords)
     }
@@ -185,6 +167,24 @@ shinyServer(function(input, output, session) {
   all_probes <- reactive({
     all_probes <- read.delim(paste0(output_folder, "/all_probes.bed"), header = F)
     all_probes
+  })
+  
+  output$range <- renderText({
+    coords<-extractcoords(input$coordinates)
+    if(is.null(coords)) {
+      "Invalid range!"
+    } else {
+      length <- coords$stop - coords$start + 1
+      if(length > 5e6) {
+        paste(round(length / 1e6, 1), "Mb", "(ERROR: This is too large to run.)")
+      } else if(length > 2e6) {
+        paste(round(length / 1e6, 1), "Mb", "(WARNING: This could take a while to run.)")
+      } else if(length >= 1e3) {
+        paste(round(length / 1e3, 1), "kb")
+      } else {
+        paste(length, "b")
+      }
+    }
   })
   
   ##----------Maximum Number of Probes----------####
