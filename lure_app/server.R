@@ -136,18 +136,18 @@ shinyServer(function(input, output, session) {
       max_probes <- input$max_probes
     }
     
-    if(max_probes > 0 || is.na(max_probes)){
+    if(is.na(max_probes)){
+      wd <- getwd()
+      setwd("../lure/") # Adjust working directory to find output/all_probes.bed
+      system(paste0("Rscript --vanilla ../lure/scripts/reduce_probes.R ", output_folder))
+      setwd(wd)
+    } else {
       wd <- getwd()
       setwd("../lure/") # Adjust working directory to find output/all_probes.bed
       system(paste0("Rscript --vanilla ../lure/scripts/reduce_probes.R ", output_folder, " ", max_probes))
       setwd(wd)
-      if (is.na(max_probes)){
-        wd <- getwd()
-        setwd("../lure/") # Adjust working directory to find output/all_probes.bed
-        system(paste0("Rscript --vanilla ../lure/scripts/reduce_probes.R ", output_folder))
-        setwd(wd)
-      }
     }
+    
     data <- as.data.frame(read.delim(paste0(output_folder, "/filtered_probes.bed"), header = F))
     colnames(data) <- c("chr", "start", "stop", "shift", "res.fragment", "dir", "AT", "GC", "seq", "pass")
     data
