@@ -1,7 +1,7 @@
 # Define a function that extracts coords
 extractcoords <- function (coordinates)
 {
-  coordinates<-gsub(" ", "", coordinates)
+  coordinates<-gsub(",|\\.|;| ", "", coordinates)
   match<-str_match(coordinates, "(chr.+):(\\d+)-(\\d+)")
   if(is.na(match[1, 1]) || nchar(match[1, 1]) != nchar(coordinates)) {
     return(NULL)
