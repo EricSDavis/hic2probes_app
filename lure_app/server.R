@@ -14,6 +14,9 @@ shinyServer(function(input, output, session) {
   
   options(scipen=999)
   
+  ## Initialize reactiveValues for dynamic max_probes slider ####
+  values <- reactiveValues(maximum_probes=NULL)
+  
   ##--------------------Title----------------------####
   output$title <- renderUI({
     req(input$run_script)
@@ -101,6 +104,15 @@ shinyServer(function(input, output, session) {
         system(paste0("mv ", output_folder, "/temp.bed ", output_folder, "/all_probes.bed"))
         system(paste0("cat ", output_folder, "/all_probes.bed"))
         
+        ## Run Reduce Probes script initially ####
+        wd <- getwd()
+        setwd("../lure/") # Adjust working directory to find output/all_probes.bed
+        system(paste0("Rscript --vanilla ../lure/scripts/reduce_probes.R ", output_folder))
+        setwd(wd)
+        
+        ## Set reactiveValue values$maximum_probes = nrow(all_probes.bed)
+        values$maximum_probes = nrow(all_probes())
+        
         ## Switch to Evaluate Page ####
         newtab <- switch(input$tabNav,
                          "Define" = "Evaluate",
@@ -126,28 +138,11 @@ shinyServer(function(input, output, session) {
   
   ## Get script results in reactive context ####
   script_results <- reactive({
-    req(input$index)
-    req(input$run_script)
-    
-    ## Handle NULL values for input$max_probes ####
-    if (is.null(input$max_probes)){
-      max_probes <- NA
-    }else{
-      max_probes <- input$max_probes
-    }
-    
-    if(is.na(max_probes)){
-      wd <- getwd()
-      setwd("../lure/") # Adjust working directory to find output/all_probes.bed
-      system(paste0("Rscript --vanilla ../lure/scripts/reduce_probes.R ", output_folder))
-      setwd(wd)
-    } else {
-      wd <- getwd()
-      setwd("../lure/") # Adjust working directory to find output/all_probes.bed
-      system(paste0("Rscript --vanilla ../lure/scripts/reduce_probes.R ", output_folder, " ", max_probes))
-      setwd(wd)
-    }
-    
+    wd <- getwd()
+    setwd("../lure/") # Adjust working directory to find output/all_probes.bed
+    system(paste0("Rscript --vanilla ../lure/scripts/reduce_probes.R ", output_folder, " ", input$max_probes))
+    setwd(wd)
+      
     data <- as.data.frame(read.delim(paste0(output_folder, "/filtered_probes.bed"), header = F))
     colnames(data) <- c("chr", "start", "stop", "shift", "res.fragment", "dir", "AT", "GC", "seq", "pass")
     data
@@ -189,21 +184,15 @@ shinyServer(function(input, output, session) {
   
   ##----------Maximum Number of Probes----------####
   output$max_probes <- renderUI({
-    req(input$run_script)
-    req(script_results())
-    req(all_probes())
-    data <- script_results()
-    all_probes <- all_probes()
-    probes <- nrow(data)
-    max_possible <- nrow(all_probes)
     sliderInput(
       inputId = "max_probes",
       label = "Maximum Number of Probes",
-      value = ifelse(is.null(input$max_probes), max_possible, input$max_probes),
-      min = 1, 
-      max = max_possible
+      value = isolate(values$maximum_probes),
+      min = 1,
+      max = isolate(values$maximum_probes)
     )
   })
+  
   
   ##--------------Coverage Histogram----------------####
   output$coverageHistogram <- renderPlot({
