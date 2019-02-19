@@ -459,7 +459,6 @@ shinyServer(function(input, output, session) {
   })
   
   ##-------------Region View Slider--------------####
-  
   output$region_slider <- renderUI({
     sliderInput(
       inputId = "region_slider",
@@ -629,7 +628,7 @@ shinyServer(function(input, output, session) {
     data <- script_results()
     cols <- c("#FFD770", "#FF7F5C", "#666EE5", "#71CAE4", "#666EE5", "#FF7F5C", "#FFD770")
     cols <- adjustcolor(cols, alpha.f = 1)
-    breaks <- nrow(data)*0.05
+    breaks = (max(data$GC) - min(data$GC))/0.1*5
     if (breaks < 1) breaks <- 1
     h <- hist(data$GC, breaks = breaks, plot = F)
     cuts <- cut(h$breaks, c(-Inf, .25, .35, .49, .65, .7, .8, Inf))
@@ -653,7 +652,7 @@ shinyServer(function(input, output, session) {
          xlab = "GC Fraction",
          add = TRUE, 
          axes = FALSE,
-         ylim = c(0,max(h$counts)),
+         ylim = c(0,max(h$counts))
          )
     axis(2, 
          lwd = 0,
@@ -661,8 +660,8 @@ shinyServer(function(input, output, session) {
          las = 2)
     axis(1, 
          col = "#b8c2cc",
-         lwd = 1,
-         lwd.ticks = 1,
+         lwd = 0,
+         lwd.ticks = 0,
          tcl = -.4,
          las = 1)
     legend('topright', legend = c("0", "1", "2", "3"), bg = "#ffffff",
@@ -712,7 +711,6 @@ shinyServer(function(input, output, session) {
          line = 0)
   })
   
-  
   output$summary_shift <- renderPlot({
     data <- script_results()
     col_func <- colorRampPalette(c("#71CAE4", "#666EE5", "#FF7F5C", "#FFD770"))
@@ -722,7 +720,7 @@ shinyServer(function(input, output, session) {
       h,
       xlim = c(0, max(data$shift)+20),
       col = adjustcolor(col_func(length(h$breaks)),alpha.f = 1),
-      main = "Restriction Site Distance",
+      main = "Distance from Restriction Site",
       xlab = "Distance (bp)",
       ylab = "",
       las = 1,
@@ -753,8 +751,8 @@ shinyServer(function(input, output, session) {
          las = 2)
     axis(1, 
          col = "#b8c2cc",
-         lwd = 1,
-         lwd.ticks = 1,
+         lwd = 0,
+         lwd.ticks = 0,
          tcl = -.4,
          las = 1)
   })
