@@ -126,6 +126,9 @@ body <- dashboardBody(
     
     fluidRow(
       column(width=12,align="center", style="margin-top:10px",
+             uiOutput("set_max_probes"),
+             h6("(Defaults to maximum available probes)"),
+             tags$hr(),
              radioButtons(width ="100%", 
                           inputId = "index",inline=F,
                           label = "Add index sequences",

@@ -107,7 +107,9 @@ shinyServer(function(input, output, session) {
         ## Run Reduce Probes script initially ####
         wd <- getwd()
         setwd("../lure/") # Adjust working directory to find output/all_probes.bed
-        system(paste0("Rscript --vanilla ../lure/scripts/reduce_probes.R ", output_folder))
+        ifelse(is.null(input$set_max_probes),
+               system(paste0("Rscript --vanilla ../lure/scripts/reduce_probes.R ", output_folder)),
+               system(paste0("Rscript --vanilla ../lure/scripts/reduce_probes.R ", output_folder, " ", input$set_max_probes)))
         setwd(wd)
         
         ## Set reactiveValue values$maximum_probes = nrow(all_probes.bed)
@@ -183,13 +185,23 @@ shinyServer(function(input, output, session) {
   })
   
   ##----------Maximum Number of Probes----------####
+  ## Max Probes Slider ####
   output$max_probes <- renderUI({
     sliderInput(
       inputId = "max_probes",
       label = "Maximum Number of Probes",
-      value = isolate(values$maximum_probes),
+      value = ifelse(is.na(input$set_max_probes), isolate(values$maximum_probes), input$set_max_probes),
       min = 1,
       max = isolate(values$maximum_probes)
+    )
+  })
+  
+  ## Set Max Probes at Start Screen (Default to Maximum Possible Probes) ####
+  output$set_max_probes <- renderUI({
+    numericInput(
+      inputId = "set_max_probes",
+      label = "Set Maximum Number of Probes",
+      value = NA
     )
   })
   
