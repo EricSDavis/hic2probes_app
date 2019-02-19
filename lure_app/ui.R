@@ -268,20 +268,6 @@ body <- dashboardBody(
                     uiOutput("region_slider")
                   ),
                   
-                  div(id = "borderless-box", 
-                    box(
-                      width = 12, 
-                      solidHeader = T,
-                      materialSwitch(
-                        inputId = "toggle_res.sites",
-                        label = "Show Restriction Sites?",
-                        value = F,
-                        status = "primary",
-                        right = F
-                      )
-                    )
-                  ),
-                  
                   ## Histogram of Probe Coverage ####
                   box(
                     title = "Histogram of Probe Coverage",
@@ -301,6 +287,20 @@ body <- dashboardBody(
                     plotOutput("restrictionHistogram")
                   )
                 ), # end of column
+                
+                div(id = "borderless-box", 
+                    box(
+                      width = 12, 
+                      solidHeader = T,
+                      materialSwitch(
+                        inputId = "toggle_res.sites",
+                        label = "Show Restriction Sites?",
+                        value = F,
+                        status = "primary",
+                        right = F
+                      )
+                    )
+                ),
                 
                 column(
                   width = 12,

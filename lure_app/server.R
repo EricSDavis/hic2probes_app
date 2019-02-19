@@ -266,8 +266,8 @@ shinyServer(function(input, output, session) {
            las = 2)
       axis(1, 
            col = "#b8c2cc",
-           lwd = 1,
-           lwd.ticks = 1,
+           lwd = 0,
+           lwd.ticks = 0,
            tcl = -.4,
            las = 1)
       
@@ -276,7 +276,7 @@ shinyServer(function(input, output, session) {
       rect(bdata$bin_start, bdata$`0`, bdata$bin_stop, bdata$`0`+bdata$`1`, col = cols[2], border=NA)
       rect(bdata$bin_start, bdata$`0`+bdata$`1`, bdata$bin_stop, bdata$`0`+bdata$`1`+bdata$`2`, col = cols[3], border=NA)
       rect(bdata$bin_start, bdata$`0`+bdata$`1`+bdata$`2`, bdata$bin_stop, bdata$`0`+bdata$`1`+bdata$`2`+bdata$`3`, col = cols[4], border=NA)
-      legend('topright', title = "Pass Number", adj=1, legend = c(0:3), fill = cols, bg = "#ffffff", border=NA)
+      legend('topright', title = "Pass Number", adj=1, legend = c(0:3), fill = cols, bg = "transparent", border=NA)
       if (input$toggle_res.sites == T){ #input$region_slider[2] - input$region_slider[1] <= 50000 & 
         segments(sites, -1, sites, 0.65*max(bdata$bins))
       }
@@ -344,8 +344,8 @@ shinyServer(function(input, output, session) {
            las = 2)
       axis(1, 
            col = "#b8c2cc",
-           lwd = 1,
-           lwd.ticks = 1,
+           lwd = 0,
+           lwd.ticks = 0,
            tcl = -.4,
            las = 1)
       
@@ -395,16 +395,17 @@ shinyServer(function(input, output, session) {
          las = 2)
     axis(1, 
          col = "#b8c2cc",
-         lwd = 1,
-         lwd.ticks = 1,
+         lwd = 0,
+         lwd.ticks = 0,
          tcl = -.4,
          las = 1)
     
-    segments(data$start, data$GC, data$stop, data$GC, col = cols, lwd=5)
-    legend('topright', title = "Pass Number", legend = c(0, 1, 2, 3), fill = leg_cols, bg = "white", box.lty = 0)
     if (input$toggle_res.sites == T){ #input$region_slider[2] - input$region_slider[1] <= 50000 & 
-      segments(sites, -1, sites, 0.65)
+      segments(sites, -1, sites, 1.0, col = "lightgrey")
     }
+    
+    segments(data$start, data$GC, data$stop, data$GC, col = cols, lwd=5)
+    legend('topright', title = "Pass Number", legend = c(0, 1, 2, 3), fill = leg_cols, bg = "transparent", box.lty = 0, border=NA)
   })
   
   ##--------------Plotting Shift-----------------####
@@ -432,7 +433,7 @@ shinyServer(function(input, output, session) {
     par(mgp=c(2.75,.7,.2), bg="NA", new = TRUE)
     plot(data$start, data$shift, "n", frame.plot = F,
          xlim = c(input$region_slider[1], input$region_slider[2]),
-         ylim = c(min(data$shift), max(data$shift)+0.45*(max(data$shift))),
+         ylim = c(min(data$shift)-5, max(data$shift)+0.45*(max(data$shift))),
          xlab = paste0(extractcoords(input$coordinates)$chr, " region"),
          ylab = "Base Pairs from Restriction Site",
          yaxs='i',
@@ -446,16 +447,17 @@ shinyServer(function(input, output, session) {
          las = 2)
     axis(1, 
          col = "#b8c2cc",
-         lwd = 1,
-         lwd.ticks = 1,
+         lwd = 0,
+         lwd.ticks = 0,
          tcl = -.4,
          las = 1)
     
-    segments(data$start, data$shift, data$stop, data$shift, col = cols, lwd = 5)
-    legend('topright', title = "Pass Number", legend = c(0, 1, 2, 3), fill = leg_cols, bg = "white", box.lty = 0)
     if (input$toggle_res.sites == T){ #input$region_slider[2] - input$region_slider[1] <= 50000 & 
-      segments(sites, -1, sites, max(data$shift))
+      segments(sites, -1, sites, max(data$shift)+0.45*(max(data$shift)), col = "lightgrey")
     }
+    
+    segments(data$start, data$shift, data$stop, data$shift, col = cols, lwd = 5)
+    legend('topright', title = "Pass Number", legend = c(0, 1, 2, 3), fill = leg_cols, bg = "transparent", box.lty = 0, border=NA)
   })
   
   ##-------------Region View Slider--------------####
