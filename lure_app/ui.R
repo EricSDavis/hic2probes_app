@@ -31,7 +31,7 @@ body <- dashboardBody(
   shinyjs::useShinyjs(),
   tags$head(
     ## Link in stylesheets ####
-     tags$link(rel = "stylesheet", type = "text/css", href = "css/style.css"),
+    tags$link(rel = "stylesheet", type = "text/css", href = "css/style.css"),
     
     ## Link in scripts ####
     tags$script(src = "js/main.js")
@@ -129,9 +129,9 @@ body <- dashboardBody(
              tags$a(id = "toggleAdvanced1", h5("Advanced options", icon("caret-down")), href = "#toggleAdvanced1"),
              shinyjs::hidden(
                div(id = "advanced1",
+                   tags$hr(),
                    uiOutput("set_max_probes"),
                    h6("(Defaults to maximum available probes)"),
-                   tags$hr(),
                    radioButtons(width ="100%", 
                                 inputId = "index",inline=F,
                                 label = "Add index sequences",

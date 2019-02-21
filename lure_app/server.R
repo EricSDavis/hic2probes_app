@@ -110,7 +110,7 @@ shinyServer(function(input, output, session) {
         ## Run Reduce Probes script initially ####
         wd <- getwd()
         setwd("../lure/") # Adjust working directory to find output/all_probes.bed
-        ifelse(is.null(input$set_max_probes),
+        ifelse(is.null(input$set_max_probes) || is.logical(input$set_max_probes),
                system(paste0("Rscript --vanilla ../lure/scripts/reduce_probes.R ", output_folder)),
                system(paste0("Rscript --vanilla ../lure/scripts/reduce_probes.R ", output_folder, " ", input$set_max_probes)))
         setwd(wd)
@@ -193,7 +193,8 @@ shinyServer(function(input, output, session) {
     sliderInput(
       inputId = "max_probes",
       label = "Maximum Number of Probes",
-      value = ifelse(is.na(input$set_max_probes), isolate(values$maximum_probes), input$set_max_probes),
+      value = ifelse(is.null(input$set_max_probes) || is.logical(input$set_max_probes),
+                     isolate(values$maximum_probes), input$set_max_probes),
       min = 1,
       max = isolate(values$maximum_probes)
     )
