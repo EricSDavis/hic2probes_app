@@ -126,47 +126,52 @@ body <- dashboardBody(
     
     fluidRow(
       column(width=12,align="center", style="margin-top:10px",
-             uiOutput("set_max_probes"),
-             h6("(Defaults to maximum available probes)"),
-             tags$hr(),
-             radioButtons(width ="100%", 
-                          inputId = "index",inline=F,
-                          label = "Add index sequences",
-                          choices = c("None",
-                                      "1: TCGCGCCCATAACTC-N120-CTGAGGGTCCGCCTT" = "Index1",
-                                      "2: ATCGCACCAGCGTGT-N120-CACTGCGGCTCCTCA" = "Index2",
-                                      "3: CCTCGCCTATCCCAT-N120-CACTACCGGGGTCTG" = "Index3",
-                                      "Custom"), 
-                          selected = "None"
-             ), # end of radioButtons,
-             conditionalPanel(
-               condition = "input.index == 'Custom'",
-               fluidRow(      
-                 class="custom-row",
-                 column(
-                   width = 3, offset=2,
-                   textInput(
-                     inputId = "custom_index_1",
-                     label = "",
-                     placeholder = "start index"
-                   ) # end of textInput
-                 ), # end of column
-                 column(
-                   class="n120",
-                   width = 1,
-                   br(),
-                   span("-N120-")
-                 ), # end of column
-                 column(
-                   width = 3, 
-                   textInput(
-                     inputId = "custom_index_2",
-                     label = "",
-                     placeholder = "end index"
-                   ) # end of textInput
-                 ) # end of column
-               ) # end of fluidRow
-             ) # end of conditionalPanel
+             tags$a(id = "toggleAdvanced1", h5("Advanced options", icon("caret-down")), href = "#toggleAdvanced1"),
+             shinyjs::hidden(
+               div(id = "advanced1",
+                   uiOutput("set_max_probes"),
+                   h6("(Defaults to maximum available probes)"),
+                   tags$hr(),
+                   radioButtons(width ="100%", 
+                                inputId = "index",inline=F,
+                                label = "Add index sequences",
+                                choices = c("None",
+                                            "1: TCGCGCCCATAACTC-N120-CTGAGGGTCCGCCTT" = "Index1",
+                                            "2: ATCGCACCAGCGTGT-N120-CACTGCGGCTCCTCA" = "Index2",
+                                            "3: CCTCGCCTATCCCAT-N120-CACTACCGGGGTCTG" = "Index3",
+                                            "Custom"), 
+                                selected = "None"
+                   ), # end of radioButtons,
+                   conditionalPanel(
+                     condition = "input.index == 'Custom'",
+                     fluidRow(      
+                       class="custom-row",
+                       column(
+                         width = 3, offset=2,
+                         textInput(
+                           inputId = "custom_index_1",
+                           label = "",
+                           placeholder = "start index"
+                         ) # end of textInput
+                       ), # end of column
+                       column(
+                         class="n120",
+                         width = 1,
+                         br(),
+                         span("-N120-")
+                       ), # end of column
+                       column(
+                         width = 3, 
+                         textInput(
+                           inputId = "custom_index_2",
+                           label = "",
+                           placeholder = "end index"
+                         ) # end of textInput
+                       ) # end of column
+                     ) # end of fluidRow
+                   ) # end of conditionalPanel
+               )
+             )
       ) # end of column
     ),
     
@@ -397,8 +402,9 @@ body <- dashboardBody(
       br(),
       br()
     ), # end of tabItem
-    tabItem(tabName = "About", 
-      h3("About")
+    
+    tabItem(tabName = "About",
+      source("about_page.R", local = T)$value
     ),
     tabItem(tabName = "Download", 
       h3("Download")

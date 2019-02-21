@@ -14,6 +14,9 @@ shinyServer(function(input, output, session) {
   
   options(scipen=999)
   
+  ## Add shinyjs reaction for dynamic drop-down
+  shinyjs::onclick("toggleAdvanced1", shinyjs::toggle(id = "advanced1", anim = TRUE))
+  
   ## Initialize reactiveValues for dynamic max_probes slider ####
   values <- reactiveValues(maximum_probes=NULL)
   
@@ -168,10 +171,10 @@ shinyServer(function(input, output, session) {
   
   output$range <- renderText({
     coords<-extractcoords(input$coordinates)
-    if(is.null(coords)) {
+    length <- coords$stop - coords$start + 1
+    if(is.null(coords) || length < 0) {
       "Invalid range!"
     } else {
-      length <- coords$stop - coords$start + 1
       if(length > 5e6) {
         paste(round(length / 1e6, 1), "Mb", "(ERROR: This is too large to run.)")
       } else if(length > 2e6) {
