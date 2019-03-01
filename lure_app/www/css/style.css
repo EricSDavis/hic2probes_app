@@ -386,16 +386,16 @@ background-color: #f4f6fa;
 
 /* genome title */
 #title.shiny-html-output.shiny-bound-output{
-  margin-bottom: 15px;
-  padding-top: 10px;
+  margin-bottom: 20px;
+  margin-top: 8px;
   line-height: 1.3em;
+  padding-left: 25px;
 }
 
-@media (min-width: 768px) {
-#title.shiny-html-output.shiny-bound-output{ 
-  margin-bottom: 0px;
-    padding-top: 6px;
-    padding-left: 25px
+@media (max-width: 767px) {
+  #title.shiny-html-output.shiny-bound-output{ 
+    margin-bottom: 25px;
+    margin-top: 15px;
   }
 }
 
@@ -408,26 +408,24 @@ ul.nav li.header{
 /* summary/region tabs */
 .nav.nav-tabs.shiny-tab-input.pull-right.shiny-bound-input{
   background: #f4f6fa;
+  margin-bottom: -15px;
 }
 
 ul.nav li.active{
-  border-top: none;
+  border: none;
+}
+
+ul.nav li.active a{
+  height: 45px;
+  padding-top: 13px;
+  color: #000 !important;
 }
 
 ul.nav li{
   border-top-color: #fff !important;
-  color: #fff;
 }
 
-ul.nav li:hover{
-  background: #f3f5f7;
-}
-
-ul.nav li a:hover{
-  color: #444 !important;
-}
-
-ul.nav li.active a:hover{
+ul.nav li a{
   color: #444 !important;
 }
 
