@@ -234,7 +234,7 @@ shinyServer(function(input, output, session) {
       bin_size <- bdata$bin_stop[1] - bdata$bin_start[1]
       
       ## Define color palette
-      cols <- c("#71CAE4", "#666EE5", "#FF7F5C", "#FFD770")
+      cols <- c("#148fc7", "#3bb6e3", "#82e0fc", "#d9ebf5")
       cols <- adjustcolor(cols, alpha.f = 1)
       
       ## Plot stacked histogram barplot
@@ -313,7 +313,7 @@ shinyServer(function(input, output, session) {
       bin_size <- bdata$bin_stop[1] - bdata$bin_start[1]
       
       ## Define color palette
-      cols <- c("#71CAE4", "#666EE5", "#FF7F5C", "#FFD770")
+      cols <- c("#148fc7", "#3bb6e3", "#82e0fc", "#d9ebf5")
       cols <- adjustcolor(cols, alpha.f = 1)
       
       ## Plot stacked histogram barplot
@@ -353,7 +353,7 @@ shinyServer(function(input, output, session) {
            tcl = -.4,
            las = 1)
       
-      rect(bdata$bin_start, 0, bdata$bin_stop, bdata$bins, col = "#b8c2cc", border = NA)
+      rect(bdata$bin_start, 0, bdata$bin_stop, bdata$bins, col = "#b8c3d4", border = NA)
     }
     
     ## Implement function
@@ -366,10 +366,10 @@ shinyServer(function(input, output, session) {
     sites <- res.sites()
     req(input$region_slider)
 
-    cols <- c("#71CAE4", "#666EE5", "#FF7F5C", "#FFD770")[factor(data$pass)]
+    cols <- c("#148fc7", "#3bb6e3", "#82e0fc", "#d9ebf5")[factor(data$pass)]
     cols <- adjustcolor(cols, alpha.f = 1)
     
-    leg_cols <- c("#71CAE4", "#666EE5", "#FF7F5C", "#FFD770")
+    leg_cols <- c("#148fc7", "#3bb6e3", "#82e0fc", "#d9ebf5")
     leg_cols <- adjustcolor(leg_cols, alpha.f = 1)
     
     par(mgp=c(2.75,.7,.2))
@@ -417,10 +417,10 @@ shinyServer(function(input, output, session) {
     data <- script_results()
     sites <- res.sites()
     
-    cols <- c("#71CAE4", "#666EE5", "#FF7F5C", "#FFD770")[factor(data$pass)]
+    cols <- c("#148fc7", "#3bb6e3", "#82e0fc", "#d9ebf5")[factor(data$pass)]
     cols <- adjustcolor(cols, alpha.f = 1)
     
-    leg_cols <- c("#71CAE4", "#666EE5", "#FF7F5C", "#FFD770")
+    leg_cols <- c("#148fc7", "#3bb6e3", "#82e0fc", "#d9ebf5")
     leg_cols <- adjustcolor(leg_cols, alpha.f = 1)
     
     par(mgp=c(2.75,.7,.2))
@@ -632,7 +632,7 @@ shinyServer(function(input, output, session) {
   ##--------------Summary View Plots-------------####
   output$summary_gc <- renderPlot({
     data <- script_results()
-    cols <- c("#FFD770", "#FF7F5C", "#666EE5", "#71CAE4", "#666EE5", "#FF7F5C", "#FFD770")
+    cols <- c("#d9ebf5", "#82e0fc", "#3bb6e3", "#148fc7", "#3bb6e3", "#82e0fc", "#d9ebf5")
     cols <- adjustcolor(cols, alpha.f = 1)
     breaks = (max(data$GC) - min(data$GC))/0.1*5
     if (breaks < 1) breaks <- 1
@@ -671,13 +671,13 @@ shinyServer(function(input, output, session) {
          tcl = -.4,
          las = 1)
     legend('topright', legend = c("0", "1", "2", "3"), bg = "#ffffff",
-           fill = adjustcolor(c("#71CAE4", "#666EE5", "#FF7F5C", "#FFD770"), alpha.f = 1),
+           fill = adjustcolor(c("#148fc7", "#3bb6e3", "#82e0fc", "#d9ebf5"), alpha.f = 1),
            title = "Pass")
   })
   
   output$summary_pass <- renderPlot({
     data <- script_results()
-    cols <- c("#71CAE4", "#666EE5", "#FF7F5C", "#FFD770")
+    cols <- c("#148fc7", "#3bb6e3", "#82e0fc", "#d9ebf5")
     cols <- adjustcolor(cols, alpha.f = 1)
     par(lty = 0, mgp=c(2.75,.7,0.2), bg="NA")
     barplot(table(factor(data$pass, levels = 0:3)), col = NA,
@@ -719,7 +719,7 @@ shinyServer(function(input, output, session) {
   
   output$summary_shift <- renderPlot({
     data <- script_results()
-    col_func <- colorRampPalette(c("#71CAE4", "#666EE5", "#FF7F5C", "#FFD770"))
+    col_func <- colorRampPalette(c("#adc2d9"))
     h <- hist(data$shift, plot = F)
     par(lty = 0, mgp=c(2.75,.7,0.2), bg="NA")
     plot(
