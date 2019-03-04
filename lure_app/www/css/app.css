@@ -1,0 +1,30 @@
+.navbar-default {
+    background-color: #ffffff;
+    border-color: #ffffff;
+}
+
+#tab1-content .scrollspy-section {
+  /*height: 500px;*/
+  /*border: 1px solid #DDD;*/
+}
+#tab1-scrollspy {
+  position: fixed;
+}
+#tab1-scrollspy li > a {
+  background-color: transparent;
+  border: 1px solid #DDD;
+  color: black;
+  size: 20;
+}
+#tab1-scrollspy li > a:hover {
+  background-color: gray;
+  color: white;
+}
+#test {
+  color: white;
+}
+#tab1-scrollspy li.active > a {
+  background-color: gray;
+  color: white;
+}
+
