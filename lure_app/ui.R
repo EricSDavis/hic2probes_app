@@ -241,14 +241,42 @@ body <- dashboardBody(
           div(id = "borderless-box", 
             box(width = 12, 
               solidHeader = T,
+              collapsible = T,
                 fluidRow(
                   column(
-                    width = 6,
-                    uiOutput("max_probes")
-                  ), # end of column
+                        width = 3,
+                        box(
+                          width = 12,
+                          title = "Settings",
+                          status = "primary",
+                          textOutput("info_genome"),
+                          textOutput("info_chr"),
+                          textOutput("info_start"),
+                          textOutput("info_stop"),
+                          textOutput("info_resenz"),
+                          textOutput("info_index")
+                        )
+                      ), # end of column
+                    column(
+                      width = 3,
+                      box(
+                        width = 12,
+                        title = "Results",
+                        status = "primary",
+                        textOutput("info_res.sites"),
+                        textOutput("info_all_probes"),
+                        textOutput("info_selected_probes"),
+                        textOutput("info_probeLength"),
+                        textOutput("info_avgGC")
+                      )
+                    ), # end of column
+                  column(
+                      width = 4,
+                      uiOutput("max_probes")
+                    ), # end of column
                   column(
                     width = 2,
-                    align = "left",
+                    # align = "right",
                     downloadButton(
                       outputId = "downloadProbes",
                       label = "Download Probes"
@@ -339,37 +367,7 @@ body <- dashboardBody(
             ## Summary View ####
             tabPanel(
               title="Summary View",
-              fluidRow( style = "margin-top:5px",
-                column(
-                  width = 6,
-                  box(
-                    width = 12,
-                    title = "Settings",
-                    status = "primary",
-                    textOutput("info_genome"),
-                    textOutput("info_chr"),
-                    textOutput("info_start"),
-                    textOutput("info_stop"),
-                    textOutput("info_resenz"),
-                    textOutput("info_index")
-                  )
-                ), # end of column
-                column(
-                  width = 6,
-                  box(
-                    width = 12,
-                    title = "Results",
-                    status = "primary",
-                    textOutput("info_res.sites"),
-                    textOutput("info_all_probes"),
-                    textOutput("info_selected_probes"),
-                    textOutput("info_probeLength"),
-                    textOutput("info_avgGC"),
-                    br()
-                  )
-                ) # end of column
-              ), # end of fluidRow
-              
+
               ## Summary View Plots ####
               fluidRow( id="plot-margin",
                 column(width = 12, 
