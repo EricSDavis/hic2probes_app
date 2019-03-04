@@ -22,7 +22,8 @@ shinyServer(function(input, output, session) {
   
   ##--------------------Title----------------------####
   output$title <- renderUI({
-    req(input$run_script)
+    if(!isTruthy(input$returnPressed) || !isTruthy(input$run_script))
+      NULL
     coords<-extractcoords(input$coordinates)
     paste0(input$genome, " - ", coords$chr, ":", coords$start, "-", coords$stop)
   })
@@ -528,7 +529,8 @@ shinyServer(function(input, output, session) {
       } else if (input$index == "Index3"){
         write(paste0("# Index 3: CCTCGCCTATCCCAT - N120 - CACTACCGGGGTCTG"), file, append = T)
       }
-      req(input$run_script)
+      if(!isTruthy(input$returnPressed) || !isTruthy(input$run_script))
+        NULL
       req(script_results())
       data <- script_results()
       probes <- nrow(data)
@@ -593,13 +595,15 @@ shinyServer(function(input, output, session) {
   ## Results ####
   observe({
     output$info_res.sites <- renderText({
-      req(input$run_script)
+      if(!isTruthy(input$returnPressed) || !isTruthy(input$run_script))
+        NULL
       req(res.sites())
       sites <- res.sites()
       paste0("Restriction Sites: ", length(sites), " found")
     })
     output$info_all_probes <- renderText({
-      req(input$run_script)
+      if(!isTruthy(input$returnPressed) || !isTruthy(input$run_script))
+        NULL
       req(script_results())
       req(all_probes())
       data <- script_results()
@@ -612,7 +616,8 @@ shinyServer(function(input, output, session) {
       paste0("Maximum Possible: ", max_possible, " probes (", max_density, " probes/kb)" )
     })
     output$info_selected_probes <- renderText({
-      req(input$run_script)
+      if(!isTruthy(input$returnPressed) || !isTruthy(input$run_script))
+        NULL
       req(script_results())
       data <- script_results()
       probes <- nrow(data)
@@ -633,7 +638,8 @@ shinyServer(function(input, output, session) {
       }
     })
     output$info_avgGC <- renderText({
-      req(input$run_script)
+      if(!isTruthy(input$returnPressed) || !isTruthy(input$run_script))
+        NULL
       req(script_results())
       data <- script_results()
       paste0("Average GC Fraction: ", round(mean(data$GC), 2))
