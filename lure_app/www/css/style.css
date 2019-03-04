@@ -69,7 +69,7 @@ a:hover {
 
 @media (min-width: 768px) {
   .nav-btn{
-    background-color:#b8c2cc; 
+    background-color:#b8c3d4; 
     color:#ffffff; 
     margin: 0px 6px 0px 6px; 
     padding: 0px 10px 0px 0px;
@@ -321,7 +321,7 @@ background-color: #f4f6fa;
 }
 
 .custom-row .form-group.shiny-input-container ::placeholder{
-  color: #b8c2cc;
+  color: #b8c3d4;
   font-weight: 400;
   opacity: 1;
 }
@@ -386,16 +386,16 @@ background-color: #f4f6fa;
 
 /* genome title */
 #title.shiny-html-output.shiny-bound-output{
-  margin-bottom: 15px;
-  padding-top: 10px;
+  margin-bottom: 20px;
+  margin-top: 8px;
   line-height: 1.3em;
+  padding-left: 25px;
 }
 
-@media (min-width: 768px) {
-#title.shiny-html-output.shiny-bound-output{ 
-  margin-bottom: 0px;
-    padding-top: 6px;
-    padding-left: 25px
+@media (max-width: 767px) {
+  #title.shiny-html-output.shiny-bound-output{ 
+    margin-bottom: 25px;
+    margin-top: 15px;
   }
 }
 
@@ -408,26 +408,24 @@ ul.nav li.header{
 /* summary/region tabs */
 .nav.nav-tabs.shiny-tab-input.pull-right.shiny-bound-input{
   background: #f4f6fa;
+  margin-bottom: -15px;
 }
 
 ul.nav li.active{
-  border-top: none;
+  border: none;
+}
+
+ul.nav li.active a{
+  height: 45px;
+  padding-top: 13px;
+  color: #000 !important;
 }
 
 ul.nav li{
   border-top-color: #fff !important;
-  color: #fff;
 }
 
-ul.nav li:hover{
-  background: #f3f5f7;
-}
-
-ul.nav li a:hover{
-  color: #444 !important;
-}
-
-ul.nav li.active a:hover{
+ul.nav li a{
   color: #444 !important;
 }
 
@@ -486,12 +484,12 @@ ul.nav{
 
 .even:hover,
 .odd:hover{
-  background: #d0e2ef !important;
+  background: #d9ebf5 !important;
 }
 
 .dataTable tbody tr.odd.selected td,
 .dataTable tbody tr.even.selected td{
-  background-color: #94abce !important;
+  background-color: #adc2d9 !important;
   color: #fff !important;
 }
 
@@ -510,7 +508,7 @@ ul.nav{
 }
 
 .dataTables_paginate .paginate_button:hover{
-  background: #94abce !important;
+  background: #adc2d9 !important;
   color: #ffffff!important;
   border: solid 1px #fff !important;
   border-radius: 0px !important;
@@ -523,7 +521,7 @@ ul.nav{
 
 .dataTables_paginate.paging_simple_numbers .paginate_button.previous.disabled,
 .dataTables_paginate.paging_simple_numbers .paginate_button.previous.disabled:hover{
-  color: #b8c2cc !important;
+  color: #b8c3d4 !important;
   background: none !important;
 }
 
@@ -566,7 +564,7 @@ ul.nav{
 .irs-slider.from,
 .irs-slider.to{
   background: #fff;
-  border-color: #b8c2cc;
+  border-color: #b8c3d4;
   border-width: 6px;
   -webkit-box-shadow: none;
   -moz-box-shadow: none;
@@ -597,7 +595,7 @@ ul.nav{
 .label-primary:after{
   background: #fff !important;
   border: solid !important;
-  border-color: #b8c2cc !important;
+  border-color: #b8c3d4 !important;
   border-width: 6px !important;
   -webkit-box-shadow: none !important; 
   -moz-box-shadow: none !important;
@@ -608,7 +606,7 @@ ul.nav{
 .label-primary:before{
   background: #eceff3 !important;
   border: none !important;
-  border-color: #b8c2cc !important;
+  border-color: #b8c3d4 !important;
   border-width: 6px !important;
   opacity: 1 !important;
   -webkit-box-shadow: none !important; 

@@ -54,7 +54,7 @@ body <- dashboardBody(
                 color:#eceff3;
                 padding: 12px 25px 0px 20px;
                 margin-left:-20px;
-                background-color:#b8c2cc;
+                background-color:#b8c3d4;
                 z-index:1000;",
            tags$ul("© 2018 Phanstiel Lab", align="right", style="font-weight:300") # c4c8cc
   ),
