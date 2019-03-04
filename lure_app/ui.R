@@ -58,6 +58,13 @@ body <- dashboardBody(
                 z-index:1000;",
            tags$ul("© 2018 Phanstiel Lab", align="right", style="font-weight:300") # c4c8cc
   ),
+  tags$script('
+    $(document).on("keyup", function (e) {
+                if(e.keyCode == 13) {
+                  Shiny.onInputChange("returnPressed", e.which);
+                }
+              });
+              '),
   
   fluidRow( 
     class="nav-margins",
@@ -199,7 +206,7 @@ body <- dashboardBody(
     fluidRow(
       column(12,
              conditionalPanel(
-               condition = "input.run_script > 0 && $('html').hasClass('shiny-busy')",
+               condition = "(input.returnPressed || input.run_script > 0) && $('html').hasClass('shiny-busy')",
                
                HTML('
 

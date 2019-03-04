@@ -58,10 +58,18 @@ shinyServer(function(input, output, session) {
     updateTabsetPanel(session, "tab_view", selected = "Summary View")
   })
   
+  observeEvent(input$returnPressed, {
+    runScript()
+  })
+  
   output_folder <- paste0(tempdir(), '/', session$token)
 
   ##-------------Run script-----------------------####
   observeEvent(input$run_script, {
+    runScript()
+  })
+  
+  runScript <- function() {
     shinyjs::hide("run_script")
     
     ## Define run_script ####
@@ -142,7 +150,7 @@ shinyServer(function(input, output, session) {
     }
     
     shinyjs::show("run_script", anim = TRUE)
-  })
+  }
   
   ## Get script results in reactive context ####
   script_results <- reactive({
