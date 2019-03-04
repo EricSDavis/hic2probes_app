@@ -203,7 +203,7 @@ body <- dashboardBody(
                
                HTML('
 
-                            <div id="preloader-5">
+                            <br /><br /><div id="preloader-5">
 		<span></span>
                     <span></span>
                     <span></span>

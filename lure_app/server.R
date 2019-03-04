@@ -62,6 +62,7 @@ shinyServer(function(input, output, session) {
 
   ##-------------Run script-----------------------####
   observeEvent(input$run_script, {
+    shinyjs::hide("run_script")
     
     ## Define run_script ####
     run_script <- function(coords) {
@@ -139,6 +140,8 @@ shinyServer(function(input, output, session) {
     } else {
       run_script(coords)
     }
+    
+    shinyjs::show("run_script", anim = TRUE)
   })
   
   ## Get script results in reactive context ####
