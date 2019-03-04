@@ -155,10 +155,7 @@ shinyServer(function(input, output, session) {
   
   ## Get script results in reactive context ####
   script_results <- reactive({
-    wd <- getwd()
-    setwd("../lure/") # Adjust working directory to find output/all_probes.bed
     system(paste0("Rscript --vanilla ../lure/scripts/reduce_probes.R ", output_folder, " ", input$max_probes))
-    setwd(wd)
       
     data <- as.data.frame(read.delim(paste0(output_folder, "/filtered_probes.bed"), header = F))
     colnames(data) <- c("chr", "start", "stop", "shift", "res.fragment", "dir", "AT", "GC", "seq", "pass")
