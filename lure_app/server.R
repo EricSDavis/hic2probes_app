@@ -34,9 +34,7 @@ shinyServer(function(input, output, session) {
       unlink(output_folder, recursive = T, force = T)
     }
     updateTabItems(session, "tabNav", "Define")
-    if(input$tabNav == "Evaluate") {
-      session$reload() #reload session on input$return
-    }
+    session$reload()
   })
   
   ##----------------Set About Tab------------------####
