@@ -109,21 +109,15 @@ shinyServer(function(input, output, session) {
         system(command)
         system(paste0("mv ", output_folder, "/temp.bed ", output_folder, "/all_probes.bed"))
         ## Initial filtering with max_probes
-        wd <- getwd()
-        setwd("../lure/") # Adjust working directory to find output/all_probes.bed
-        system(paste0("Rscript --vanilla ../lure/scripts/reduce_probes.R "))
+        system(paste0("Rscript --vanilla ../lure/scripts/reduce_probes.R ", output_folder))
         system(paste0("mv ", output_folder, "/filtered_probes.bed ", output_folder, "/temp.bed"))
-        setwd(wd)
         system(paste0("mv ", output_folder, "/temp.bed ", output_folder, "/all_probes.bed"))
         system(paste0("cat ", output_folder, "/all_probes.bed"))
         
         ## Run Reduce Probes script initially ####
-        wd <- getwd()
-        setwd("../lure/") # Adjust working directory to find output/all_probes.bed
         ifelse(is.null(input$set_max_probes) || is.logical(input$set_max_probes),
                system(paste0("Rscript --vanilla ../lure/scripts/reduce_probes.R ", output_folder)),
                system(paste0("Rscript --vanilla ../lure/scripts/reduce_probes.R ", output_folder, " ", input$set_max_probes)))
-        setwd(wd)
         
         ## Set reactiveValue values$maximum_probes = nrow(all_probes.bed)
         values$maximum_probes = nrow(all_probes())
