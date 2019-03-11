@@ -1,30 +1,47 @@
+
+
 .navbar-default {
     background-color: #ffffff;
     border-color: #ffffff;
 }
 
+
+
 #tab1-content .scrollspy-section {
-  /*height: 500px;*/
+  /*height: 500px;
   /*border: 1px solid #DDD;*/
+  margin-top: 70px;
 }
 #tab1-scrollspy {
   position: fixed;
 }
 #tab1-scrollspy li > a {
   background-color: transparent;
-  border: 1px solid #DDD;
+  border: none;
   color: black;
-  size: 20;
+  font-weight: 400;
+  line-height:.5em;
+  height: 30px;
+  margin-bottom: 0px;
 }
 #tab1-scrollspy li > a:hover {
-  background-color: gray;
-  color: white;
+  color: #1b8fc1 !important;
 }
 #test {
   color: white;
 }
 #tab1-scrollspy li.active > a {
-  background-color: gray;
-  color: white;
+  background-color: #1b8fc1;
+  color: white !important;
 }
+
+#tab1-content .active-scrollspy {
+  margin-top: 70px;
+}
+
+#tab1-content .nav.nav-pills.nav-stacked {
+  border-left: 2px solid #1b8fc1;
+}
+
+
 

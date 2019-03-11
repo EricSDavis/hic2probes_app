@@ -283,10 +283,10 @@ body <- dashboardBody(
                     ), # end of column
                   column(
                     width = 2,
-                    # align = "right",
+                    align = "right",
                     downloadButton(
                       outputId = "downloadProbes",
-                      label = "Download Probes"
+                      label = "Download"
                     )
                   ) # end of column
                 ) # end of fluidRow

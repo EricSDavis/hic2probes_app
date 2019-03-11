@@ -21,6 +21,22 @@ textarea {
   font-family: inherit;
 }
 
+h1 {
+  font-family: inherit;
+  font-size: 160%;
+  font-weight: 500 !important;
+  letter-spacing: .25px;
+  line-height: 1.5em
+}
+
+h4 {
+  font-family: inherit;
+  font-size: 105%;
+  font-weight: 400 !important;
+  letter-spacing: .25px;
+  line-height: 1.5em
+}
+
 a:hover {
   color: #eceff3;
 }
@@ -170,9 +186,15 @@ text-align: center;}
   background-color:#1A93C7;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 1001px) {
   .btn.btn-default.shiny-download-link.shiny-bound-output{
-    margin: 55px 5px 0px 25px
+    margin: 55px 60px 0px 0px
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1000px) {
+  .btn.btn-default.shiny-download-link.shiny-bound-output{
+    margin: 55px 25px 0px -20px
   }
 }
    
@@ -858,3 +880,6 @@ ul.nav{
   background-size: cover;
   background-repeat: no-repeat;
 }
+
+/* About page */
+
