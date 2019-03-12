@@ -30,6 +30,9 @@ body <- dashboardBody(
   useShinyalert(),
   shinyjs::useShinyjs(),
   tags$head(
+    ## Favicon ####
+    tags$link(rel = "icon", type = "image/ico", href = "images/favicon.ico"),
+    
     ## Link in stylesheets ####
     tags$link(rel = "stylesheet", type = "text/css", href = "css/style.css"),
     
