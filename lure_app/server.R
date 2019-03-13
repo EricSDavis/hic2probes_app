@@ -436,10 +436,17 @@ shinyServer(function(input, output, session) {
     
     abline(h=c(0.5, 1.0, 1.5) * max(data$shift), col="#d2d9e0", lty = 3)
     
+    ## Handle ylim resizing when there is 0 shift from restriction site
+    if(max(data$shift)+0.45*(max(data$shift)) == 0){
+      ymax = 10
+    }else{
+      ymax = max(data$shift)+0.45*(max(data$shift))
+    }
+    
     par(mgp=c(2.75,.7,.2), bg="NA", new = TRUE)
     plot(data$start, data$shift, "n", frame.plot = F,
          xlim = c(input$region_slider[1], input$region_slider[2]),
-         ylim = c(min(data$shift)-5, max(data$shift)+0.45*(max(data$shift))),
+         ylim = c(-1, ymax),
          xlab = paste0(extractcoords(input$coordinates)$chr, " region"),
          ylab = "Base Pairs from Restriction Site",
          yaxs='i',
