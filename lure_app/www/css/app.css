@@ -10,7 +10,7 @@
 #tab1-content .scrollspy-section {
   /*height: 500px;
   /*border: 1px solid #DDD;*/
-  margin-top: 70px;
+  margin-top: 60px;
 }
 #tab1-scrollspy {
   position: fixed;
@@ -36,7 +36,7 @@
 }
 
 #tab1-content .active-scrollspy {
-  margin-top: 70px;
+  margin-top: 60px;
 }
 
 #tab1-content .nav.nav-pills.nav-stacked {
