@@ -26,7 +26,8 @@ h1 {
   font-size: 160%;
   font-weight: 500 !important;
   letter-spacing: .25px;
-  line-height: 1.5em
+  line-height: 1.5em;
+  margin-bottom: 20px
 }
 
 h4 {
@@ -34,7 +35,8 @@ h4 {
   font-size: 105%;
   font-weight: 400 !important;
   letter-spacing: .25px;
-  line-height: 1.5em
+  line-height: 1.5em;
+  margin-bottom: 25px;
 }
 
 a:hover {

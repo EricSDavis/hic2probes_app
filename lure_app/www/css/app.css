@@ -10,6 +10,12 @@
 #tab1-content .scrollspy-section {
   /*height: 500px;
   /*border: 1px solid #DDD;*/
+  text-align: justify;
+}
+#tab1-content .scrollspy-section {
+  margin-top: 55px;
+}
+#section1-1.scrollspy-section {
   margin-top: 60px;
 }
 #tab1-scrollspy {
@@ -43,5 +49,16 @@
   border-left: 2px solid #1b8fc1;
 }
 
-
+@media (max-width: 767px) {
+  #section1-1.scrollspy-section {
+    margin-top: 50px;
+  }
+  #tab1-content .scrollspy-section {
+    margin-top: 45px;
+  }
+  #tab1-content .active-scrollspy {
+    margin-top: 20px;
+    position: relative;
+}
+}
 
