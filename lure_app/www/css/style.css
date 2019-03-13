@@ -227,7 +227,8 @@ h3,.h3{
 
 /* header text - sliders & homepage inputs */
 .form-group.shiny-input-container label.control-label,
-.form-group.shiny-input-container label[for=coordinates]{
+.form-group.shiny-input-container label[for=coordinates],
+.form-group.shiny-input-container label[for=set_max_probes]{
   font-family: inherit;
   font-weight: 500 !important;
   font-size: 100% !important;
@@ -246,7 +247,8 @@ h3,.h3{
 /* radio options on home page */
 
 .form-group.shiny-input-container label.control-label[for=index]{
-  margin-bottom:5px;
+  margin-top: 20px;
+  margin-bottom: 5px;
 }
 
 .shiny-options-group label{
@@ -285,7 +287,7 @@ background-color: #f4f6fa;
   border-color: #fdfeff !important;
   background: #fdfeff !important;
   color: #394b58;
-  margin-bottom: 10px;
+  margin-bottom: 0px;
 }
 
 .form-control.shinyjs-resettable.shiny-bound-input{
@@ -294,7 +296,7 @@ background-color: #f4f6fa;
   background: #fdfeff !important;
   text-align: center;
   color: #394b58;
-  margin-bottom: 24px;
+  margin-bottom: 0px;
   }
 
 .option.selected,
@@ -331,6 +333,11 @@ background-color: #f4f6fa;
     margin-left: 20%; 
     margin-right: 20%
   }
+}
+
+/* region range */
+#range.shiny-text-output.shiny-bound-output{
+  margin-bottom: 10px
 }
 
 /* custom index inputs */
@@ -882,6 +889,4 @@ ul.nav{
   background-size: cover;
   background-repeat: no-repeat;
 }
-
-/* About page */
 
