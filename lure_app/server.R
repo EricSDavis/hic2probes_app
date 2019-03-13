@@ -206,7 +206,8 @@ shinyServer(function(input, output, session) {
     numericInput(
       inputId = "set_max_probes",
       label = "Set Maximum Number of Probes",
-      value = NA
+      value = NA, 
+      min = 1
     )
   })
   
