@@ -1,6 +1,6 @@
 // initialize common scrollspy control
 shinyjs.init = function() {
-  $('body').scrollspy({ target: '.active-scrollspy' });
+  $('body').scrollspy({ target: '.active-scrollspy', offset: 200 });
 };
 
 // Smooth scroll

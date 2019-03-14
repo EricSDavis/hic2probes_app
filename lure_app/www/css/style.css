@@ -446,11 +446,11 @@ ul.nav li.active{
   border: none;
 }
 
-ul.nav li.active a{
+/*ul.nav li.active a{
   height: 45px;
   padding-top: 13px;
   color: #000 !important;
-}
+}*/
 
 ul.nav li{
   border-top-color: #fff !important;
@@ -469,7 +469,7 @@ ul.nav{
     padding-bottom:5px
   }
   ul.nav li.active{
-    margin-bottom: 10px
+    /*margin-bottom: 10px*/
   }
 }
 
