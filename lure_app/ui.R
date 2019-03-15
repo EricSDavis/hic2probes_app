@@ -537,34 +537,36 @@ body <- dashboardBody(
                           ),
                           div(id = "section1-6",
                               class = "scrollspy-section",
-                              h1("Validation"),
-                              HTML(
-                                "
-                                <h4>
-                                  To validate probes designed by Lure, we performed Hi-C<sup>2</sup> on several Hi-C libraries. The preliminary results show XXX enrichment of the target region when compared to genome-wide Hi-C. Below are representative images of the same genomic region with Hi-C (<i>left</i>) and Hi-C<sup>2</sup> (<i>right</i>):
-                                </h4>
-                                <img class='centered' src='images/HiC2_IL1B_Norm.png' align='center' height='100%' width='100%'></img>
-                                <br></br>
-                                <h4>
-                                  Both maps look very similar in the target region. However, the Hi-C map (<i>left</i>), used 990 million reads while the Hi-C<sup>2</sup> map (<i>right</i>) used only 12 million reads.
-                                </h4>
-                                "
-                              )
+                              h1("In Progress..."),
+                              h4("Probe validation is in progress, check back later for updates!")
+                              # HTML(
+                              #   "
+                              #   <h4>
+                              #     To validate probes designed by Lure, we performed Hi-C<sup>2</sup> on several Hi-C libraries. The preliminary results show XXX enrichment of the target region when compared to genome-wide Hi-C. Below are representative images of the same genomic region with Hi-C (<i>left</i>) and Hi-C<sup>2</sup> (<i>right</i>):
+                              #   </h4>
+                              #   <img class='centered' src='images/HiC2_IL1B_Norm.png' align='center' height='100%' width='100%'></img>
+                              #   <br></br>
+                              #   <h4>
+                              #     Both maps look very similar in the target region. However, the Hi-C map (<i>left</i>), used 990 million reads while the Hi-C<sup>2</sup> map (<i>right</i>) used only 12 million reads.
+                              #   </h4>
+                              #   "
+                              # )
                               
                           ),
                           div(id = "section1-7",
                               class = "scrollspy-section",
-                              h1("FAQs"),
-                              HTML(
-                                "
-                                <h3>
-                                  What kinds of questions should we put on here?
-                                </h3>
-                                <blockquote>
-                                  I am not really sure. Let's ask the lab what they think...
-                                </blockquote>
-                                "
-                              ),
+                              h1("Coming Soon..."),
+                              h4("This section is underdevelopment, check back later for updates!"),
+                              # HTML(
+                              #   "
+                              #   <h3>
+                              #     What kinds of questions should we put on here?
+                              #   </h3>
+                              #   <blockquote>
+                              #     I am not really sure. Let's ask the lab what they think...
+                              #   </blockquote>
+                              #   "
+                              # ),
                               
                               br(),
                               br(),
@@ -656,7 +658,7 @@ body <- dashboardBody(
                               HTML(
                                 "
                                 <h4>
-                                  The Phanstiel Lab is located in the Thurston-Bowles Building at the University of North Carolina at Chapel Hill. For questions, or suggestions for Lure, open an issue on the github repositories. Other questions can be directed to Doug Phanstiel at douglas_phanstiel@med.unc.edu. 
+                                  Lure was developed in the Phanstiel Lab at UNC Chapel Hill.  Code was developed by <a href='https://ericscottdavis.com/'>Eric Davis</a>, Erika Deoudes, and Craig Wenger. For questions, or suggestions for Lure, please open an issue on the github repositories. Other questions can be directed to Eric Davis or Doug Phanstiel at esdavis@live.unc.edu and douglas_phanstiel@med.unc.edu respectively. 
                                 </h4>
                                 "
                               )
