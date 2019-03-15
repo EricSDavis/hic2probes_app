@@ -488,7 +488,7 @@ body <- dashboardBody(
                                     If you use this webapp to design your probes, please cite:
                                     <br></br>
                                     <div style='background: #E2E2E2; padding:10px'>
-                                      Davis ES, Deoudes EM, Thulson EA, Kramer N, Wenger C and Phanstiel DH. Lure: A Probe Design Tool for Hybrid-Capture Hi-C. <i>Super Awesome Journal</i>. 2019.
+                                      Davis ES, Deoudes EM, Thulson EA, Kramer N, Wenger C and Phanstiel DH. Lure: A Probe Design Tool for Hybrid-Capture Hi-C. <i>In Progress</i>. 2019.
                                     </div>
                                   </h4>
                                 "
