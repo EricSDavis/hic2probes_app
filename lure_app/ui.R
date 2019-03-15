@@ -419,7 +419,6 @@ body <- dashboardBody(
     tabItem(tabName = "About",
             ##### About Page ####
             fluidPage(
-              # tab 1 contains 4 sections and a scrollspy on the left with text
               tabPanel(
                 "tab1",
                 div(id = "tab1-content",
@@ -432,46 +431,148 @@ body <- dashboardBody(
                           class = "active-scrollspy",
                           tags$ul(
                             class = "nav nav-pills nav-stacked",
-                            tags$li(tags$a(class="test", href = "#section1-1", "Section 1-1")),
-                            tags$li(tags$a(href = "#section1-2", "Section 1-2")),
-                            tags$li(tags$a(href = "#section1-3", "Section 1-3")),
-                            tags$li(tags$a(href = "#section1-4", "Section 1-4"))
+                            tags$li(tags$a(href = "#section1-1", "Introduction")),
+                            tags$li(tags$a(href = "#section1-2", "Quickstart")),
+                            tags$li(tags$a(href = "#section1-3", "How to Cite")),
+                            tags$li(tags$a(href = "#section1-4", "Advanced Options")),
+                            tags$li(tags$a(href = "#section1-5", "How it Works")),
+                            tags$li(tags$a(href = "#section1-6", "Validation")),
+                            tags$li(tags$a(href = "#section1-7", "FAQs"))
                           )
                         )
                       ),
                       column(
                         width = 6,
-                        div(id = "section1-1",
-                            class = "scrollspy-section",
-                            h1("This is the about page (Placeholder Text)"),
-                            h4("Long-range interactions between genomic regions are important mediators of gene expression. These contacts, or DNA loops, allow linearly distant cis- or trans-regulatory elements to be brought into close proximity to their effector genes. Many techniques have been devised to explore these distant genomic interactions. The first technique developed, chromosome conformation capture (3C), only allowed for investigation of interactions between pairs of loci. Newer methods, such as Hi-C, allow for genome-wide identification of chromatin interactions by combining 3C methods with high-throughput sequencing."),
-                            h4("While Hi-C can generate a genome-wide map of contact frequencies, observations of genomic features are limited by the base-pair resolution. Sequencing deep enough to achieve the resolution necessary to see genome-wide loops (5 Kb) is prohibitively expensive. In 2015, Sanborn and Rao et al. developed an inexpensive, region-targeted method for Hi-C that they termed hybrid-capture Hi-C (Hi-C2). Rather than sequencing an entire Hi-C library, Hi-C2 allows for the selection of a targeted genomic region though enrichment with hybridization probes. ")
-                            
-                        ),
-                        div(id = "section1-2",
-                            class = "scrollspy-section",
-                            h1("Lets Create More Fake Output"),
-                            h4("Long-range interactions between genomic regions are important mediators of gene expression. These contacts, or DNA loops, allow linearly distant cis- or trans-regulatory elements to be brought into close proximity to their effector genes. Many techniques have been devised to explore these distant genomic interactions. The first technique developed, chromosome conformation capture (3C), only allowed for investigation of interactions between pairs of loci. Newer methods, such as Hi-C, allow for genome-wide identification of chromatin interactions by combining 3C methods with high-throughput sequencing."),
-                            h4("While Hi-C can generate a genome-wide map of contact frequencies, observations of genomic features are limited by the base-pair resolution. Sequencing deep enough to achieve the resolution necessary to see genome-wide loops (5 Kb) is prohibitively expensive. In 2015, Sanborn and Rao et al. developed an inexpensive, region-targeted method for Hi-C that they termed hybrid-capture Hi-C (Hi-C2). Rather than sequencing an entire Hi-C library, Hi-C2 allows for the selection of a targeted genomic region though enrichment with hybridization probes. "),
-                            h4("While Hi-C can generate a genome-wide map of contact frequencies, observations of genomic features are limited by the base-pair resolution. Sequencing deep enough to achieve the resolution necessary to see genome-wide loops (5 Kb) is prohibitively expensive. In 2015, Sanborn and Rao et al. developed an inexpensive, region-targeted method for Hi-C that they termed hybrid-capture Hi-C (Hi-C2). Rather than sequencing an entire Hi-C library, Hi-C2 allows for the selection of a targeted genomic region though enrichment with hybridization probes. "),
-                            img(src = "images/HiC2_IL1B_Norm.png", align = "center", height="100%", width="100%")
-                        ),
-                        div(id = "section1-3",
-                            class = "scrollspy-section",
-                            h1("Section 3 Output"),
-                            h4("Long-range interactions between genomic regions are important mediators of gene expression. These contacts, or DNA loops, allow linearly distant cis- or trans-regulatory elements to be brought into close proximity to their effector genes. Many techniques have been devised to explore these distant genomic interactions. The first technique developed, chromosome conformation capture (3C), only allowed for investigation of interactions between pairs of loci. Newer methods, such as Hi-C, allow for genome-wide identification of chromatin interactions by combining 3C methods with high-throughput sequencing."),
-                            h4("While Hi-C can generate a genome-wide map of contact frequencies, observations of genomic features are limited by the base-pair resolution. Sequencing deep enough to achieve the resolution necessary to see genome-wide loops (5 Kb) is prohibitively expensive. In 2015, Sanborn and Rao et al. developed an inexpensive, region-targeted method for Hi-C that they termed hybrid-capture Hi-C (Hi-C2). Rather than sequencing an entire Hi-C library, Hi-C2 allows for the selection of a targeted genomic region though enrichment with hybridization probes. "),
-                            h4("While Hi-C can generate a genome-wide map of contact frequencies, observations of genomic features are limited by the base-pair resolution. Sequencing deep enough to achieve the resolution necessary to see genome-wide loops (5 Kb) is prohibitively expensive. In 2015, Sanborn and Rao et al. developed an inexpensive, region-targeted method for Hi-C that they termed hybrid-capture Hi-C (Hi-C2). Rather than sequencing an entire Hi-C library, Hi-C2 allows for the selection of a targeted genomic region though enrichment with hybridization probes. "),
-                            img(src = "images/HiC2_IL1B_Norm.png", align = "center", height="100%", width="100%")
-                        ),
-                        div(id = "section1-4",
-                            class = "scrollspy-section",
-                            h1("Section 4"),
-                            h4("Long-range interactions between genomic regions are important mediators of gene expression. These contacts, or DNA loops, allow linearly distant cis- or trans-regulatory elements to be brought into close proximity to their effector genes. Many techniques have been devised to explore these distant genomic interactions. The first technique developed, chromosome conformation capture (3C), only allowed for investigation of interactions between pairs of loci. Newer methods, such as Hi-C, allow for genome-wide identification of chromatin interactions by combining 3C methods with high-throughput sequencing."),
-                            h4("While Hi-C can generate a genome-wide map of contact frequencies, observations of genomic features are limited by the base-pair resolution. Sequencing deep enough to achieve the resolution necessary to see genome-wide loops (5 Kb) is prohibitively expensive. In 2015, Sanborn and Rao et al. developed an inexpensive, region-targeted method for Hi-C that they termed hybrid-capture Hi-C (Hi-C2). Rather than sequencing an entire Hi-C library, Hi-C2 allows for the selection of a targeted genomic region though enrichment with hybridization probes. "),
-                            h4("While Hi-C can generate a genome-wide map of contact frequencies, observations of genomic features are limited by the base-pair resolution. Sequencing deep enough to achieve the resolution necessary to see genome-wide loops (5 Kb) is prohibitively expensive. In 2015, Sanborn and Rao et al. developed an inexpensive, region-targeted method for Hi-C that they termed hybrid-capture Hi-C (Hi-C2). Rather than sequencing an entire Hi-C library, Hi-C2 allows for the selection of a targeted genomic region though enrichment with hybridization probes. "),
-                            img(src = "images/HiC2_IL1B_Norm.png", align = "center", height="100%", width="100%")
-                        )              
+                        div(
+                          class="aboutPageContent",
+                          div(id = "section1-1",
+                              class = "scrollspy-section",
+                              div(
+                                id = "aboutHeader",
+                                h1("Introducing Lure"),
+                                h2("A probe design tool for fishing Hi-C data"),
+                                br()
+                              ),
+                              HTML(
+                                "
+                                <h4>
+                                  Lure is a fast, user-friendly web application for designing oligonucleotide probes for hybrid capture Hi-C (Hi-C<sup>2</sup>). Developed by the <a href='http://aidenlab.org/' target='_blank'> Aiden Lab </a> , Hi-C<sup>2</sup> allows scientists to enrich Hi-C data in a small, continuous genomic region <a href='https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4664323/' target='_blank'>(Sanborn et al. 2015)</a>. Lure is tailored specifically to Hi-C<sup>2</sup>, designing the optimal probes for Hi-C library enrichment.
+                                </h4>
+                                "
+                              )
+                          ),
+                          div(id = "section1-2",
+                              class = "scrollspy-section",
+                              h1("Quick Start"),
+                              h4("Designing probes with Lure is fast, easy, and doesn't require downloads or dependencies. To get started:"),
+                              tags$ol(
+                                tags$li("Select a genome (ex: Human: hg38)"),
+                                tags$li("Enter your target region (ex: chr3:133,000,000-133,100,000)"),
+                                tags$li("Choose your Restriction Enzyme (ex: ^GATC,MobI)"),
+                                tags$li("Design Probes!")
+                              ),
+                              tags$br(),
+                              tags$br(),
+                              img(src = "images/quickstart.gif", align = "center", height="100%", width="100%"),
+                              tags$br(),
+                              tags$br()
+                          ),
+                          div(id = "section1-3",
+                              class = "scrollspy-section",
+                              h1("How to Cite"),
+                              HTML(
+                                "
+                                  <h4>
+                                    Lure was developed in the <a href='http://phanstiel-lab.med.unc.edu/' target='_blank'> Phanstiel Lab </a> at UNC by <a href='https://ericscottdavis.com/' target='_blank'>Eric Davis</a>, Erika Deoudes, Craig Wenger, and Doug Phanstiel.
+                                    <br></br>
+                                    If you use this webapp to design your probes, please cite:
+                                    <br></br>
+                                    <div style='background: #E2E2E2; padding:10px'>
+                                      Davis ES, Deoudes EM, Thulson EA, Kramer N, Wenger C and Phanstiel DH. Lure: A Probe Design Tool for Hybrid-Capture Hi-C. <i>Super Awesome Journal</i>. 2019.
+                                    </div>
+                                  </h4>
+                                "
+                              )
+                          ),
+                          div(id = "section1-4",
+                              class = "scrollspy-section",
+                              h1("Advanced options"),
+                              HTML(
+                                "
+                                <h4>
+                                  Lure offers advanced options for adjusting the number of desired probes and adding predefined or custom index sequences to the start and end of each probe sequence. This allows for pooling of probes to reduce cost.
+                                </h4>
+                                <img class='centered' src='images/advancedOptions.png' align='center' height='80%' width='80%'></img>
+                                "
+                              )
+                          ),
+                          div(id = "section1-5",
+                              class = "scrollspy-section",
+                              h1("How it Works"),
+                              HTML(
+                                "
+                                <h3> Implementation </h3>
+                                <h4>
+                                  The Lure web application is a Shiny R implementation of the <a href='https://github.com/PhanstielLab/lure'>Lure command line tool</a>, which is written primarily using BASH and R. It utilizes several command line tools to identify and fragment the region of interest (ROI) by restriction site (<a href='https://www.bioinformatics.babraham.ac.uk/projects/hicup/'>HiCUP - Hi-C User Pipeline</a>), extract genomic fragments (<a href='http://bedtools.readthedocs.io/en/latest/'>Bedtools</a>), and assess potential probes in parallel (<a href='https://www.gnu.org/software/parallel/'>GNU Parallel</a>). The diagram below outlines LURE's workflow:
+                                </h4>
+                                <img class='centered' src='images/flow_diagram2.png' align='center' height='80%' width='80%'></img>
+
+                                <h3> Selection </h3>
+                                <h4>
+                                  Criteria for selecting probes were modeled after Sanborn et al. (2015) where they outline their Hi-C<sup>2</sup> method. Briefly, potential probes were identified upstream and downstream of each restriction site. All potential probes were scored for repetitive bases, GC content, and distance from restriction site. Each probe was assigned a \"Pass Number\" (0-3) for overall quality according to the scheme below:
+                                </h4>
+                                <img class='centered' src='images/selectionTable.png' align='center' height='100%' width='100%'></img>
+                                <br></br>
+                                <h4>
+                                  Selection criteria relax as pass number increases, making the highest quality probes (passing the most restrictive criteria) pass 0 and lowest quality probes (passing the least strict criteria) pass 3.
+                                </h4>
+
+                                
+                                <h3> Filtering </h3>
+                                <h4>
+                                  By default all suitable probes are shown for every restriction site. However, users may wish to reduce the number of probes ordered to reduce cost or achieve a specific probe density. The web application allows users to specify the maximum number of probes desired before designing probes, or adjust them with a slider after designing probes. Probes are removed (pruned) from the pool by quality score to ensure that those remaining are the highest quality available. If all remaining probes are of the highest quality, they are randomly removed to preserve even coverage. For reproduciblilty, a seed is set in the program so that the same settings will always return the same probes.
+                                </h4>
+                                "
+                              )
+                          ),
+                          div(id = "section1-6",
+                              class = "scrollspy-section",
+                              h1("Validation"),
+                              HTML(
+                                "
+                                <h4>
+                                  To validate probes designed by Lure, we performed Hi-C<sup>2</sup> on several Hi-C libraries. The preliminary results show XXX enrichment of the target region when compared to genome-wide Hi-C. Below are representative images of the same genomic region with Hi-C (<i>left</i>) and Hi-C<sup>2</sup> (<i>right</i>):
+                                </h4>
+                                <img class='centered' src='images/HiC2_IL1B_Norm.png' align='center' height='100%' width='100%'></img>
+                                <br></br>
+                                <h4>
+                                  Both maps look very similar in the target region. However, the Hi-C map (<i>left</i>), used 990 million reads while the Hi-C<sup>2</sup> map (<i>right</i>) used only 12 million reads.
+                                </h4>
+                                "
+                              )
+                              
+                          ),
+                          div(id = "section1-7",
+                              class = "scrollspy-section",
+                              h1("FAQs"),
+                              HTML(
+                                "
+                                <h3>
+                                  What kinds of questions should we put on here?
+                                </h3>
+                                <blockquote>
+                                  I am not really sure. Let's ask the lab what they think...
+                                </blockquote>
+                                "
+                              ),
+                              
+                              br(),
+                              br(),
+                              br(),
+                              br()
+                          ) 
+                        )
+                        
                       )
                     )
                 )
@@ -479,10 +580,94 @@ body <- dashboardBody(
             )
             ##### End About Page #####
     ),
-    tabItem(tabName = "Download", 
-      h3("Download")
+    tabItem(tabName = "Download",
+            ##### Download Page ####
+            fluidPage(
+              tabPanel(
+                "tab2",
+                div(id = "tab2-content",
+                    fluidRow(
+                      column(
+                        width = 6,
+                        offset = 3,
+                        div(
+                          class="aboutPageContent",
+                          div(id = "section2-1",
+                              class = "scrollspy-section",
+                              div(
+                                id = "aboutHeader",
+                                br(),
+                                br(),
+                                h1("Download Lure"),
+                                h2("Available as a command-line interface or Shiny web application"),
+                                br()
+                              ),
+                              HTML(
+                                "
+                                <h4>
+                                  Lure is available as both a command-line interface, and as a Shiny web application. The easiest way to use Lure is through this website. For programmatic access and piping through other command line tools, use Lure command line. For further webapp development, fork the github repo in the links shown below. 
+                                </h4>
+                                "
+                    ),
+                    fluidRow(
+                      column(
+                        width = 6,
+                        h2("Lure Command Line", align="center"),
+                        HTML('<a href="https://github.com/PhanstielLab/lure" target="_blank"><img src="images/commandLineLogo.svg" width="60%" height="60%" class="centered"> </img></a>')
+ 
+                      ),
+                      column(
+                        width = 6,
+                        h2("Lure Web Application", align="center"),
+                        HTML('<a href="https://github.com/PhanstielLab/lure_app" target="_blank"><img src="images/Lure_logo_new.png" width="100%" height="100%" class="centered"> </img></a>')
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+      ##### End Download Page #####
     ),
-    tabItem(tabName = "Contact"
+    tabItem(tabName = "Contact",
+            ##### Contact Page ####
+            fluidPage(
+              tabPanel(
+                "tab3",
+                div(id = "tab3-content",
+                    fluidRow(
+                      column(
+                        width = 6,
+                        offset = 3,
+                        div(
+                          class="aboutPageContent",
+                          div(id = "section3-1",
+                              class = "scrollspy-section",
+                              div(
+                                id = "aboutHeader",
+                                br(),
+                                br(),
+                                h1("Contact Us"),
+                                h2("Phanstiel Lab, The University of North Carolina at Chapel Hill"),
+                                br()
+                              ),
+                              HTML(
+                                "
+                                <h4>
+                                  The Phanstiel Lab is located in the Thurston-Bowles Building at the University of North Carolina at Chapel Hill. For questions, or suggestions for Lure, open an issue on the github repositories. Other questions can be directed to Doug Phanstiel at douglas_phanstiel@med.unc.edu. 
+                                </h4>
+                                "
+                              )
+                          )
+                        )
+                      )
+                    )
+                )
+              )
+            )
+            ##### End Contact Page #####
     ) # end of tabItem
   ) # end of tabItems
 ) # end of body
