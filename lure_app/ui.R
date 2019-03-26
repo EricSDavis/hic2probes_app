@@ -145,15 +145,16 @@ body <- dashboardBody(
              shinyjs::hidden(
                div(id = "advanced1",
                    tags$hr(),
+                   uiOutput("set_probe_length"),
                    uiOutput("set_max_probes"),
                    h6("(Defaults to maximum available probes)"),
                    radioButtons(width ="100%", 
                                 inputId = "index",inline=F,
                                 label = "Add index sequences",
                                 choices = c("None",
-                                            "1: TCGCGCCCATAACTC-N120-CTGAGGGTCCGCCTT" = "Index1",
-                                            "2: ATCGCACCAGCGTGT-N120-CACTGCGGCTCCTCA" = "Index2",
-                                            "3: CCTCGCCTATCCCAT-N120-CACTACCGGGGTCTG" = "Index3",
+                                            "1: TCGCGCCCATAACTC-N-CTGAGGGTCCGCCTT" = "Index1",
+                                            "2: ATCGCACCAGCGTGT-N-CACTGCGGCTCCTCA" = "Index2",
+                                            "3: CCTCGCCTATCCCAT-N-CACTACCGGGGTCTG" = "Index3",
                                             "Custom"), 
                                 selected = "None"
                    ), # end of radioButtons,
@@ -502,7 +503,7 @@ body <- dashboardBody(
                                 <h4>
                                   Lure offers advanced options for adjusting the number of desired probes and adding predefined or custom index sequences to the start and end of each probe sequence. This allows for pooling of probes to reduce cost.
                                 </h4>
-                                <img class='centered' src='images/advancedOptions.png' align='center' height='80%' width='80%'></img>
+                                <img class='centered' src='images/advancedOptions2.png' align='center' height='80%' width='80%'></img>
                                 "
                               )
                           ),

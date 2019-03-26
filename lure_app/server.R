@@ -73,6 +73,14 @@ shinyServer(function(input, output, session) {
     
     ## Define run_script ####
     run_script <- function(coords) {
+      
+      ## Parse Optional Probe Length Parameter ####
+      if(is.null(input$set_probe_length) || is.logical(input$set_probe_length)){
+        probe_length = 120
+      } else {
+        probe_length = input$set_probe_length
+      }
+      
       ## Stitch command ####
       command <- paste0("./../lure/shell/lure.sh",
                         " -c ", coords$chr,
@@ -80,6 +88,7 @@ shinyServer(function(input, output, session) {
                         " -e ", coords$stop,
                         " -r ", input$resenz,
                         " -g ", paste0('"', "./../genomes/", sub(".+: ", "", basename(input$genome)), ".fa", '"'),
+                        " -l ", probe_length,
                         " -o ", output_folder)
       print (command)
       console_output <- system(command, input = "yes", intern = T)
@@ -186,6 +195,16 @@ shinyServer(function(input, output, session) {
         paste(length, "b")
       }
     }
+  })
+  
+  ##----------Adjust Probe Length --------------####
+  output$set_probe_length <- renderUI({
+    numericInput(
+      inputId = "set_probe_length",
+      label = "Set Probe Length",
+      value = 120,
+      min = 2
+    )
   })
   
   ##----------Maximum Number of Probes----------####
@@ -624,14 +643,22 @@ shinyServer(function(input, output, session) {
     })
     output$info_probeLength <- renderText({
       req(input$index)
+      
+      ## Parse Optional Probe Length Parameter ####
+      if(is.null(input$set_probe_length) || is.logical(input$set_probe_length)){
+        probe_length = 120
+      } else {
+        probe_length = input$set_probe_length
+      }
+      
       if(input$index == "None"){
-        paste0("Probe Length: 120 bp")
+        paste0("Probe Length: ", probe_length, " bp")
       } else if (input$index == "Custom"){
         req(input$custom_index_1)
         req(input$custom_index_2)
-        paste0("Probe Length: ", nchar(input$custom_index_1)+120+nchar(input$custom_index_2), " bp")
+        paste0("Probe Length: ", nchar(input$custom_index_1)+probe_length+nchar(input$custom_index_2), " bp")
       } else {
-        paste0("Probe Length: 150 bp")
+        paste0("Probe Length: ", 30+probe_length, " bp")
       }
     })
     output$info_avgGC <- renderText({
