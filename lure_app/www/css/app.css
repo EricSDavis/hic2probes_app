@@ -36,7 +36,7 @@
   font-size: 105%;
 }
 #tab1-scrollspy li > a:hover {
-  color: #aab7ca !important;
+  color: #9cacc4 !important;
 }
 #tab1-scrollspy li.active > a {
   /*background-color: #1b8fc1;
@@ -73,19 +73,46 @@
   font-size: 15px;
 }
 
-#aboutHeader > h1 {
-  font-size: 50px;
-  line-height:0.5em;
-  color:#0b3661;
+@media (min-width: 768px) and (max-width: 1150px) {
+  .aboutPageContent{
+    margin-left: 50px;
+  }
 }
 
-#aboutHeader > h2 {
-  font-size: 25px;
-  color:#0b3661;
-}
+
 
 img.centered {
     display: block;
     margin-left: auto;
     margin-right: auto 
 }
+
+.scrollspy-section ol{
+  line-height: 1.8em;
+  text-align: left;
+}
+
+
+ol {
+  margin: 0 0 0 0;
+  padding: 0;
+  counter-reset: item;
+}
+
+ol > li {
+  margin: 0;
+  padding: 0 0 0 2.2em;
+  text-indent: -2em;
+  list-style-type: none;
+  counter-increment: item;
+}
+
+ol > li:before {
+  display: inline-block;
+  width: 2em;
+  padding-right: 1.5em;
+  font-weight: 500;
+  text-align: right;
+  content: counter(item) ".";
+}
+

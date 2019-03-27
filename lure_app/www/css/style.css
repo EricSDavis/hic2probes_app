@@ -23,16 +23,40 @@ textarea {
 
 h1 {
   font-family: inherit;
-  font-size: 160%;
+  font-size: 140% !important;
+  font-weight: 500 !important;
+  letter-spacing: .25px;
+  line-height: 1.25em !important;
+  margin-bottom: 20px;
+  color: #1b8fc1;
+}
+
+h2 {
+  font-family: inherit;
+  font-size: 100% !important;
   font-weight: 500 !important;
   letter-spacing: .25px;
   line-height: 1.5em;
-  margin-bottom: 20px
+  margin-bottom: 20px;
+}
+
+
+#aboutHeader h2 {
+  margin-bottom: 30px
+}
+
+h3 {
+  font-family: inherit;
+  font-size: 115%;
+  font-weight: 400 !important;
+  letter-spacing: .25px;
+  line-height: 1.5em;
+  margin-bottom: 25px;
 }
 
 h4 {
   font-family: inherit;
-  font-size: 105%;
+  font-size: 100%;
   font-weight: 400 !important;
   letter-spacing: .25px;
   line-height: 1.5em;
@@ -228,7 +252,8 @@ h3,.h3{
 /* header text - sliders & homepage inputs */
 .form-group.shiny-input-container label.control-label,
 .form-group.shiny-input-container label[for=coordinates],
-.form-group.shiny-input-container label[for=set_max_probes]{
+.form-group.shiny-input-container label[for=set_max_probes],
+.form-group.shiny-input-container label[for=set_probe_length]{
   font-family: inherit;
   font-weight: 500 !important;
   font-size: 100% !important;
@@ -889,4 +914,5 @@ ul.nav{
   background-size: cover;
   background-repeat: no-repeat;
 }
+
 

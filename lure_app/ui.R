@@ -433,7 +433,7 @@ body <- dashboardBody(
                           tags$ul(
                             class = "nav nav-pills nav-stacked",
                             tags$li(tags$a(href = "#section1-1", "Introduction")),
-                            tags$li(tags$a(href = "#section1-2", "Quickstart")),
+                            tags$li(tags$a(href = "#section1-2", "Quick Start")),
                             tags$li(tags$a(href = "#section1-3", "How to Cite")),
                             tags$li(tags$a(href = "#section1-4", "Advanced Options")),
                             tags$li(tags$a(href = "#section1-5", "How it Works")),
@@ -452,7 +452,7 @@ body <- dashboardBody(
                                 id = "aboutHeader",
                                 h1("Introducing Lure"),
                                 h2("A probe design tool for fishing Hi-C data"),
-                                br()
+                                tags$br()
                               ),
                               HTML(
                                 "
@@ -488,7 +488,7 @@ body <- dashboardBody(
                                     <br></br>
                                     If you use this webapp to design your probes, please cite:
                                     <br></br>
-                                    <div style='background: #E2E2E2; padding:10px'>
+                                    <div style='background: #dde4ee; padding:15px 20px'>
                                       Davis ES, Deoudes EM, Thulson EA, Kramer N, Wenger C and Phanstiel DH. Lure: A Probe Design Tool for Hybrid-Capture Hi-C. <i>In Progress</i>. 2019.
                                     </div>
                                   </h4>
@@ -503,6 +503,7 @@ body <- dashboardBody(
                                 <h4>
                                   Lure offers advanced options for adjusting the number of desired probes and adding predefined or custom index sequences to the start and end of each probe sequence. This allows for pooling of probes to reduce cost.
                                 </h4>
+                                <br>
                                 <img class='centered' src='images/advancedOptions2.png' align='center' height='80%' width='80%'></img>
                                 "
                               )
@@ -538,7 +539,7 @@ body <- dashboardBody(
                           ),
                           div(id = "section1-6",
                               class = "scrollspy-section",
-                              h1("In Progress..."),
+                              h1("Validation"),
                               h4("Probe validation is in progress, check back later for updates!")
                               # HTML(
                               #   "
@@ -556,8 +557,8 @@ body <- dashboardBody(
                           ),
                           div(id = "section1-7",
                               class = "scrollspy-section",
-                              h1("Coming Soon..."),
-                              h4("This section is underdevelopment, check back later for updates!"),
+                              h1("FAQ"),
+                              h4("This section is under development, check back later for updates!"),
                               # HTML(
                               #   "
                               #   <h3>
