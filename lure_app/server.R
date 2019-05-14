@@ -173,6 +173,21 @@ shinyServer(function(input, output, session) {
     sites
   })
   
+  ##-----------Load in Repetitive Fragment Regions ----------####
+  res.repFrags <- reactive({
+    req(script_results())
+    ## Load in restriction sites
+    frags <- read.delim(paste0(output_folder, "/fragments.bed"), header = F)
+    ## Load in genomic coordinates (ROI)
+    coords<-extractcoords(input$coordinates)
+    ## Locate all continuous regions of reptitive regions (lowercase letters)
+    temp <- stringr::str_locate_all(frags$V17, sprintf("[acgt]{1,%i}", max(frags$V16)))
+    temp2 <- lapply(1:length(temp), function(x){
+      temp[[x]] + frags$V2[x] + coords$start
+    })
+    repFrags <- as.data.frame(do.call(rbind, temp2))
+  })
+  
   ##------------Load in All Probes--------------####
   all_probes <- reactive({
     all_probes <- read.delim(paste0(output_folder, "/all_probes.bed"), header = F)
@@ -267,6 +282,7 @@ shinyServer(function(input, output, session) {
            ylab = "",
            frame.plot = F,
            las = 1,
+           xaxs = 'i',
            axes = FALSE)
       
       abline(h=c(0.25, 0.50, 0.75, 1.00, 1.25, 1.50) * max(bdata$bins), col="#d2d9e0", lty = 3)
@@ -283,6 +299,7 @@ shinyServer(function(input, output, session) {
            frame.plot = F,
            las = 1,
            axes = FALSE,
+           xaxs = 'i',
            cex.lab = 1.1
            )
       axis(2, 
@@ -345,6 +362,7 @@ shinyServer(function(input, output, session) {
            ylab = "",
            frame.plot = F,
            las = 1,
+           xaxs = 'i',
            axes = FALSE
       )
       abline(h=c(0.5, 1.0, 1.5) * max(bdata$bins), col="#d2d9e0", lty = 3)
@@ -361,6 +379,7 @@ shinyServer(function(input, output, session) {
            frame.plot = F,
            las = 1,
            axes = FALSE,
+           xaxs = 'i',
            cex.lab = 1.1
       )
       axis(2, 
@@ -385,6 +404,7 @@ shinyServer(function(input, output, session) {
   output$gc_plot <- renderPlot({
     data <- script_results()
     sites <- res.sites()
+    repFrags <- res.repFrags()
     req(input$region_slider)
 
     cols <- c("#148fc7", "#3bb6e3", "#82e0fc", "#d9ebf5")[factor(data$pass)]
@@ -400,6 +420,7 @@ shinyServer(function(input, output, session) {
          ylab = "",
          las = 1,
          frame.plot = F,
+         xaxs = 'i',
          axes = FALSE)
     abline(h=c(.2,.4,.6,.8,1), col="#d2d9e0", lty = 3)
     
@@ -409,9 +430,11 @@ shinyServer(function(input, output, session) {
          xlab = paste0(extractcoords(input$coordinates)$chr, " region"),
          ylab = "GC Fraction",
          yaxs='i',
+         ylim = c(-0.19, 1.0),
          las = 1,
          frame.plot = F,
          axes = FALSE,
+         xaxs = 'i',
          cex.lab = 1.1
          )
     axis(2, 
@@ -425,11 +448,25 @@ shinyServer(function(input, output, session) {
          tcl = -.4,
          las = 1)
     
-    if (input$toggle_res.sites == T){ #input$region_slider[2] - input$region_slider[1] <= 50000 & 
-      segments(sites, -1, sites, 1.0, col = "lightgrey")
+    ## Grey bottom bar
+    segments(extractcoords(input$coordinates)$start, -0.1, extractcoords(input$coordinates)$stop, -0.1, col = "lightgrey", lwd=5)
+    
+    ## Pink repetitive region highlighting
+    if (input$toggle_rep.regions == T){
+      rect(repFrags$start, -0.1, repFrags$end, 1.0, col = "#FFF0F5", border = NA)
     }
     
-    segments(data$start, data$GC, data$stop, data$GC, col = cols, lwd=5)
+    ## Restriction site markers
+    if (input$toggle_res.sites == T){ #input$region_slider[2] - input$region_slider[1] <= 50000 & 
+      segments(sites, -0.09, sites, 1.0, col = "lightgrey", lwd=3, lend=2)
+    }
+    
+    ## Red repetitive region bars
+    if (input$toggle_rep.regions == T){
+      segments(repFrags$start, -0.1, repFrags$end, -0.1, col = "red", lwd=5, lend=2)
+    }
+    
+    segments(data$start, data$GC, data$stop, data$GC, col = cols, lwd=5, lend=2)
     legend('topright', title = "Pass Number", legend = c(0, 1, 2, 3), fill = leg_cols, bg = "transparent", box.lty = 0, border=NA)
   })
   
@@ -437,6 +474,7 @@ shinyServer(function(input, output, session) {
   output$shift_plot <- renderPlot({
     data <- script_results()
     sites <- res.sites()
+    repFrags <- res.repFrags()
     
     cols <- c("#148fc7", "#3bb6e3", "#82e0fc", "#d9ebf5")[factor(data$pass)]
     cols <- adjustcolor(cols, alpha.f = 1)
@@ -451,26 +489,30 @@ shinyServer(function(input, output, session) {
          xlab = "",
          ylab = "",
          las = 1,
+         xaxs = 'i',
          axes = FALSE)
-    
+
     abline(h=c(0.5, 1.0, 1.5) * max(data$shift), col="#d2d9e0", lty = 3)
     
     ## Handle ylim resizing when there is 0 shift from restriction site
-    if(max(data$shift)+0.45*(max(data$shift)) == 0){
+    if(max(data$shift)+0.45*(max(data$shift)) <= 10){
       ymax = 10
+      ymin = -1.5 - 0.1*(max(data$shift))
     }else{
       ymax = max(data$shift)+0.45*(max(data$shift))
+      ymin = -1.5 - 0.1*(max(data$shift))
     }
     
     par(mgp=c(2.75,.7,.2), bg="NA", new = TRUE)
     plot(data$start, data$shift, "n", frame.plot = F,
          xlim = c(input$region_slider[1], input$region_slider[2]),
-         ylim = c(-1, ymax),
+         ylim = c(ymin, ymax),
          xlab = paste0(extractcoords(input$coordinates)$chr, " region"),
          ylab = "Base Pairs from Restriction Site",
          yaxs='i',
          las = 1,
          axes = FALSE,
+         xaxs = 'i',
          cex.lab = 1.1
          )
     axis(2, 
@@ -484,11 +526,30 @@ shinyServer(function(input, output, session) {
          tcl = -.4,
          las = 1)
     
-    if (input$toggle_res.sites == T){ #input$region_slider[2] - input$region_slider[1] <= 50000 & 
-      segments(sites, -1, sites, max(data$shift)+0.45*(max(data$shift)), col = "lightgrey")
+    # if (input$toggle_res.sites == T){ #input$region_slider[2] - input$region_slider[1] <= 50000 & 
+    #   # segments(sites, -1, sites, max(data$shift)+0.45*(max(data$shift)), col = "lightgrey")
+    #   segments(repFrags$start, max(data$shift)+0.40*(max(data$shift)), repFrags$end, max(data$shift)+0.40*(max(data$shift)), col = "red", lwd=5, lend=2)
+    # }
+    
+    ## Grey bottom bar
+    segments(extractcoords(input$coordinates)$start, ymin+1, extractcoords(input$coordinates)$stop, ymin+1, col = "lightgrey", lwd=5)
+    
+    ## Pink repetitive region highlighting
+    if (input$toggle_rep.regions == T){
+      rect(repFrags$start, ymin+1, repFrags$end, ymax, col = "#FFF0F5", border = NA)
     }
     
-    segments(data$start, data$shift, data$stop, data$shift, col = cols, lwd = 5)
+    ## Restriction site markers
+    if (input$toggle_res.sites == T){ #input$region_slider[2] - input$region_slider[1] <= 50000 & 
+      segments(sites, ymin+1, sites, ymax, col = "lightgrey", lwd=3, lend=2)
+    }
+    
+    ## Red repetitive region bars
+    if (input$toggle_rep.regions == T){
+      segments(repFrags$start, ymin+1, repFrags$end, ymin+1, col = "red", lwd=5, lend=2)
+    }
+    
+    segments(data$start, data$shift, data$stop, data$shift, col = cols, lwd = 5, lend = 2)
     legend('topright', title = "Pass Number", legend = c(0, 1, 2, 3), fill = leg_cols, bg = "transparent", box.lty = 0, border=NA)
   })
   
@@ -689,6 +750,7 @@ shinyServer(function(input, output, session) {
          yaxs='i',
          ylim = c(0,max(h$counts)),
          cex.main = 1.3,
+         xaxs = 'i',
          cex.lab = 1.1
          )
     abline(h=c(0.2, 0.4, 0.6, 0.8, 1.0) * max(h$counts), col="#eceff3", lty = 1)

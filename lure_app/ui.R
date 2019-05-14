@@ -107,7 +107,7 @@ body <- dashboardBody(
                inputId = "genome",
                label = "Genome",
                choices = genome.names,
-               selected = "Human: hg38",
+               selected = "Human: hg19",
                multiple = F
              )
       ),
@@ -117,7 +117,7 @@ body <- dashboardBody(
              textInput(
                inputId = "coordinates",
                label = "Target Region",
-               value = "chr3:133000000-133100000"
+               value = "chr8:133000000-133100000"
              )
       ),
       
@@ -126,8 +126,8 @@ body <- dashboardBody(
              selectInput(
                inputId = "resenz",
                label = "Restriction Enzyme",
-               choices = c("^GATC,MboI", "A^AGCTT,HindIII"),
-               selected = "^GATC,MboI",
+               choices = c("^GATC, MboI" = "^GATC", "A^AGCTT, HindIII" = "A^AGCTT"),
+               selected = "^GATC, MboI",
                multiple = F
              )
       ) # end column
@@ -344,6 +344,13 @@ body <- dashboardBody(
                       materialSwitch(
                         inputId = "toggle_res.sites",
                         label = "Show Restriction Sites?",
+                        value = F,
+                        status = "primary",
+                        right = F
+                      ),
+                      materialSwitch(
+                        inputId = "toggle_rep.regions",
+                        label = "Show Repetitive Regions?",
                         value = F,
                         status = "primary",
                         right = F
