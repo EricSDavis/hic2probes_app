@@ -90,7 +90,7 @@ shinyServer(function(input, output, session) {
                         " -g ", paste0('"', "./../genomes/", sub(".+: ", "", basename(input$genome)), ".fa", '"'),
                         " -l ", probe_length,
                         " -o ", output_folder)
-      print (command)
+      print(command)
       console_output <- system(command, input = "yes", intern = T)
       if(!is.null(attr(console_output, "status"))) {
         shinyalert("Error", console_output[length(console_output)], type = "error")
@@ -157,9 +157,9 @@ shinyServer(function(input, output, session) {
   ## Get script results in reactive context ####
   script_results <- reactive({
     req(input$max_probes)
-    system(paste0("Rscript --vanilla ../lure/scripts/reduce_probes.R ", output_folder, " ", input$max_probes))
+    system(paste0("Rscript --vanilla ../lure/scripts/reduce_probes.R ", output_folder, " ", input$max_probes, " ", input$remove_overlapping))
     data <- as.data.frame(read.delim(paste0(output_folder, "/filtered_probes.bed"), header = F))
-    colnames(data) <- c("chr", "start", "stop", "shift", "res.fragment", "dir", "AT", "GC", "seq", "pass")
+    colnames(data) <- c("chr", "start", "stop", "shift", "res.fragment", "dir", "AT", "GC", "seq", "pass", "repetitive", "gc_score", "quality_score", "quality")
     data
   })
   
@@ -194,6 +194,15 @@ shinyServer(function(input, output, session) {
     all_probes
   })
   
+  ##------------Calculate Overlap---------------####
+  overlap <- reactive({
+    req(all_probes)
+    all_probes <- all_probes()
+    vec <- sapply(1:(nrow(all_probes)-1), function(x) length(intersect(all_probes[x,2]:all_probes[x,3], all_probes[x+1,2]:all_probes[x+1,3])))
+    overlap <- data.frame(index1=1:(nrow(all_probes)-1), index2=1:(nrow(all_probes)-1)+1, overlap=vec)
+    overlap
+  })
+  
   output$range <- renderText({
     coords<-extractcoords(input$coordinates)
     length <- coords$stop - coords$start + 1
@@ -222,16 +231,37 @@ shinyServer(function(input, output, session) {
     )
   })
   
-  ##----------Maximum Number of Probes----------####
+  ##----------Desired Number of Probes----------####
   ## Max Probes Slider ####
   output$max_probes <- renderUI({
     sliderInput(
       inputId = "max_probes",
-      label = "Maximum Number of Probes",
+      label = "Desired Number of Probes",
       value = ifelse(is.null(input$set_max_probes) || is.logical(input$set_max_probes),
                      isolate(values$maximum_probes), input$set_max_probes),
       min = 1,
       max = isolate(values$maximum_probes)
+    )
+  })
+  
+  ## Observer to change maximum probe slider when overlapping probes are removed ####
+  observeEvent(input$remove_overlapping,{
+    req(script_results())
+    req(all_probes())
+    req(overlap())
+    all_probes <- all_probes()
+    overlap <- overlap()
+    
+    if(input$remove_overlapping == TRUE){
+      max <- nrow(all_probes) - nrow(overlap[overlap$overlap > 0,])
+    }else{
+      max <- isolate(values$maximum_probes)
+    }
+    
+    updateSliderInput(
+      session = session,
+      inputId = "max_probes",
+      max = max
     )
   })
   
@@ -262,7 +292,7 @@ shinyServer(function(input, output, session) {
     ## Custom histogram barplot
     custom_histogram <- function(data=data, breaks = breaks, xlim){
       ## Cut table into bins along with pass numbers
-      bins <- table(cut(data$start, breaks = breaks, include.lowest = T), factor(data$pass, levels = 0:3))
+      bins <- table(cut(data$start, breaks = breaks, include.lowest = T), factor(data$quality, levels = c("High", "Medium", "Low")))
       bin_start <- as.numeric(gsub("^[:(:]|\\[|,.*", "", rownames(bins)))
       bin_stop <- as.numeric(gsub(".*,|\\]","", rownames(bins)))
       bdata <- as.data.frame(cbind(bin_start, bin_stop, bins))
@@ -270,7 +300,8 @@ shinyServer(function(input, output, session) {
       bin_size <- bdata$bin_stop[1] - bdata$bin_start[1]
       
       ## Define color palette
-      cols <- c("#148fc7", "#3bb6e3", "#82e0fc", "#d9ebf5")
+      # cols <- c("#148fc7", "#3bb6e3", "#82e0fc", "#d9ebf5") # Use these when coloring by pass number
+      cols <- c("#138fc8", "#5fcef2", "#b6e9fa") # Use these when coloring by pass number
       cols <- adjustcolor(cols, alpha.f = 1)
       
       ## Plot stacked histogram barplot
@@ -314,11 +345,11 @@ shinyServer(function(input, output, session) {
            las = 1)
       
       rect(bdata$bin_start, 0, bdata$bin_stop, bdata$bins, border=NA)
-      rect(bdata$bin_start, 0, bdata$bin_stop, bdata$`0`, col = cols[1], border=NA)
-      rect(bdata$bin_start, bdata$`0`, bdata$bin_stop, bdata$`0`+bdata$`1`, col = cols[2], border=NA)
-      rect(bdata$bin_start, bdata$`0`+bdata$`1`, bdata$bin_stop, bdata$`0`+bdata$`1`+bdata$`2`, col = cols[3], border=NA)
-      rect(bdata$bin_start, bdata$`0`+bdata$`1`+bdata$`2`, bdata$bin_stop, bdata$`0`+bdata$`1`+bdata$`2`+bdata$`3`, col = cols[4], border=NA)
-      legend('topright', title = "Pass Number", adj=1, legend = c(0:3), fill = cols, bg = "transparent", border=NA)
+      rect(bdata$bin_start, 0, bdata$bin_stop, bdata$High, col = cols[1], border=NA)
+      rect(bdata$bin_start, bdata$High, bdata$bin_stop, bdata$High+bdata$Medium, col = cols[2], border=NA)
+      rect(bdata$bin_start, bdata$High+bdata$Medium, bdata$bin_stop, bdata$High+bdata$Medium+bdata$Low, col = cols[3], border=NA)
+      # rect(bdata$bin_start, bdata$`0`+bdata$`1`+bdata$`2`, bdata$bin_stop, bdata$`0`+bdata$`1`+bdata$`2`+bdata$`3`, col = cols[4], border=NA) # When coloring by pass
+      legend('topright', title = "Quality", adj=0, legend = c("High", "Medium", "Low"), fill = cols, bg = "transparent", border=NA)
       if (input$toggle_res.sites == T){ #input$region_slider[2] - input$region_slider[1] <= 50000 & 
         segments(sites, -1, sites, 0.65*max(bdata$bins))
       }
@@ -407,12 +438,13 @@ shinyServer(function(input, output, session) {
     repFrags <- res.repFrags()
     req(input$region_slider)
 
-    cols <- c("#148fc7", "#3bb6e3", "#82e0fc", "#d9ebf5")[factor(data$pass)]
+    # cols <- c("#148fc7", "#3bb6e3", "#82e0fc", "#d9ebf5")[factor(data$pass)] #discrete color palatte
+    cols <- c("#138fc7", "#5fcef2", "#b6e9fa")[factor(data$quality)] #discrete color palatte
     cols <- adjustcolor(cols, alpha.f = 1)
     
-    leg_cols <- c("#148fc7", "#3bb6e3", "#82e0fc", "#d9ebf5")
+    leg_cols <- c("#138fc7", "#5fcef2", "#b6e9fa")
     leg_cols <- adjustcolor(leg_cols, alpha.f = 1)
-    
+
     par(mgp=c(2.75,.7,.2))
     plot(c(0,1), c(0,1), "n",
          xlim=c(input$region_slider[1], input$region_slider[2]),
@@ -423,7 +455,7 @@ shinyServer(function(input, output, session) {
          xaxs = 'i',
          axes = FALSE)
     abline(h=c(.2,.4,.6,.8,1), col="#d2d9e0", lty = 3)
-    
+
     par(mgp=c(2.75,.7,.2), bg="NA", new = TRUE)
     plot(c(0,1), c(0,1), "n",
          xlim=c(input$region_slider[1], input$region_slider[2]),
@@ -437,37 +469,37 @@ shinyServer(function(input, output, session) {
          xaxs = 'i',
          cex.lab = 1.1
          )
-    axis(2, 
+    axis(2,
          lwd = 0,
          lwd.ticks = 0,
          las = 2)
-    axis(1, 
+    axis(1,
          col = "#b8c2cc",
          lwd = 0,
          lwd.ticks = 0,
          tcl = -.4,
          las = 1)
-    
+
     ## Grey bottom bar
     segments(extractcoords(input$coordinates)$start, -0.1, extractcoords(input$coordinates)$stop, -0.1, col = "lightgrey", lwd=5)
-    
+
     ## Pink repetitive region highlighting
     if (input$toggle_rep.regions == T){
       rect(repFrags$start, -0.1, repFrags$end, 1.0, col = "#FFF0F5", border = NA)
     }
-    
+
     ## Restriction site markers
-    if (input$toggle_res.sites == T){ #input$region_slider[2] - input$region_slider[1] <= 50000 & 
+    if (input$toggle_res.sites == T){ #input$region_slider[2] - input$region_slider[1] <= 50000 &
       segments(sites, -0.09, sites, 1.0, col = "lightgrey", lwd=3, lend=2)
     }
-    
+
     ## Red repetitive region bars
     if (input$toggle_rep.regions == T){
       segments(repFrags$start, -0.1, repFrags$end, -0.1, col = "red", lwd=5, lend=2)
     }
-    
+
     segments(data$start, data$GC, data$stop, data$GC, col = cols, lwd=5, lend=2)
-    legend('topright', title = "Pass Number", legend = c(0, 1, 2, 3), fill = leg_cols, bg = "transparent", box.lty = 0, border=NA)
+    legend('topright', title = "Quality", legend = c("High", "Medium", "Low"), fill = leg_cols, bg = "transparent", box.lty = 0, border=NA)
   })
   
   ##--------------Plotting Shift-----------------####
@@ -476,10 +508,11 @@ shinyServer(function(input, output, session) {
     sites <- res.sites()
     repFrags <- res.repFrags()
     
-    cols <- c("#148fc7", "#3bb6e3", "#82e0fc", "#d9ebf5")[factor(data$pass)]
+    # cols <- c("#148fc7", "#3bb6e3", "#82e0fc", "#d9ebf5")[factor(data$pass)] #discrete color palatte
+    cols <- c("#138fc7", "#5fcef2", "#b6e9fa")[factor(data$quality)] #discrete color palatte
     cols <- adjustcolor(cols, alpha.f = 1)
     
-    leg_cols <- c("#148fc7", "#3bb6e3", "#82e0fc", "#d9ebf5")
+    leg_cols <- c("#138fc7", "#5fcef2", "#b6e9fa")
     leg_cols <- adjustcolor(leg_cols, alpha.f = 1)
     
     par(mgp=c(2.75,.7,.2))
@@ -526,11 +559,6 @@ shinyServer(function(input, output, session) {
          tcl = -.4,
          las = 1)
     
-    # if (input$toggle_res.sites == T){ #input$region_slider[2] - input$region_slider[1] <= 50000 & 
-    #   # segments(sites, -1, sites, max(data$shift)+0.45*(max(data$shift)), col = "lightgrey")
-    #   segments(repFrags$start, max(data$shift)+0.40*(max(data$shift)), repFrags$end, max(data$shift)+0.40*(max(data$shift)), col = "red", lwd=5, lend=2)
-    # }
-    
     ## Grey bottom bar
     segments(extractcoords(input$coordinates)$start, ymin+1, extractcoords(input$coordinates)$stop, ymin+1, col = "lightgrey", lwd=5)
     
@@ -550,7 +578,7 @@ shinyServer(function(input, output, session) {
     }
     
     segments(data$start, data$shift, data$stop, data$shift, col = cols, lwd = 5, lend = 2)
-    legend('topright', title = "Pass Number", legend = c(0, 1, 2, 3), fill = leg_cols, bg = "transparent", box.lty = 0, border=NA)
+    legend('topright', title = "Quality", legend = c("High", "Medium", "Low"), fill = leg_cols, bg = "transparent", box.lty = 0, border=NA)
   })
   
   ##-------------Region View Slider--------------####
@@ -728,10 +756,117 @@ shinyServer(function(input, output, session) {
       req(script_results())
       data <- script_results()
       paste0("Average GC Fraction: ", round(mean(data$GC), 2))
-    }) 
+    })
+    output$info_overlapping <- renderText({
+      if(!isTruthy(input$returnPressed) || !isTruthy(input$run_script))
+        NULL
+      req(script_results())
+      req(all_probes())
+      req(overlap())
+      overlap <- overlap()
+      paste0("Remove ", nrow(overlap[overlap$overlap > 0,]), " Overlapping Probes? ")
+    })
   })
 
   ##--------------Summary View Plots-------------####
+  output$summary_overlap <- renderPlot({
+    data <- script_results()
+    if(nrow(data) < 2){
+      overlap <- 0
+    }else{
+      overlap <- sapply(1:(nrow(data)-1), function(x) length(intersect(data$start[x]:data$stop[x], data$start[x+1]:data$stop[x+1])))  
+    }
+    col_func <- colorRampPalette(c("#0082ba", "#daebf5"))
+    h <- hist(overlap, plot = F)
+    par(lty = 0, mgp=c(2.75,.7,0.2), bg="NA")
+    plot(
+      h,
+      xlim = c(0, max(overlap)+20),
+      col = adjustcolor(col_func(length(h$breaks)),alpha.f = 1),
+      main = "Overlapping Probes",
+      xlab = "Amount of Overlap (bp)",
+      ylab = "",
+      las = 1,
+      axes = FALSE,
+      yaxs='i',
+      ylim = c(0,max(h$counts)),
+      cex.main = 1.3,
+      cex.lab = 1.1
+    )
+    abline(h=c(0.2, 0.4, 0.6, 0.8, 1.0) * max(h$counts), col="#eceff3", lty = 1)
+    par(lty = 0, mgp=c(2.75,.7,0.2), bg="NA")
+    plot(
+      h,
+      xlim = c(0, max(overlap)+20),
+      col = adjustcolor(col_func(length(h$breaks)),alpha.f = 1),
+      main = "Overlapping Probes",
+      xlab = "Amount of Overlap (bp)",
+      ylab = "Number of Probes",
+      las = 1,
+      add = TRUE,
+      axes = FALSE,
+      yaxs='i',
+      ylim = c(0,max(h$counts)))
+    axis(2, 
+         col = "#b8c2cc",
+         lwd = 0,
+         lwd.ticks = 0,
+         las = 2)
+    axis(1, 
+         col = "#b8c2cc",
+         lwd = 0,
+         lwd.ticks = 0,
+         tcl = -.4,
+         las = 1)
+  })
+  
+  output$summary_rep <- renderPlot({
+    data <- script_results()
+    col_func <- colorRampPalette(c("#0082ba", "#daebf5"))  #adc2d9
+    h <- hist(data$rep, plot = F)
+    par(lty = 0, mgp=c(2.75,.7,0.2), bg="NA")
+    plot(
+      h,
+      xlim = c(0, max(data$repetitive)+20),
+      col = adjustcolor(col_func(length(h$breaks)),alpha.f = 1),
+      main = "Number of Bases from Repetitive Regions",
+      xlab = "Repetitive Bases (bp)",
+      ylab = "",
+      las = 1,
+      axes = FALSE,
+      yaxs='i',
+      ylim = c(0,max(h$counts)),
+      cex.main = 1.3,
+      cex.lab = 1.1
+    )
+    abline(h=c(0.2, 0.4, 0.6, 0.8, 1.0) * max(h$counts), col="#eceff3", lty = 1)
+    par(lty = 0, mgp=c(2.75,.7,0.2), bg="NA")
+    plot(
+      h,
+      xlim = c(0, max(data$repetitive)+20),
+      col = adjustcolor(col_func(length(h$breaks)),alpha.f = 1),
+      main = "Repetitive Bases",
+      xlab = "Distance (bp)",
+      ylab = "Number of Probes",
+      las = 1,
+      add = TRUE,
+      axes = FALSE,
+      yaxs='i',
+      ylim = c(0,max(h$counts)))
+    axis(2, 
+         col = "#b8c2cc",
+         lwd = 0,
+         lwd.ticks = 0,
+         las = 2)
+    axis(1, 
+         col = "#b8c2cc",
+         lwd = 0,
+         lwd.ticks = 0,
+         tcl = -.4,
+         las = 1)
+  })
+  
+  
   output$summary_gc <- renderPlot({
     data <- script_results()
     cols <- c("#d9ebf5", "#82e0fc", "#3bb6e3", "#148fc7", "#3bb6e3", "#82e0fc", "#d9ebf5")
@@ -778,6 +913,48 @@ shinyServer(function(input, output, session) {
            title = "Pass")
   })
   
+  output$summary_quality <- renderPlot({
+    data <- script_results()
+    cols <- c("#138fc7", "#5fcef2", "#b6e9fa")
+    cols <- adjustcolor(cols, alpha.f = 1)
+    par(lty = 0, mgp=c(2.75,.7,0.2), bg="NA")
+    barplot(table(factor(data$quality, levels = c("High", "Medium", "Low"))), col = NA,
+            main = "",
+            ylab = "",
+            xlab = "",
+            border = NA,
+            xaxt = "n",
+            yaxt = "n",
+            axes = FALSE,
+            yaxs='i',
+            ylim = c(0,max(table(factor(data$quality, levels = c("High", "Medium", "Low")))))
+    )
+    abline(h=c(0.2, 0.4, 0.6, 0.8, 1.0) * max(table(factor(data$quality, levels = c("High", "Medium", "Low")))), col="#eceff3", lty = 1)
+    par(lty = 0, mgp=c(2.75,.7,0.2), bg="NA")
+    bp=barplot(table(factor(data$quality, levels = c("High", "Medium", "Low"))), col = cols,
+               main = "Overall Probe Quality",
+               ylab = "",
+               xlab = "Quality",
+               add = TRUE,
+               axes = FALSE,
+               xaxt = "n",
+               yaxs='i',
+               ylim = c(0,max(table(factor(data$quality, levels = c("High", "Medium", "Low"))))),
+               cex.main = 1.3,
+               cex.lab = 1.1
+    )
+    axis(2, 
+         lwd = 0,
+         lwd.ticks = 0,
+         las = 2)
+    axis(1, 
+         lwd = 0,
+         lwd.ticks = 0,
+         at = bp,
+         labels = c("High", "Medium", "Low"),
+         line = 0)
+  })
+  
   output$summary_pass <- renderPlot({
     data <- script_results()
     cols <- c("#148fc7", "#3bb6e3", "#82e0fc", "#d9ebf5")
@@ -797,7 +974,7 @@ shinyServer(function(input, output, session) {
     abline(h=c(0.2, 0.4, 0.6, 0.8, 1.0) * max(table(factor(data$pass, levels = 0:3))), col="#eceff3", lty = 1)
     par(lty = 0, mgp=c(2.75,.7,0.2), bg="NA")
     bp=barplot(table(factor(data$pass, levels = 0:3)), col = cols,
-            main = "Probe Quality",
+            main = "Pass Category",
             ylab = "",
             xlab = "Pass Number",
             add = TRUE,
@@ -808,11 +985,11 @@ shinyServer(function(input, output, session) {
             cex.main = 1.3,
             cex.lab = 1.1
             )
-    axis(2, 
+    axis(2,
          lwd = 0,
          lwd.ticks = 0,
          las = 2)
-    axis(1, 
+    axis(1,
          lwd = 0,
          lwd.ticks = 0,
          at = bp,
@@ -822,7 +999,7 @@ shinyServer(function(input, output, session) {
   
   output$summary_shift <- renderPlot({
     data <- script_results()
-    col_func <- colorRampPalette(c("#adc2d9"))
+    col_func <- colorRampPalette(c("#0082ba", "#daebf5"))
     h <- hist(data$shift, plot = F)
     par(lty = 0, mgp=c(2.75,.7,0.2), bg="NA")
     plot(

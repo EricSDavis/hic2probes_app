@@ -283,7 +283,25 @@ body <- dashboardBody(
                     ), # end of column
                   column(
                       width = 4,
-                      uiOutput("max_probes")
+                      uiOutput("max_probes"),
+                      fluidRow(
+                        column(
+                          offset = 1,
+                          width = 5,
+                          textOutput("info_overlapping")
+                        ),
+                        column(
+                          width = 2,
+                          materialSwitch(
+                            inputId = "remove_overlapping",
+                            label = "",
+                            value = F,
+                            status = "primary",
+                            right = F,
+                            inline = T
+                          )
+                        )
+                      )
                     ), # end of column
                   column(
                     width = 2,
@@ -391,7 +409,19 @@ body <- dashboardBody(
                 column(width = 12, 
                   box(
                     width = 4,
-                    plotOutput("summary_gc")
+                    plotOutput("summary_overlap")
+                  ), # end of box
+                  box(
+                    width = 4,
+                    plotOutput("summary_rep")
+                  ), # end of box
+                  box(
+                    width = 4,
+                    plotOutput("summary_shift")
+                  ), # end of box
+                  box(
+                    width = 4,
+                    plotOutput("summary_quality")
                   ), # end of box
                   box(
                     width = 4,
@@ -399,7 +429,7 @@ body <- dashboardBody(
                   ), # end of box
                   box(
                     width = 4,
-                    plotOutput("summary_shift")
+                    plotOutput("summary_gc")
                   ) # end of box
                 ) # end of column
               ), # end of fluidRow
