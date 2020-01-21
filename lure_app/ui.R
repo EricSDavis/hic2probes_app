@@ -126,7 +126,8 @@ body <- dashboardBody(
              selectInput(
                inputId = "resenz",
                label = "Restriction Enzyme",
-               choices = c("^GATC, MboI" = "^GATC", "A^AGCTT, HindIII" = "A^AGCTT"),
+               choices = c("^GATC, MboI" = "^GATC", "A^AGCTT, HindIII" = "A^AGCTT", 
+                           "A^GATCT, Bgl II" = "A^GATCT"),
                selected = "^GATC, MboI",
                multiple = F
              )
